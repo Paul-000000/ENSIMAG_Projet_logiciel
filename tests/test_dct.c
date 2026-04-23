@@ -1,0 +1,43 @@
+#include "unity.h"
+#include "dct.h"
+
+void setUp(void) {
+    // set stuff up here
+}
+
+void tearDown(void) {
+    // clean stuff up here
+}
+
+void test_wikipedia(void) {
+    /* Exemple de wikipedia. */
+    int16_t ref[] = {
+        52, 55, 61, 66, 70, 61, 64, 73,
+        63, 59, 55, 90, 109, 85, 69, 72,
+        62, 59, 68, 113, 144, 104, 66, 73,
+        63, 58, 71, 122, 154, 106, 70, 69,
+        67, 61, 68, 104, 126, 88, 68, 70,
+        79, 65, 60, 70, 77, 68, 58, 75,
+        85, 71, 64, 59, 55, 61, 65, 83,
+        87, 79, 69, 68, 65, 76, 78, 94
+    };
+    int16_t expected[64] = {
+	-415, -30, -61, 27, 56, -20, -2, 0, 
+	4, -22, -61, 10, 13, -7, -9, 5, 
+	-47, 7, 77, -25, -29, 10, 5, -6, 
+	-49, 12, 34, -15, -10, 6, 2, 2, 
+	12, -7, -13, -4, -2, 2, -3, 3, 
+	-8, 3, 2, -6, -2, 1, 4, 2, 
+	-1, 0, 0, -2, -1, -3, 4, -1, 
+	0, 0, -1, -4, -1, 0, 0, 2
+    };
+    dct_naive(ref);
+    TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,ref,64); // On est bon à la louche
+}
+
+
+int main(void) {
+    UNITY_BEGIN();
+    RUN_TEST(test_wikipedia);
+    return UNITY_END();
+}
