@@ -1,6 +1,6 @@
 # État de l'encodeur JPEG
 
-![Coverage](https://gitlab.ensimag.fr/formationc/projet/jpeg/2026/groupe/badges/main/coverage.svg)
+![Coverage](https://gitlab.ensimag.fr/formationc/projet/jpeg/propalCI/coverage.svg)
 
 [Tableau de bord](https://formationc.pages.ensimag.fr/projet/jpeg/propalCI)
 
@@ -69,7 +69,7 @@ C'est une métrique imparfaite qui ne capturé ni l'ILP du processeur ni les dé
 * Syntèse des tests : visible depuis build:jobs ou en cliquant sur le résultat du job
 * Intégration de la couverture de code :
 	* Résumé et suivi visible dans build:jobs
-	* Badge utilisable dans le README  : ![Coverage](https://gitlab.ensimag.fr/formationc/projet/jpeg/test_etu/badges/main/coverage.svg)
+	* Badge utilisable dans le README  : ![Coverage](https://gitlab.ensimag.fr/formationc/projet/jpeg/propalCI/badges/main/coverage.svg)
 	* Page de couverture consultable dans depuis le tableau de bord 
 * Génération d'un [tableau de bord incluant les stats(qualité, performance) par scénario, les infos mémoires, un lien vers les rapports et le profilage de Biiiiiiig](https://formationc.pages.ensimag.fr/projet/jpeg/propalCI)
 
