@@ -4,6 +4,10 @@
 
 [Tableau de bord](https://formationc.pages.ensimag.fr/projet/jpeg/2026/2_bahag_becharam_bottnerp)
 
+# Diagramme de Gantt
+
+![diagramme](diagramme%20de%20Gantt/diagramme.png)
+
 # Notre encodeur JPEG à nous
 
 Bienvenue sur la page d'accueil de _votre_ projet JPEG, un grand espace de liberté, sous le regard bienveillant de vos enseignants préférés.
