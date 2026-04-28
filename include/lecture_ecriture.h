@@ -10,19 +10,17 @@ typedef enum{
 }TypeImage;
 
 typedef struct Image {
-    u_int32_t largeur;
-    u_int32_t hauteur;
+    int largeur;
+    int hauteur;
     TypeImage type;
     uint8_t * tab;
-    FILE * fichier;
-    
-
+    FILE *fichier;
     
 }Image;
 
 Image* recupEntete (FILE *fichier);
 Image* lectureImage(char * nom_fichier );
-Image* lireEblocs(Image *image);
+Image* lireEblocs( Image *image);
 
 
 #endif // _LECTURE_ECRITURE_H_

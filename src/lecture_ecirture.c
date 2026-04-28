@@ -1,10 +1,29 @@
-#include <lecture_ecriture.h>
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "lecture_ecriture.h"
 
 #define TAILLE_ENTETE_PPM 8
 
-
-
+Image* recupEntete (FILE *fichier){
+    struct Image* image;
+    char c1,c2;
+    unsigned int l,h;
+    if(fscanf(fichier, "%c%c\n %l %h", &c1,&c2, &l,&h)==4){
+        if(c1=="P" && c2=="5") { 
+            image->type=P5;
+        }
+        else if (c1=="P" && c2=="6"){
+             image->type=P6;
+            }
+        image->largeur = l;
+        image->hauteur = h;
+    }
+    image->tab = NULL;
+    image->fichier = fichier;
+    return image;
+}
 void completer_image(FILE *fichier,Image *image_ppm,int taille_ligne){
 
     if (image_ppm->largeur%8 !=0)
@@ -71,7 +90,7 @@ Image* lectureImage(char * nom_fichier ){
 
 }
 
- Image* lireEblocs(Image *image_ppm){
+ struct Image* lireEblocs(struct Image *image_ppm){
 
         int taille_ligne;
 
@@ -105,4 +124,5 @@ Image* lectureImage(char * nom_fichier ){
         {
             completer_image(image_ppm->fichier,image_ppm,taille_ligne);
         }
-}
+    }
+
