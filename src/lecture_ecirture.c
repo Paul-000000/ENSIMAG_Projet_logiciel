@@ -6,6 +6,7 @@
 
 #define TAILLE_ENTETE_PPM 8
 
+
 Image* recupEntete (FILE *fichier){
     struct Image* image;
     char c1,c2;
@@ -24,6 +25,15 @@ Image* recupEntete (FILE *fichier){
     image->fichier = fichier;
     return image;
 }
+
+
+void positionner_curseur(Image *img, uint32_t x, uint32_t y) {
+    // La formule magique pour retrouver n'importe quel pixel (x,y) :
+    long position = img->debut_pixels + ( (long)y * img->largeur ) + (long)x;
+    fseek(img->fichier, position, SEEK_SET);
+}
+
+
 void completer_image(FILE *fichier,Image *image_ppm,int taille_ligne){
 
     if (image_ppm->largeur%8 !=0)
@@ -69,7 +79,7 @@ void completer_image(FILE *fichier,Image *image_ppm,int taille_ligne){
 
 Image* lectureImage(char * nom_fichier ){
 
-        FILE *fichier = fopen(nom_fichier, "r");
+        FILE *fichier = fopen(nom_fichier, "rb");
         if (fichier==NULL)
         {
             perror("[ERREUR] ouverture du fichier");
@@ -90,39 +100,43 @@ Image* lectureImage(char * nom_fichier ){
 
 }
 
- struct Image* lireEblocs(struct Image *image_ppm){
 
-        int taille_ligne;
+ Image* lireEblocs(Image *image_ppm,uint32_t x, uint32_t y){
 
-        
-        if (image_ppm->type==P5 && image_ppm->largeur>=64*8)
+
+        int taille_ligne=image_ppm->largeur;
+        int nb_octets_lire;
+    
+        if (image_ppm->type==P5)
         {
-        taille_ligne=64*8;
-        }else
+           nb_octets_lire = 512; 
+        if (x + nb_octets_lire > taille_ligne) {
+            nb_octets_lire = taille_ligne - x;
+        }
+        }
+
+       int index_tab =0; 
+       for (size_t i = 0; i < 8; i++)
+       {
+          positionner_curseur(image_ppm, x, y + i);
+
+        size_t lus = fread(&(image_ppm->tab[index_tab]), 1, nb_octets_lire, image_ppm->fichier);
+        if (i==0)
         {
-            taille_ligne=image_ppm->largeur;
+            image_ppm->taille_ligne=lus;
+        }
+        if (lus<nb_octets_lire)
+        {
+            break;
         }
         
-        // else
-        // {
-        //     taille_ligne=image_ppm->largeur*3;
-        // }
+    
+         index_tab+=nb_octets_lire;
+       }    
+        
+       return image_ppm;
 
-        for (int i = 0,index_tab=0; i < 8; index_tab+=taille_ligne,i++)
-        {
-            size_t lus = fread(&(image_ppm->tab[index_tab]), 1, taille_ligne, image_ppm->fichier);
-            
-            if (lus<taille_ligne)
-            {
-              printf("[ERREUR] lecture de ligne ");
-            }
-            
+}
 
-        }
 
-        if (image_ppm->hauteur %8!=0 || image_ppm->largeur%8 !=0 )
-        {
-            completer_image(image_ppm->fichier,image_ppm,taille_ligne);
-        }
-    }
 
