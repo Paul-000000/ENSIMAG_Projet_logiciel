@@ -4,12 +4,35 @@
 #include <string.h>
 #include "lecture_ecriture.h"
 
-#define TAILLE_ENTETE_PPM 8
 #define LARGEUR_BLOC 8          
 #define NB_BLOCS_LUS 64         
 #define NB_LIGNES_IMAGE_TAB 8   
 #define LARGEUR_SUPER_BLOC (LARGEUR_BLOC * NB_BLOCS_LUS) 
-/*
+#define TAILLE_ENTETE_PPM_MIN 9
+
+void ignore_commentaires(FILE *fichier)
+{
+
+    int c;
+    while ((c = fgetc(fichier)) != EOF)
+    {
+
+        if (c == '#')
+        {
+
+            while ((c = fgetc(fichier)) != '\n' && c != EOF)
+            {
+            }
+        }
+        else
+        {
+
+            ungetc(c, fichier);
+            break;
+        }
+    }
+}
+
 Image *recupEntete(FILE *fichier)
 {
 
@@ -17,32 +40,38 @@ Image *recupEntete(FILE *fichier)
     if (image == NULL)
         return NULL;
 
-    image->tab=NULL;
-    
+    image->tab = NULL;
+
     char c1, c2;
     unsigned int l, h, profondeur;
 
     ignore_commentaires(fichier);
 
-    if (fscanf(fichier, "%c%c\n",&c1, &c2) != 2) { // P5 ou P6
+    if (fscanf(fichier, "%c%c\n", &c1, &c2) != 2)
+    { // P5 ou P6
         return NULL;
+    }
+    else
+    {
 
-    } else {
-        
-        if(c1=='P' && c2=='5') { 
-            image->type=P5;
-        
-        } else if (c1=='P' && c2=='6'){
-            image->type=P6;
-
-        } else {
+        if (c1 == 'P' && c2 == '5')
+        {
+            image->type = P5;
+        }
+        else if (c1 == 'P' && c2 == '6')
+        {
+            image->type = P6;
+        }
+        else
+        {
             return NULL;
         }
     }
 
     ignore_commentaires(fichier);
 
-    if (fscanf(fichier, "%u %u\n",&l, &h) != 2) { // largeur et hauteur
+    if (fscanf(fichier, "%u %u\n", &l, &h) != 2)
+    { // largeur et hauteur
         return NULL;
     }
 
@@ -51,46 +80,13 @@ Image *recupEntete(FILE *fichier)
 
     ignore_commentaires(fichier);
 
-    if(fscanf(fichier, "%u\n", &profondeur) != 1) {
+    if (fscanf(fichier, "%u\n", &profondeur) != 1)
+    {
         return NULL;
     }
-    
+
     ignore_commentaires(fichier);
 
-    image->debut_pixels = ftell(fichier);
-    image->fichier = fichier;
-    return image;
-}
-*/
-
-Image *recupEntete(FILE *fichier) {
-
-    struct Image *image = (struct Image *)malloc(sizeof(Image));
-    if (image == NULL)
-        return NULL;
-
-    char c1, c2;
-    unsigned int l, h, profondeur;
-
-    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5)
-    {
-        image->tab=NULL;
-        if(c1=='P' && c2=='5') { 
-            image->type=P5;
-        }
-        else if (c1=='P' && c2=='6'){
-            image->type=P6;
-   }
-        else
-        {
-            return NULL;
-        }
-
-        image->largeur = l;
-        image->hauteur = h;
-    }
-
-    // image->tab = NULL;
     image->debut_pixels = ftell(fichier);
     image->fichier = fichier;
     return image;
@@ -103,7 +99,6 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
-
 Image *lectureImage(char *nom_fichier)
 {
 
@@ -115,24 +110,21 @@ Image *lectureImage(char *nom_fichier)
     }
     fseek(fichier, 0, SEEK_END);
     long taille_fichier = ftell(fichier);
-    if (taille_fichier < TAILLE_ENTETE_PPM)
+    if (taille_fichier < TAILLE_ENTETE_PPM_MIN)
     {
         printf("[ERREUR] taille de fichier inferieur a l'entete");
         return NULL;
     }
 
+    rewind(fichier);
 
-        rewind(fichier);
-
-        Image * image = recupEntete(fichier); 
-        image->tab = (uint8_t **)malloc(NB_LIGNES_IMAGE_TAB * sizeof(uint8_t *));
+    Image * image = recupEntete(fichier); 
+    image->tab = (uint8_t **)malloc(NB_LIGNES_IMAGE_TAB * sizeof(uint8_t *));
     for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
         // Chaque ligne peut contenir jusqu'à 512 pixels (64 blocs)
         image->tab[i] = (uint8_t *)malloc(LARGEUR_SUPER_BLOC* sizeof(uint8_t));
     }
     return image;
-
-
 }
 
 Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
@@ -164,23 +156,23 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
         {
             break;
         }
-        image_ppm->nb_lignes=i;
-
-
+        image_ppm->nb_lignes = i;
     }
 
     return image_ppm;
 }
 
-void liberer_image(Image *image) {
+void liberer_image(Image *image)
+{
 
-    if (image == NULL) return;
+    if (image == NULL)
+        return;
 
     if (image->tab != NULL) {
-        for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
-        
-        free(image->tab[i]);
 
+        for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
+
+            free(image->tab[i]);
         }
 
         free(image->tab);

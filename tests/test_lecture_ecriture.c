@@ -41,11 +41,9 @@ uint8_t motif_attendu[64] = {
 
 void test_lire_image(void) {
 
-    const char* filename = "images/etu/gris.pgm";
+    char* filename = "images/etu/gris.pgm";
  
-   
     Image* img = lectureImage(filename);
-
     
     TEST_ASSERT_NOT_NULL(img);
     TEST_ASSERT_NOT_NULL(img->fichier);
@@ -55,25 +53,17 @@ void test_lire_image(void) {
     TEST_ASSERT_EQUAL_UINT32(320, img->hauteur);
     TEST_ASSERT_EQUAL_INT(15, img->debut_pixels);
 
-    if (img)
-    {
-        if (img->fichier)
-    {
-        fclose(img->fichier);
-    }
-        free(img); 
-    }
+    liberer_image(img);
 }
 
 void test_lectureEblocs(){
-    const char* filename = "images/etu/invader.pgm";
+
+    char* filename = "images/etu/invader.pgm";
 
     Image* img = lectureImage(filename);
     lireEblocs(img, 0, 0);
     
     for (int i = 0; i < 8; i++) {
-
-
         
         char msg[50];
         snprintf(msg,50, "Erreur de lecture à la ligne %d", i);
@@ -85,7 +75,9 @@ void test_lectureEblocs(){
 
 
 }
+
 void test_lireEblocs_grande_image(void) {
+
     uint32_t L = 1024;
     uint32_t H = 1024;
      char* filename = "test_large.pgm";
@@ -133,8 +125,6 @@ int main(void) {
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
 
-
-  
     return UNITY_END();
 }
 
