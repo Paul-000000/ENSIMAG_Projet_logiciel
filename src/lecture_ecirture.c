@@ -23,6 +23,9 @@ Image* recupEntete (FILE *fichier){
         else if (c1=="P" && c2=="6"){
             image->type=P6;
         }
+        else {
+            return NULL;
+        }
 
         image->largeur = l;
         image->hauteur = h;
