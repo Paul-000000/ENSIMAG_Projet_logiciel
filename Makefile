@@ -99,3 +99,7 @@ realclean: clean ##! Nettoie à fond : idéal avant un commit
 	rm -rf tests/*.d $(OBJ_DIR) $(JPG_DIR) coverage.* callgrind.* report.* *.xml *.html *.json public massif.*
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".pytest_cache" -exec rm -rf {} +
+
+
+compile: clean
+	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET)

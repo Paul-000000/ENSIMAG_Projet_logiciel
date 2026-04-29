@@ -19,21 +19,89 @@ void ignore_commentaire(FILE *fichier){
     }
 }
 
-Image *recupEntete(FILE *fichier)
-{
 
+/*
+
+void ignore_commentaire(FILE *fichier){
+
+    int c;
+    while ((c=fgetc(fichier)) != EOF){
+
+        if (c=='#'){
+
+            while((c=fgetc(fichier)) !='\n' && c != EOF){}
+
+        }else{
+
+            ungetc(c,fichier);
+            break;
+        }
+    }
+}
+    
+Image *recupEntete(FILE *fichier) {
 
     struct Image *image = (struct Image *)malloc(sizeof(Image));
     if (image == NULL)
         return NULL;
 
+    image->tab=NULL;
+    
+    char c1, c2;
+    unsigned int l, h, profondeur;
+
+    ignore_commentaires(fichier);
+
+    if (fscanf(fichier, "%c%c\n",&c1, &c2) != 2) { // P5 ou P6
+        return NULL;
+
+    } else {
+        
+        if(c1=='P' && c2=='5') { 
+            image->type=P5;
+        
+        } else if (c1=='P' && c2=='6'){
+            image->type=P6;
+
+        } else {
+            return NULL;
+        }
+    }
+
+    ignore_commentaires(fichier);
+
+    if (fscanf(fichier, "%u %u\n",&l, &h) != 2) { // largeur et hauteur
+        return NULL;
+    }
+
+    image->largeur = l;
+    image->hauteur = h;
+
+    ignore_commentaires(fichier);
+
+    if(fscanf(fichier, "%u\n", &profondeur) != 1) {
+        return NULL;
+    }
+    
+    ignore_commentaires(fichier);
+
+    image->debut_pixels = ftell(fichier);
+    image->fichier = fichier;
+    return image;
+}
+*/
+
+Image *recupEntete(FILE *fichier) {
+
+    struct Image *image = (struct Image *)malloc(sizeof(Image));
+    if (image == NULL)
+        return NULL;
 
     char c1, c2;
     unsigned int l, h, profondeur;
 
-   
-
-    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5){
+    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5)
+    {
         image->tab=NULL;
         if(c1=='P' && c2=='5') { 
             image->type=P5;
@@ -49,10 +117,6 @@ Image *recupEntete(FILE *fichier)
         image->largeur = l;
         image->hauteur = h;
     }
-    else
-    {
-        return NULL;
-    }
 
     // image->tab = NULL;
     image->debut_pixels = ftell(fichier);
@@ -67,6 +131,7 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
+<<<<<<< HEAD
 /*void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
 {
 
@@ -108,6 +173,8 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
         }
     }
 }*/
+=======
+>>>>>>> c3c18545009b73981467360bd98ba1a79a92dc74
 
 Image *lectureImage(char *nom_fichier)
 {
@@ -126,13 +193,16 @@ Image *lectureImage(char *nom_fichier)
         return NULL;
     }
 
-    rewind(fichier);
 
         rewind(fichier);
 
         Image * image = recupEntete(fichier); 
-        image->tab=(uint8_t *)malloc(sizeof(uint8_t)*64*64);
-        return image;
+        image->tab = (uint8_t **)malloc(8 * sizeof(uint8_t *));
+    for (int i = 0; i < 8; i++) {
+        // Chaque ligne peut contenir jusqu'à 512 pixels (64 blocs)
+        image->tab[i] = (uint8_t *)malloc(512 * sizeof(uint8_t));
+    }
+    return image;
 
 
 }
@@ -152,12 +222,12 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
         }
     }
 
-    int index_tab = 0;
+
     for (size_t i = 0; i < 8; i++)
     {
         positionner_curseur(image_ppm, x, y + i);
 
-        size_t lus = fread(&(image_ppm->tab[index_tab]), 1, nb_octets_lire, image_ppm->fichier);
+        size_t lus = fread(image_ppm->tab[i], 1, nb_octets_lire, image_ppm->fichier);
         if (i == 0)
         {
             image_ppm->taille_ligne = lus;
@@ -166,8 +236,9 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
         {
             break;
         }
+        image_ppm->nb_lignes=i;
 
-        index_tab += nb_octets_lire;
+
     }
 
     return image_ppm;
@@ -178,8 +249,14 @@ void liberer_image(Image *image) {
     if (image == NULL) return;
 
     if (image->tab != NULL) {
+        for (int i = 0; i < 8; i++) {
         
+        free(image->tab[i]);
+
+        }
+
         free(image->tab);
     }
+    fclose(image->fichier);
     free(image);
 }

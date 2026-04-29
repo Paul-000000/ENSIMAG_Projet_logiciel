@@ -8,6 +8,10 @@
 
 ![diagramme](diagramme%20de%20Gantt/diagramme.png)
 
+# Structures de données utilisées
+
+![structures](structures%20de%20donnees/structures%20de%20donnees.png)
+
 # Notre encodeur JPEG à nous
 
 Bienvenue sur la page d'accueil de _votre_ projet JPEG, un grand espace de liberté, sous le regard bienveillant de vos enseignants préférés.
