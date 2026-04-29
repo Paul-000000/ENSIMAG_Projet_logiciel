@@ -70,57 +70,27 @@ void test_lectureEblocs(){
 
     Image* img = lectureImage(filename);
     lireEblocs(img, 0, 0);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(motif_attendu, img->tab, 64);
-}
+    
+    for (int i = 0; i < 8; i++) {
 
+
+        
+        char msg[50];
+        sprintf(msg, "Erreur de lecture à la ligne %d", i);
+        
+        TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE(motif_attendu + (i * 8), img->tab[i], 8, msg);
+    }
+
+    liberer_image(img);
+
+
+}
 void test_lireEblocs_grande_image(void) {
     uint32_t L = 1024;
     uint32_t H = 1024;
     const char* filename = "test_large.pgm";
 
-    // 1. Créer une image de 1024x1024 en mémoire et l'écrire sur disque
-    FILE *f = fopen(filename, "wb");
-    fprintf(f, "P5\n%u %u\n255\n", L, H);
-    
-    for (uint32_t i = 0; i < L * H; i++) {
-        uint8_t pixel = (uint8_t)(i % 256); 
-        fputc(pixel, f);
-    }
-    fclose(f);
-
-    // 2. Charger l'image avec tes fonctions
-    Image *img = lectureImage(filename);
-    
-    // 3. Tester la lecture d'un bloc au MILIEU de l'image
-    // On veut lire 64 blocs (512px) à partir de x=128, y=200
-    uint32_t test_x = 128;
-    uint32_t test_y = 200;
-    lireEblocs(img, test_x, test_y);
-
-    // 4. Vérification mathématique
-    // Le premier pixel du buffer (index 0) doit correspondre au pixel (128, 200) du fichier
-    // Valeur attendue = (y * Largeur + x) % 256
-    uint8_t attendu = (uint8_t)((test_y * L + test_x) % 256);
-    TEST_ASSERT_EQUAL_HEX8(attendu, img->tab[0]);
-
-    // Nettoyage
-     if (img)
-    {
-        if (img->fichier)
-    {
-        fclose(img->fichier);
-    }
-        free(img); 
-    }
-    
-}
-
-void test_lireEblocs_verif_lignes(void) {
-    uint32_t L = 1024;
-    uint32_t H = 1024;
-    const char* filename = "test_lignes.pgm";
-
-    // 1. Création de l'image mathématique : Pixel(x,y) = (y * L + x) % 256
+    // 1. Créer une image mathématique : Pixel(x,y) = (y*L + x) % 256
     FILE *f = fopen(filename, "wb");
     fprintf(f, "P5\n%u %u\n255\n", L, H);
     for (uint32_t i = 0; i < L * H; i++) {
@@ -128,42 +98,32 @@ void test_lireEblocs_verif_lignes(void) {
     }
     fclose(f);
 
+    // 2. Charger l'image (alloue la structure et la matrice 8x512)
     Image *img = lectureImage(filename);
-    
-    // Coordonnées de test (au milieu de l'image)
-    uint32_t tx = 128;
-    uint32_t ty = 200;
-    
-    lireEblocs(img, tx, ty);
+    TEST_ASSERT_NOT_NULL(img);
 
-    // 2. Vérification du début de chaque ligne (i va de 0 à 7)
-   
-    uint32_t largeur_bloc = 512; 
-    
+    // 3. Lire un Super-Bloc au milieu
+    uint32_t test_x = 128;
+    uint32_t test_y = 200;
+    lireEblocs(img, test_x, test_y);
+
+    // 4. Vérification mathématique sur plusieurs lignes du bloc
     for (uint32_t i = 0; i < 8; i++) {
-        // Coordonnée Y réelle dans le fichier pour cette ligne du bloc
-        uint32_t y_actuel = ty + i;
+        // Valeur attendue pour le premier pixel de la ligne 'i' du bloc
+        // Coordonnées réelles dans le fichier : (test_x, test_y + i)
+        uint8_t attendu = (uint8_t)(((test_y + i) * L + test_x) % 256);
         
-        // Calcul de la valeur attendue selon la formule
-        uint8_t attendu = (uint8_t)((y_actuel * L + tx) % 256);
+        char msg[50];
+        sprintf(msg, "Erreur à la ligne locale %u", i);
         
-        // Index dans ton tableau img->tab
-        uint32_t index_buffer = i * largeur_bloc;
+        // NOUVEAU FORMAT : tab[i][0] au lieu de tab[index]
+        TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu, img->tab[i][0], msg);
+    }
 
-        // Message personnalisé pour savoir quelle ligne a échoué
-       
-         TEST_ASSERT_EQUAL_HEX8(attendu, img->tab[index_buffer]);
-    }
- if (img)
-    {
-        if (img->fichier)
-    {
-        fclose(img->fichier);
-    }
-        free(img); 
-    }
-    
-    
+    // 5. Nettoyage utilisant TA fonction liberer_image
+    // C'est plus sûr car elle gère la boucle de free pour les lignes
+    liberer_image(img);
+
 }
 
 int main(void) {
@@ -172,8 +132,7 @@ int main(void) {
     RUN_TEST(test_recupEntete_P5);
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
-    RUN_TEST(test_lireEblocs_verif_lignes);
-
+  
     return UNITY_END();
 }
 

@@ -50,47 +50,6 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
-void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
-{
-
-    if (image_ppm->largeur % 8 != 0)
-    {
-        for (uint32_t i = 0, index_tab = taille_ligne; i < image_ppm->hauteur; index_tab += taille_ligne, i++)
-        {
-            if (image_ppm->type == P5)
-            {
-                uint8_t dernierPixel = image_ppm->tab[index_tab - 1];
-                int j = index_tab;
-                while (j % 8 != 0)
-                {
-                    image_ppm->tab[j] = dernierPixel;
-                    j++;
-                }
-            }
-            else
-            {
-                uint8_t dernierB = image_ppm->tab[index_tab - 1];
-                uint8_t dernierG = image_ppm->tab[index_tab - 2];
-                uint8_t dernierR = image_ppm->tab[index_tab - 3];
-                int j = index_tab;
-                while (j % 8 != 0)
-                {
-                    image_ppm->tab[index_tab] = dernierR;
-                    image_ppm->tab[index_tab + 1] = dernierG;
-                    image_ppm->tab[index_tab + 2] = dernierB;
-                    j += 3;
-                }
-            }
-        }
-    }
-    else
-    {
-        int index_tab = image_ppm->hauteur;
-        while (index_tab % 8 == 0)
-        {
-        }
-    }
-}
 
 Image *lectureImage(char *nom_fichier)
 {
@@ -109,13 +68,16 @@ Image *lectureImage(char *nom_fichier)
         return NULL;
     }
 
-    rewind(fichier);
 
         rewind(fichier);
 
         Image * image = recupEntete(fichier); 
-        image->tab=(uint8_t *)malloc(sizeof(uint8_t)*64*64);
-        return image;
+        image->tab = (uint8_t **)malloc(8 * sizeof(uint8_t *));
+    for (int i = 0; i < 8; i++) {
+        // Chaque ligne peut contenir jusqu'à 512 pixels (64 blocs)
+        image->tab[i] = (uint8_t *)malloc(512 * sizeof(uint8_t));
+    }
+    return image;
 
 
 }
@@ -140,7 +102,7 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
     {
         positionner_curseur(image_ppm, x, y + i);
 
-        size_t lus = fread(&(image_ppm->tab[index_tab]), 1, nb_octets_lire, image_ppm->fichier);
+        size_t lus = fread(image_ppm->tab[i], 1, nb_octets_lire, image_ppm->fichier);
         if (i == 0)
         {
             image_ppm->taille_ligne = lus;
@@ -161,10 +123,14 @@ void liberer_image(Image *image) {
     if (image == NULL) return;
 
     if (image->tab != NULL) {
+        for (int i = 0; i < 8; i++) {
         
+        free(image->tab[i]);
+
+        }
+
         free(image->tab);
     }
-
     fclose(image->fichier);
     free(image);
 }

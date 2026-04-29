@@ -16,7 +16,7 @@ typedef struct Image {
     uint32_t debut_pixels;
 
     TypeImage type;
-    uint8_t * tab;
+    uint8_t ** tab;
     FILE * fichier;
     uint32_t taille_ligne;
 
@@ -27,6 +27,7 @@ Image* recupEntete (FILE *fichier);
 Image* lectureImage(char * nom_fichier );
 
 Image* lireEblocs(Image *image,uint32_t x, uint32_t y);
+void liberer_image(Image *image);
 
 
 
