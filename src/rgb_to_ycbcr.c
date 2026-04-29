@@ -1,4 +1,4 @@
-#include "rgb_to_ycbcr.h"
+#include "../include/rgb_to_ycbcr.h"
 
 struct couleur_ycbcr_t rgb_to_ycbcr(struct couleur_rgb_t couleur) {
 
