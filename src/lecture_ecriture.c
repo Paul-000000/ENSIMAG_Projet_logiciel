@@ -7,6 +7,7 @@
 #define TAILLE_ENTETE_PPM 8
 
 
+
 Image* recupEntete (FILE *fichier){
 
     struct Image* image = (struct Image *)malloc(sizeof(Image));
@@ -15,12 +16,12 @@ Image* recupEntete (FILE *fichier){
     char c1,c2;
     unsigned int l,h, profondeur;
 
-    if(fscanf(fichier, "%c%c\n%u %u\n%u", &c1, &c2, &l, &h, &profondeur) == 5){
-        
-        if(c1=="P" && c2=="5") { 
+    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5){
+        image->tab=NULL;
+        if(c1=='P' && c2=='5') { 
             image->type=P5;
         }
-        else if (c1=="P" && c2=="6"){
+        else if (c1=='P' && c2=='6'){
             image->type=P6;
         }
         else {
@@ -34,11 +35,13 @@ Image* recupEntete (FILE *fichier){
         return NULL;
     }
 
-    image->tab = NULL;
+    // image->tab = NULL;
     image->debut_pixels = ftell(fichier);
     image->fichier = fichier;
     return image;
 }
+
+
 
 
 void positionner_curseur(Image *img, uint32_t x, uint32_t y) {
@@ -75,8 +78,11 @@ void completer_image(FILE *fichier,Image *image_ppm,int taille_ligne){
             image_ppm->tab[index_tab+2]=dernierB;
             j+=3;
           }
+   
             
         }
+         
+       
        }
     }else
     {
@@ -107,7 +113,10 @@ Image* lectureImage(char * nom_fichier ){
 
         rewind(fichier);
 
-        return recupEntete(fichier); 
+        Image * image = recupEntete(fichier); 
+        image->tab=(uint8_t *)malloc(sizeof(uint8_t)*64*64);
+        return image;
+
 
 }
 
