@@ -85,8 +85,8 @@ Image *lectureImage(char *nom_fichier)
 Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
 {
 
-    int taille_ligne = image_ppm->largeur;
-    int nb_octets_lire;
+    uint32_t taille_ligne = image_ppm->largeur;
+    uint32_t nb_octets_lire;
 
     if (image_ppm->type == P5)
     {
@@ -97,7 +97,7 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
         }
     }
 
-    int index_tab = 0;
+
     for (size_t i = 0; i < 8; i++)
     {
         positionner_curseur(image_ppm, x, y + i);
@@ -111,8 +111,9 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
         {
             break;
         }
+        image_ppm->nb_lignes=i;
 
-        index_tab += nb_octets_lire;
+
     }
 
     return image_ppm;

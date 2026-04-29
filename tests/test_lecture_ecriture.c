@@ -41,7 +41,7 @@ uint8_t motif_attendu[64] = {
 
 void test_lire_image(void) {
 
-    const char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/gris.pgm";
+     char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/gris.pgm";
  
    
     Image* img = lectureImage(filename);
@@ -66,7 +66,7 @@ void test_lire_image(void) {
 }
 
 void test_lectureEblocs(){
-    const char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/invader.pgm";
+    char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/invader.pgm";
 
     Image* img = lectureImage(filename);
     lireEblocs(img, 0, 0);
@@ -76,7 +76,7 @@ void test_lectureEblocs(){
 
         
         char msg[50];
-        sprintf(msg, "Erreur de lecture à la ligne %d", i);
+        snprintf(msg,50, "Erreur de lecture à la ligne %d", i);
         
         TEST_ASSERT_EQUAL_HEX8_ARRAY_MESSAGE(motif_attendu + (i * 8), img->tab[i], 8, msg);
     }
@@ -88,7 +88,7 @@ void test_lectureEblocs(){
 void test_lireEblocs_grande_image(void) {
     uint32_t L = 1024;
     uint32_t H = 1024;
-    const char* filename = "test_large.pgm";
+     char* filename = "test_large.pgm";
 
     // 1. Créer une image mathématique : Pixel(x,y) = (y*L + x) % 256
     FILE *f = fopen(filename, "wb");
@@ -114,7 +114,7 @@ void test_lireEblocs_grande_image(void) {
         uint8_t attendu = (uint8_t)(((test_y + i) * L + test_x) % 256);
         
         char msg[50];
-        sprintf(msg, "Erreur à la ligne locale %u", i);
+        snprintf(msg, 50,"Erreur à la ligne locale %u", i);
         
         // NOUVEAU FORMAT : tab[i][0] au lieu de tab[index]
         TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu, img->tab[i][0], msg);
@@ -132,6 +132,8 @@ int main(void) {
     RUN_TEST(test_recupEntete_P5);
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
+
+
   
     return UNITY_END();
 }

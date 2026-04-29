@@ -19,6 +19,7 @@ typedef struct Image {
     uint8_t ** tab;
     FILE * fichier;
     uint32_t taille_ligne;
+    uint32_t nb_lignes;
 
 
 }Image;
