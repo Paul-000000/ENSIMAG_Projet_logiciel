@@ -31,11 +31,12 @@ void test_wikipedia(void) {
 	-1, 0, 0, -2, -1, -3, 4, -1, 
 	0, 0, -1, -4, -1, 0, 0, 2
     };
-    dct_naive(ref);
-    TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,ref,64); // On est bon à la louche
+    int16_t bloc_sq[64];
+    init_table_cosinus();
+    applique_dct(ref,bloc_sq);
+    TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,bloc_sq,64); // On est bon à la louche
 }
-
-
+ 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_wikipedia);

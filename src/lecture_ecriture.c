@@ -5,6 +5,19 @@
 #include "lecture_ecriture.h"
 
 #define TAILLE_ENTETE_PPM 8
+void ignore_commentaire(FILE *fichier){
+    int c;
+    while ((c=fgetc(fichier))!=EOF){
+        if (c=='#'){
+            while((c=fgetc(fichier)) !='\n' && c!=EOF){
+
+            }
+        }else{
+            ungetc(c,fichier);
+            break;
+        }
+    }
+}
 
 Image *recupEntete(FILE *fichier)
 {
@@ -54,12 +67,12 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
-void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
+/*void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
 {
 
     if (image_ppm->largeur % 8 != 0)
     {
-        for (int i = 0, index_tab = taille_ligne; i < image_ppm->hauteur; index_tab += taille_ligne, i++)
+        for (uint32_t i = 0, index_tab = taille_ligne; i < image_ppm->hauteur; index_tab += taille_ligne, i++)
         {
             if (image_ppm->type == P5)
             {
@@ -76,7 +89,7 @@ void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
                 uint8_t dernierB = image_ppm->tab[index_tab - 1];
                 uint8_t dernierG = image_ppm->tab[index_tab - 2];
                 uint8_t dernierR = image_ppm->tab[index_tab - 3];
-                int j = index_tab;
+                uint32_t j = index_tab;
                 while (j % 8 != 0)
                 {
                     image_ppm->tab[index_tab] = dernierR;
@@ -94,7 +107,7 @@ void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
         {
         }
     }
-}
+}*/
 
 Image *lectureImage(char *nom_fichier)
 {
@@ -127,8 +140,8 @@ Image *lectureImage(char *nom_fichier)
 Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
 {
 
-    int taille_ligne = image_ppm->largeur;
-    int nb_octets_lire;
+    uint32_t taille_ligne = image_ppm->largeur;
+    uint32_t nb_octets_lire;
 
     if (image_ppm->type == P5)
     {
