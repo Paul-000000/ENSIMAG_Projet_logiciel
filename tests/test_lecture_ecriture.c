@@ -115,12 +115,64 @@ void test_lireEblocs_grande_image(void) {
     
 }
 
+void test_lireEblocs_verif_lignes(void) {
+    uint32_t L = 1024;
+    uint32_t H = 1024;
+    const char* filename = "test_lignes.pgm";
+
+    // 1. Création de l'image mathématique : Pixel(x,y) = (y * L + x) % 256
+    FILE *f = fopen(filename, "wb");
+    fprintf(f, "P5\n%u %u\n255\n", L, H);
+    for (uint32_t i = 0; i < L * H; i++) {
+        fputc((uint8_t)(i % 256), f);
+    }
+    fclose(f);
+
+    Image *img = lectureImage(filename);
+    
+    // Coordonnées de test (au milieu de l'image)
+    uint32_t tx = 128;
+    uint32_t ty = 200;
+    
+    lireEblocs(img, tx, ty);
+
+    // 2. Vérification du début de chaque ligne (i va de 0 à 7)
+   
+    uint32_t largeur_bloc = 512; 
+    
+    for (uint32_t i = 0; i < 8; i++) {
+        // Coordonnée Y réelle dans le fichier pour cette ligne du bloc
+        uint32_t y_actuel = ty + i;
+        
+        // Calcul de la valeur attendue selon la formule
+        uint8_t attendu = (uint8_t)((y_actuel * L + tx) % 256);
+        
+        // Index dans ton tableau img->tab
+        uint32_t index_buffer = i * largeur_bloc;
+
+        // Message personnalisé pour savoir quelle ligne a échoué
+       
+         TEST_ASSERT_EQUAL_HEX8(attendu, img->tab[index_buffer]);
+    }
+ if (img)
+    {
+        if (img->fichier)
+    {
+        fclose(img->fichier);
+    }
+        free(img); 
+    }
+    
+    
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_lire_image);
     RUN_TEST(test_recupEntete_P5);
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
+    RUN_TEST(test_lireEblocs_verif_lignes);
 
     return UNITY_END();
 }
