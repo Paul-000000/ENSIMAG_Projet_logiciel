@@ -9,26 +9,25 @@
 Image *recupEntete(FILE *fichier)
 {
 
+
     struct Image *image = (struct Image *)malloc(sizeof(Image));
     if (image == NULL)
         return NULL;
 
+
     char c1, c2;
     unsigned int l, h, profondeur;
 
-    if (fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) != 5) {
-        return NULL;
-    
-    } else {
+   
 
-        if (c1 == 'P' && c2 == '5')
-        {
-            image->type = P5;
+    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5){
+        image->tab=NULL;
+        if(c1=='P' && c2=='5') { 
+            image->type=P5;
         }
-        else if (c1 == 'P' && c2 == '6')
-        {
-            image->type = P6;
-        }
+        else if (c1=='P' && c2=='6'){
+            image->type=P6;
+   }
         else
         {
             return NULL;
@@ -38,7 +37,7 @@ Image *recupEntete(FILE *fichier)
         image->hauteur = h;
     }
 
-    image->tab = NULL;
+    // image->tab = NULL;
     image->debut_pixels = ftell(fichier);
     image->fichier = fichier;
     return image;
@@ -112,7 +111,13 @@ Image *lectureImage(char *nom_fichier)
 
     rewind(fichier);
 
-    return recupEntete(fichier);
+        rewind(fichier);
+
+        Image * image = recupEntete(fichier); 
+        image->tab=(uint8_t *)malloc(sizeof(uint8_t)*64*64);
+        return image;
+
+
 }
 
 Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
