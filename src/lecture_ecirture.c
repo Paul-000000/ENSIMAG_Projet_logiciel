@@ -22,6 +22,7 @@ Image* recupEntete (FILE *fichier){
         image->hauteur = h;
     }
     image->tab = NULL;
+    image->debut_pixels = ftell(fichier);
     image->fichier = fichier;
     return image;
 }
@@ -61,11 +62,8 @@ void completer_image(FILE *fichier,Image *image_ppm,int taille_ligne){
             image_ppm->tab[index_tab+2]=dernierB;
             j+=3;
           }
-   
             
         }
-         
-       
        }
     }else
     {

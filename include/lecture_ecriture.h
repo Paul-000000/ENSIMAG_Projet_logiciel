@@ -21,7 +21,6 @@ typedef struct Image {
     uint32_t taille_ligne;
 
 
-    
 }Image;
 
 Image* recupEntete (FILE *fichier);
