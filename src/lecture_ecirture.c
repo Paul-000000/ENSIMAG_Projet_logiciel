@@ -16,14 +16,16 @@ Image *recupEntete(FILE *fichier)
     char c1, c2;
     unsigned int l, h, profondeur;
 
-    if (fscanf(fichier, "%c%c\n%u %u\n%u", &c1, &c2, &l, &h, &profondeur) == 5)
-    {
+    if (fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) != 5) {
+        return NULL;
+    
+    } else {
 
-        if (c1 == "P" && c2 == "5")
+        if (c1 == 'P' && c2 == '5')
         {
             image->type = P5;
         }
-        else if (c1 == "P" && c2 == "6")
+        else if (c1 == 'P' && c2 == '6')
         {
             image->type = P6;
         }
@@ -34,10 +36,6 @@ Image *recupEntete(FILE *fichier)
 
         image->largeur = l;
         image->hauteur = h;
-    }
-    else
-    {
-        return NULL;
     }
 
     image->tab = NULL;
@@ -58,7 +56,7 @@ void completer_image(FILE *fichier, Image *image_ppm, int taille_ligne)
 
     if (image_ppm->largeur % 8 != 0)
     {
-        for (int i = 0, index_tab = taille_ligne; i < image_ppm->hauteur; index_tab += taille_ligne, i++)
+        for (uint32_t i = 0, index_tab = taille_ligne; i < image_ppm->hauteur; index_tab += taille_ligne, i++)
         {
             if (image_ppm->type == P5)
             {
@@ -161,5 +159,7 @@ void liberer_image(Image *image) {
         
         free(image->tab);
     }
+
+    fclose(image->fichier);
     free(image);
 }
