@@ -11,7 +11,7 @@ void tearDown(void) {
 }
 void test_recupEntete_P5(void) {
 
-    const char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/gris.pgm";
+    const char* filename = "images/etu/gris.pgm";
  
     FILE *f_test = fopen(filename, "rb");
     TEST_ASSERT_NOT_NULL(f_test);
@@ -41,7 +41,7 @@ uint8_t motif_attendu[64] = {
 
 void test_lire_image(void) {
 
-     char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/gris.pgm";
+    const char* filename = "images/etu/gris.pgm";
  
    
     Image* img = lectureImage(filename);
@@ -66,7 +66,7 @@ void test_lire_image(void) {
 }
 
 void test_lectureEblocs(){
-    char* filename = "/Users/test/Desktop/1A/S2/Projet_C/2_bahag_becharam_bottnerp/images/etu/invader.pgm";
+    const char* filename = "images/etu/invader.pgm";
 
     Image* img = lectureImage(filename);
     lireEblocs(img, 0, 0);

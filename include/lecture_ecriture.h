@@ -11,6 +11,7 @@ typedef enum{
 
 typedef struct Image {
 
+
     uint32_t largeur;
     uint32_t hauteur;
     uint32_t debut_pixels;

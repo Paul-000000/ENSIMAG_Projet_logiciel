@@ -5,12 +5,11 @@
 #include "lecture_ecriture.h"
 
 #define TAILLE_ENTETE_PPM 8
-
 #define LARGEUR_BLOC 8          
 #define NB_BLOCS_LUS 64         
 #define NB_LIGNES_IMAGE_TAB 8   
 #define LARGEUR_SUPER_BLOC (LARGEUR_BLOC * NB_BLOCS_LUS) 
-
+/*
 Image *recupEntete(FILE *fichier)
 {
 
@@ -18,13 +17,63 @@ Image *recupEntete(FILE *fichier)
     if (image == NULL)
         return NULL;
 
+    image->tab=NULL;
+    
+    char c1, c2;
+    unsigned int l, h, profondeur;
+
+    ignore_commentaires(fichier);
+
+    if (fscanf(fichier, "%c%c\n",&c1, &c2) != 2) { // P5 ou P6
+        return NULL;
+
+    } else {
+        
+        if(c1=='P' && c2=='5') { 
+            image->type=P5;
+        
+        } else if (c1=='P' && c2=='6'){
+            image->type=P6;
+
+        } else {
+            return NULL;
+        }
+    }
+
+    ignore_commentaires(fichier);
+
+    if (fscanf(fichier, "%u %u\n",&l, &h) != 2) { // largeur et hauteur
+        return NULL;
+    }
+
+    image->largeur = l;
+    image->hauteur = h;
+
+    ignore_commentaires(fichier);
+
+    if(fscanf(fichier, "%u\n", &profondeur) != 1) {
+        return NULL;
+    }
+    
+    ignore_commentaires(fichier);
+
+    image->debut_pixels = ftell(fichier);
+    image->fichier = fichier;
+    return image;
+}
+*/
+
+Image *recupEntete(FILE *fichier) {
+
+    struct Image *image = (struct Image *)malloc(sizeof(Image));
+    if (image == NULL)
+        return NULL;
 
     char c1, c2;
     unsigned int l, h, profondeur;
 
-   
-
-    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5){
+    if(fscanf(fichier, "%c%c\n%u %u\n%u\n", &c1, &c2, &l, &h, &profondeur) == 5)
+    {
         image->tab=NULL;
         if(c1=='P' && c2=='5') { 
             image->type=P5;
