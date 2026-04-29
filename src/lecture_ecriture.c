@@ -6,9 +6,13 @@
 
 #define TAILLE_ENTETE_PPM 8
 
+#define LARGEUR_BLOC 8          
+#define NB_BLOCS_LUS 64         
+#define NB_LIGNES_IMAGE_TAB 8   
+#define LARGEUR_SUPER_BLOC (LARGEUR_BLOC * NB_BLOCS_LUS) 
+
 Image *recupEntete(FILE *fichier)
 {
-
 
     struct Image *image = (struct Image *)malloc(sizeof(Image));
     if (image == NULL)
@@ -72,10 +76,10 @@ Image *lectureImage(char *nom_fichier)
         rewind(fichier);
 
         Image * image = recupEntete(fichier); 
-        image->tab = (uint8_t **)malloc(8 * sizeof(uint8_t *));
-    for (int i = 0; i < 8; i++) {
+        image->tab = (uint8_t **)malloc(NB_LIGNES_IMAGE_TAB * sizeof(uint8_t *));
+    for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
         // Chaque ligne peut contenir jusqu'à 512 pixels (64 blocs)
-        image->tab[i] = (uint8_t *)malloc(512 * sizeof(uint8_t));
+        image->tab[i] = (uint8_t *)malloc(LARGEUR_SUPER_BLOC* sizeof(uint8_t));
     }
     return image;
 
@@ -90,7 +94,7 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
 
     if (image_ppm->type == P5)
     {
-        nb_octets_lire = 512;
+        nb_octets_lire = LARGEUR_SUPER_BLOC;
         if (x + nb_octets_lire > taille_ligne)
         {
             nb_octets_lire = taille_ligne - x;
@@ -98,7 +102,7 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
     }
 
 
-    for (size_t i = 0; i < 8; i++)
+    for (size_t i = 0; i < NB_LIGNES_IMAGE_TAB; i++)
     {
         positionner_curseur(image_ppm, x, y + i);
 
@@ -124,7 +128,7 @@ void liberer_image(Image *image) {
     if (image == NULL) return;
 
     if (image->tab != NULL) {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
         
         free(image->tab[i]);
 
