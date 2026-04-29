@@ -8,19 +8,29 @@
 
 
 Image* recupEntete (FILE *fichier){
-    struct Image* image;
+
+    struct Image* image = (struct Image *)malloc(sizeof(Image));
+    if (image == NULL) return NULL;
+
     char c1,c2;
-    unsigned int l,h;
-    if(fscanf(fichier, "%c%c\n %l %h", &c1,&c2, &l,&h)==4){
+    unsigned int l,h, profondeur;
+
+    if(fscanf(fichier, "%c%c\n%u %u\n%u", &c1, &c2, &l, &h, &profondeur) == 5){
+        
         if(c1=="P" && c2=="5") { 
             image->type=P5;
         }
         else if (c1=="P" && c2=="6"){
-             image->type=P6;
-            }
+            image->type=P6;
+        }
+
         image->largeur = l;
         image->hauteur = h;
+    
+    } else {
+        return NULL;
     }
+
     image->tab = NULL;
     image->debut_pixels = ftell(fichier);
     image->fichier = fichier;
