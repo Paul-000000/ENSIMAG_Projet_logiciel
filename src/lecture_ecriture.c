@@ -125,7 +125,7 @@ Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels,
         Image * image = recupEntete(fichier); 
         image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
         int multiplicateur = (image->type == P6) ? 3 : 1;
-        for (int i = 0; i < nb_lignes_superbloc; i++) {
+        for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
             image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
         }
         return image;
@@ -175,7 +175,7 @@ void liberer_image(Image *image,uint32_t nb_lignes_superbloc) {
         return;
 
     if (image->tab != NULL) {
-        for (int i = 0; i < nb_lignes_superbloc; i++) {
+        for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
         
         free(image->tab[i]);
 

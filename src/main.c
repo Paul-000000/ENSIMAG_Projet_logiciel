@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
    
    
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
     if (!res) return EXIT_FAILURE;

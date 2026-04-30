@@ -21,7 +21,7 @@ typedef struct vecteur {
 typedef struct vecteurs_ycbcr {
     
     uint8_t nb_vecteurs;
-    Vecteur vecteurs[16];
+    Vecteur vecteurs[48];
 } Vecteurs_ycbcr;
 
 typedef struct dimensions_cbcr {
