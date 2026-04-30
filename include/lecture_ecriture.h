@@ -22,14 +22,17 @@ typedef struct Image {
     uint32_t taille_ligne;
     uint32_t nb_lignes;
 
-
 }Image;
 
 Image* recupEntete (FILE *fichier);
-Image* lectureImage(char * nom_fichier );
 
-Image* lireEblocs(Image *image,uint32_t x, uint32_t y);
-void liberer_image(Image *image);
+Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels,
+    uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
+
+Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc_en_pixels,
+    uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
+    
+void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
 
 
 
