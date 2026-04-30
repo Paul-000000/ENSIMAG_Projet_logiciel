@@ -1,4 +1,5 @@
-#include "../include/rgb_to_ycbcr.h"
+#include "rgb_to_ycbcr.h"
+
 
 struct couleur_ycbcr_t rgb_to_ycbcr(struct couleur_rgb_t couleur) {
 
@@ -9,4 +10,15 @@ struct couleur_ycbcr_t rgb_to_ycbcr(struct couleur_rgb_t couleur) {
     };
 
     return resultat;
+}
+
+void matrice_rgb_to_ycbcr(struct couleur_rgb_t matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, struct couleur_ycbcr_t matrice_sortie[MCU_MAX][MCU_MAX]) {
+
+    for (uint8_t i = 0; i < hauteur; i++) {
+        
+        for (uint8_t j = 0; j < largeur; j++) {
+            
+            matrice_sortie[i][j] = rgb_to_ycbcr(matrice[i][j]);
+        }
+    }
 }

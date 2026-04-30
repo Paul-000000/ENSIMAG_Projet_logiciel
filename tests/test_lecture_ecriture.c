@@ -119,6 +119,7 @@ void test_lireEblocs_grande_image(void) {
 }
 
 int main(void) {
+
     UNITY_BEGIN();
     RUN_TEST(test_lire_image);
     RUN_TEST(test_recupEntete_P5);
@@ -127,6 +128,3 @@ int main(void) {
 
     return UNITY_END();
 }
-
-
-

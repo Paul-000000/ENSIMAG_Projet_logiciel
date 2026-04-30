@@ -1,6 +1,6 @@
 
 
-#include "../include/commande.h"
+#include "commande.h"
 #include <unistd.h>
 #include <getopt.h>
 #include <stdio.h>
@@ -133,11 +133,15 @@ bool initialiser_parametres_commande(int argc, char **argv, struct parametres_co
 
 	parametres->chemin_sortie = chemin_sortie;
 	
-
+	
 	if (!facteurs_initialises) {
 
-		struct facteur_echantillonnage_t facteurs = {2, 2, 1, 1, 1, 1};
+		struct facteurs_echantillonnage_t facteurs = {2, 2, 1, 1, 1, 1};
 		parametres->facteurs = facteurs;
+	
+	} else {
+		
+		if (!verifier_facteurs_echantillonnage(parametres->facteurs)) return false; 
 	}
 
 	return true;
@@ -161,4 +165,29 @@ void liberer_parametres_commande(struct parametres_commande_t *parametres) {
 
 	free(parametres->chemin_sortie);
 	parametres->chemin_sortie = NULL;
+}
+
+
+
+bool verifier_facteurs_echantillonnage(struct facteurs_echantillonnage_t facteurs) {
+
+	if (
+		facteurs.h1 < 1 || facteurs.h1 > 4 || 
+		facteurs.v1 < 1 || facteurs.v1 > 4 || 
+		facteurs.h2 < 1 || facteurs.h2 > 4 ||
+		facteurs.v2 < 1 || facteurs.v2 > 4 || 
+		facteurs.h3 < 1 || facteurs.h3 > 4 ||
+		facteurs.v3 < 1 || facteurs.v3 > 4
+	) return false;
+
+	if ((facteurs.h1 * facteurs.v1 + facteurs.h2 * facteurs.v2 + facteurs.h3 * facteurs.v3) > 10) return false;
+
+	if (
+		facteurs.h1 % facteurs.h2 != 0 || 
+		facteurs.h1 % facteurs.h3 != 0 ||
+		facteurs.v1 % facteurs.v2 != 0 || 
+		facteurs.v1 % facteurs.v3 != 0
+	) return false;
+
+	return true;
 }
