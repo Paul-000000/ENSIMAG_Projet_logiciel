@@ -79,7 +79,9 @@ void test_lectureEblocs() {
 
     liberer_image(img, H_super);
 }
+
 void test_lireEblocs_grande_image(void) {
+
     uint32_t L = 1024;
     uint32_t H = 1024;
     char* filename = "test_large.pgm";
@@ -205,8 +207,6 @@ int main(void) {
     RUN_TEST(test_lireEblocs_grande_image);
     RUN_TEST(test_lireEblocs_grande_image_P6);
 
-
-  
     return UNITY_END();
 }
 
