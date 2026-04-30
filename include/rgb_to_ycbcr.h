@@ -3,20 +3,22 @@
 
 #include <stdint.h>
 
-typedef struct couleur_rgb_t {
+typedef struct couleur_rgb {
 	uint8_t r,g,b;
- } couleur_rgb_t;
 
-typedef struct couleur_ycbcr_t {
+ } Couleur_rgb;
+
+typedef struct couleur_ycbcr {
 	uint8_t y,cb,cr;
- } couleur_ycbcr_t;
+	
+ } Couleur_ycbcr;
 
 #include "downsampler.h"
 
 // convertion d'un pixel au format RGB en format YCbCr
-struct couleur_ycbcr_t rgb_to_ycbcr(struct couleur_rgb_t couleur);
+Couleur_ycbcr rgb_to_ycbcr(Couleur_rgb couleur);
 
-void matrice_rgb_to_ycbcr(struct couleur_rgb_t matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, struct couleur_ycbcr_t matrice_sortie[MCU_MAX][MCU_MAX]);
+void matrice_rgb_to_ycbcr(Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]);
 
 
 #endif /* _RGB_TO_YCBCR_H_ */

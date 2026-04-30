@@ -6,40 +6,36 @@
 #include "rgb_to_ycbcr.h"
 #include "commande.h"
 
-enum composante_t {
+typedef enum composante {
     Y,
     CB,
     CR
-};
+} Composante;
 
-struct vecteur_t {
+typedef struct vecteur {
     
     uint8_t valeur[64];
-    enum composante_t composante;
-};
+    Composante composante;
+} Vecteur;
 
-struct matrices_ycbcr_t {
-    
-    uint8_t matrice_y[MCU_MAX][MCU_MAX];
-    uint8_t matrice_cb[MCU_MAX][MCU_MAX];
-    uint8_t matrice_cr[MCU_MAX][MCU_MAX];
-};
-
-struct vecteurs_ycbcr_t {
+typedef struct vecteurs_ycbcr {
     
     uint8_t nb_vecteurs;
-    struct vecteur_t vecteurs[16];
-};
+    Vecteur vecteurs[16];
+} Vecteurs_ycbcr;
 
-struct dimensions_cbcr_t {
+typedef struct dimensions_cbcr {
     
     uint8_t largeur_mcu_cb, hauteur_mcu_cb, largeur_mcu_cr, hauteur_mcu_cr;
-};
+} Dimensions_cbcr;
 
-struct dimensions_cbcr_t determiner_dimensions_cb_cr(struct facteurs_echantillonnage_t facteurs);
 
-void decouper_matrices(struct couleur_ycbcr_t matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, struct dimensions_cbcr_t dimensions_sortie, struct matrices_ycbcr_t *matrices_sortie);
 
-void determiner_facteurs_mcu(struct facteurs_echantillonnage_t facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu);
+Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs);
+
+void decouper_matrices(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie);
+
+void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu);
+
 
 #endif // _DOWNSAMPLER_H_

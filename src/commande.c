@@ -17,7 +17,7 @@ static struct option options[] = {
 
 
 // récupère les valeurs des paramètres dans une ligne de commande
-bool recuperer_parametres_commande(int argc, char **argv, struct parametres_commande_t *parametres, bool *facteurs_initialises) {
+bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool *facteurs_initialises) {
 
 	if (argc < 2) return false;
 
@@ -109,7 +109,7 @@ char *dupliquer_chaine(char *chaine) {
 	return nouvelle_chaine;
 }
 
-bool initialiser_parametres_commande(int argc, char **argv, struct parametres_commande_t *parametres) {
+bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres) {
 
 	bool facteurs_initialises;
 	bool res = recuperer_parametres_commande(argc, argv, parametres, &facteurs_initialises);
@@ -136,7 +136,7 @@ bool initialiser_parametres_commande(int argc, char **argv, struct parametres_co
 	
 	if (!facteurs_initialises) {
 
-		struct facteurs_echantillonnage_t facteurs = {2, 2, 1, 1, 1, 1};
+		Facteurs_echantillonnage facteurs = {2, 2, 1, 1, 1, 1};
 		parametres->facteurs = facteurs;
 	
 	} else {
@@ -147,7 +147,7 @@ bool initialiser_parametres_commande(int argc, char **argv, struct parametres_co
 	return true;
 }
 
-bool help_demande(struct parametres_commande_t *parametres) {
+bool help_demande(Parametres_commande *parametres) {
 
 	if (!parametres->help) return false;
 
@@ -159,7 +159,7 @@ bool help_demande(struct parametres_commande_t *parametres) {
 	return true;
 }
 
-void liberer_parametres_commande(struct parametres_commande_t *parametres) {
+void liberer_parametres_commande(Parametres_commande *parametres) {
 
 	if (parametres->chemin_sortie == NULL) return;
 
@@ -169,7 +169,7 @@ void liberer_parametres_commande(struct parametres_commande_t *parametres) {
 
 
 
-bool verifier_facteurs_echantillonnage(struct facteurs_echantillonnage_t facteurs) {
+bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
 
 	if (
 		facteurs.h1 < 1 || facteurs.h1 > 4 || 
