@@ -11,7 +11,7 @@ void tearDown(void) {
 }
 void test_recupEntete_P5(void) {
 
-    const char* filename = "images/etu/gris.pgm";
+    char* filename = "images/etu/gris.pgm";
  
     FILE *f_test = fopen(filename, "rb");
     TEST_ASSERT_NOT_NULL(f_test);
@@ -40,7 +40,8 @@ uint8_t motif_attendu[64] = {
     };
 
 void test_lire_image(void) {
-    const char* filename = "images/etu/gris.pgm";
+    
+    char* filename = "images/etu/gris.pgm";
     
     // Paramètres pour 64 blocs de 8x8
     uint32_t L_bloc = 8;
@@ -60,7 +61,9 @@ void test_lire_image(void) {
 }
 
 void test_lectureEblocs() {
-    const char* filename = "images/etu/invader.pgm";
+    
+    char* filename = "images/etu/invader.pgm";
+    
     uint32_t L_bloc = 8;
     uint32_t H_super = 8;
     uint32_t nb_blocs = 64;
