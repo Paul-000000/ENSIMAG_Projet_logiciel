@@ -6,11 +6,6 @@
 #include <math.h>
 
 
-void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu) {
-
-	*largeur_mcu = 8 * facteurs.h1;
-	*hauteur_mcu = 8 * facteurs.v1;
-}
 
 Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 

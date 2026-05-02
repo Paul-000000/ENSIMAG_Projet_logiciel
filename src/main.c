@@ -5,11 +5,8 @@
 #include <lecture_ecriture.h>
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
-   
-   
     Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
@@ -17,7 +14,6 @@ int main(int argc, char **argv)
 
     bool help = help_demande(&parametres);
     if (help) return EXIT_SUCCESS;
-    
 
     // suite des fonctions
 

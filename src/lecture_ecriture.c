@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "lecture_ecriture.h"
+#include "lecture_ecriture.h"
 
-#define LARGEUR_BLOC 8          
-#define NB_BLOCS_LUS 64         
-#define NB_LIGNES_IMAGE_TAB 8   
-#define LARGEUR_SUPER_BLOC (LARGEUR_BLOC * NB_BLOCS_LUS) 
+         
+#define NB_BLOCS_SUPERBLOC 64
 #define TAILLE_ENTETE_PPM_MIN 9
+
+
 
 void ignore_commentaires(FILE *fichier)
 {
@@ -99,9 +100,7 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
-
-Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels,
-    uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
+Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
 {
 
     FILE *fichier = fopen(nom_fichier, "rb");
@@ -133,11 +132,8 @@ Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels,
 
 }
 
-Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc_en_pixels,
-    uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
+Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
 {
-
-   
     uint32_t nb_pixels_a_lire = largeur_bloc_en_pixels * nb_blocs;
 
     if (x + nb_pixels_a_lire > image_ppm->largeur) {
@@ -146,8 +142,6 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc
 
     uint32_t unite = (image_ppm->type == P6) ? 3 : 1;
     
-
-
     for (size_t i = 0; i < nb_lignes_superbloc; i++)
     {
         positionner_curseur(image_ppm, x, y + i);
@@ -162,8 +156,6 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc
             break;
         }
         image_ppm->nb_lignes = i + 1;
-
-
     }
 
     return image_ppm;
@@ -185,4 +177,19 @@ void liberer_image(Image *image,uint32_t nb_lignes_superbloc) {
     
     fclose(image->fichier);
     free(image);
-}}
+    }
+}
+
+
+
+void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu) {
+
+	*largeur_mcu = 8 * facteurs.h1;
+	*hauteur_mcu = 8 * facteurs.v1;
+}
+
+
+//void superbloc_suivant(Image *image_ppm) {
+
+    //NB_BLOCS_SUPERBLOC
+//}

@@ -4,34 +4,35 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
+
 typedef struct facteurs_echantillonnage {
-	uint8_t h1,v1,h2,v2,h3,v3;
+	uint8_t h1,v1,h2,v2,h3,v3; // h1xv1,h2xv2,h3v3
 	
 } Facteurs_echantillonnage;
 
 typedef struct parametres_commande {
-	char *chemin_entree; // le chemin du fichier en entrée non vérifié (peut être NULL)
-	char *chemin_sortie; // le chemin de sortie si modifié sinon contient NULL
+	char *chemin_entree; // le chemin du fichier en entrée accessible
+	char *chemin_sortie; // le chemin de sortie accessible
 	bool help; // vrai si on a mis --help, on s'arrète, les autres champs ne sont pas forcément initialisés
 	Facteurs_echantillonnage facteurs; // les facteurs récupérés
 
 } Parametres_commande;
 
 
+
 /*
 récupère les valeurs des paramètres dans une ligne de commande
-
+et renvoir un booléen qui est à vrai si la commande contient des arguments corrects
 parametres est une structure non initialisée qui sera remplie à la fin de l'appel de fonction
 */
-
 bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres);
 
+// affiche l'aide si l'argument help à été détecté
 bool help_demande(Parametres_commande *parametres);
 
+// libère les paramètres récupérés
 void liberer_parametres_commande(Parametres_commande *parametres);
-
-
-bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs);
 
 
 
