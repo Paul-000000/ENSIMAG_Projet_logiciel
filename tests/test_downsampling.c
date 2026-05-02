@@ -1,5 +1,8 @@
 #include "unity.h"
 #include "downsampler.h"
+#include "lecture.h"
+
+
 
 void setUp(void) {
     // set stuff up here
