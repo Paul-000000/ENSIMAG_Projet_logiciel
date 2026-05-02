@@ -2,7 +2,7 @@
 #include "htables.h"
 #include "qtables.h"
 #include "commande.h"
-#include <lecture_ecriture.h>
+#include <lecture.h>
 
 
 int main(int argc, char **argv) {
