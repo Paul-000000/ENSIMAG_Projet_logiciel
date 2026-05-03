@@ -1,15 +1,20 @@
 #ifndef _LECTURE_ECRITURE_H_
 #define _LECTURE_ECRITURE_H_
+
+
+
 #include <stdio.h>
 #include "rgb_to_ycbcr.h"
 
-typedef enum{
+
+
+typedef enum{ // P6 : image couleur, P5 : image en niveaux de gris
     P5,
     P6,
 
-}TypeImage;
+} TypeImage;
 
-typedef struct Image {
+typedef struct Image { // les propriétés de l'image ouverte
 
     uint32_t largeur;
     uint32_t hauteur;
@@ -21,7 +26,17 @@ typedef struct Image {
     uint32_t taille_ligne;
     uint32_t nb_lignes;
 
-}Image;
+} Image;
+
+typedef struct IterateurMCU { // itérateur sur la MCU en cours
+
+    Image *image;
+    uint8_t largeur_mcu, hauteur_mcu;
+    uint32_t largeur_image_mcu, hauteur_image_mcu;
+    uint32_t x, y, i_mcu;
+
+} IterateurMCU;
+
 
 
 Image* recupEntete (FILE *fichier);
@@ -32,8 +47,15 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc
     
 void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
 
+
 // permet d'obtenir les dimensions du MCU en pixels à partir des facteurs
 void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu); 
+
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs);
+
+bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]);
+
+void liberer_iterateur_mcu(IterateurMCU *iterateur);
 
 
 
