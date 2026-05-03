@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "lecture_ecriture.h"
+#include "lecture.h"
 
-#define LARGEUR_BLOC 8          
-#define NB_BLOCS_LUS 64         
-#define NB_LIGNES_IMAGE_TAB 8   
-#define LARGEUR_SUPER_BLOC (LARGEUR_BLOC * NB_BLOCS_LUS) 
+
+         
+#define NB_BLOCS_SUPERBLOC 64
 #define TAILLE_ENTETE_PPM_MIN 9
+
+
 
 void ignore_commentaires(FILE *fichier)
 {
@@ -92,12 +93,12 @@ Image *recupEntete(FILE *fichier) {
 
 void positionner_curseur(Image *img, uint32_t x, uint32_t y)
 {
-    // La formule magique pour retrouver n'importe quel pixel (x,y) :
-    long position = img->debut_pixels + ((long)y * img->largeur) + (long)x;
+    int multiplicateur = (img->type == P6) ? 3 : 1;
+    long position = img->debut_pixels + (((long)y * img->largeur) + (long)x) * multiplicateur;
     fseek(img->fichier, position, SEEK_SET);
 }
 
-Image *lectureImage(char *nom_fichier)
+Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
 {
 
     FILE *fichier = fopen(nom_fichier, "rb");
@@ -116,65 +117,77 @@ Image *lectureImage(char *nom_fichier)
 
     rewind(fichier);
 
-    Image * image = recupEntete(fichier); 
-    image->tab = (uint8_t **)malloc(NB_LIGNES_IMAGE_TAB * sizeof(uint8_t *));
-    for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
-        // Chaque ligne peut contenir jusqu'à 512 pixels (64 blocs)
-        image->tab[i] = (uint8_t *)malloc(LARGEUR_SUPER_BLOC* sizeof(uint8_t));
-    }
-    return image;
+        rewind(fichier);
+
+        Image * image = recupEntete(fichier); 
+        image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
+        int multiplicateur = (image->type == P6) ? 3 : 1;
+        for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
+            image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
+        }
+        return image;
+
+
 }
 
-Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y)
+Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
 {
+    uint32_t nb_pixels_a_lire = largeur_bloc_en_pixels * nb_blocs;
 
-    uint32_t taille_ligne = image_ppm->largeur;
-    uint32_t nb_octets_lire;
-
-    if (image_ppm->type == P5)
-    {
-        nb_octets_lire = LARGEUR_SUPER_BLOC;
-        if (x + nb_octets_lire > taille_ligne)
-        {
-            nb_octets_lire = taille_ligne - x;
-        }
+    if (x + nb_pixels_a_lire > image_ppm->largeur) {
+        nb_pixels_a_lire = image_ppm->largeur - x;
     }
 
-
-    for (size_t i = 0; i < NB_LIGNES_IMAGE_TAB; i++)
+    uint32_t unite = (image_ppm->type == P6) ? 3 : 1;
+    
+    for (size_t i = 0; i < nb_lignes_superbloc; i++)
     {
         positionner_curseur(image_ppm, x, y + i);
 
-        size_t lus = fread(image_ppm->tab[i], 1, nb_octets_lire, image_ppm->fichier);
+        size_t lus = fread(image_ppm->tab[i], unite, nb_pixels_a_lire, image_ppm->fichier);
         if (i == 0)
         {
             image_ppm->taille_ligne = lus;
         }
-        if (lus < nb_octets_lire)
+        if (lus < nb_pixels_a_lire)
         {
             break;
         }
-        image_ppm->nb_lignes = i;
+        image_ppm->nb_lignes = i + 1;
     }
 
     return image_ppm;
 }
 
-void liberer_image(Image *image)
-{
+void liberer_image(Image *image,uint32_t nb_lignes_superbloc) {
 
     if (image == NULL)
         return;
 
     if (image->tab != NULL) {
+        for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
+        
+        free(image->tab[i]);
 
-        for (int i = 0; i < NB_LIGNES_IMAGE_TAB; i++) {
-
-            free(image->tab[i]);
         }
 
         free(image->tab);
-    }
+    
     fclose(image->fichier);
     free(image);
+    }
 }
+
+
+
+void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu) {
+
+	*largeur_mcu = 8 * facteurs.h1;
+	*hauteur_mcu = 8 * facteurs.v1;
+}
+
+
+//void superbloc_suivant(Image *image_ppm) {
+
+    //NB_BLOCS_SUPERBLOC
+//}

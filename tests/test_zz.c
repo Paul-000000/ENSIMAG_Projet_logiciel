@@ -12,13 +12,14 @@ void tearDown(void) {
 }
 
 void test2(void){
-	TEST_ASSERT(1 > 0);
+	
+    TEST_ASSERT(1 > 0);
 	TEST_ASSERT_FALSE(2+2==5);
-//	TEST_FAIL_MESSAGE("Parce que la vie est injuste!");
+    // TEST_FAIL_MESSAGE("Parce que la vie est injuste!");
 }
 
 void test_position(void) {
-    uint16_t identite[64] = {
+    int16_t identite[64] = {
         0, 1, 2, 3, 4, 5, 6, 7,
         8, 9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23,
@@ -28,7 +29,7 @@ void test_position(void) {
         48, 49, 50, 51, 52, 53, 54, 55,
         56, 57, 58, 59, 60, 61, 62, 63
     };
-    uint16_t zzi[64] = {
+    int16_t zzi[64] = {
 	0, 1, 8, 16, 9, 2, 3, 10, 
 	17, 24, 32, 25, 18, 11, 4, 5, 
 	12, 19, 26, 33, 40, 48, 41, 34, 
@@ -38,6 +39,7 @@ void test_position(void) {
 	58, 59, 52, 45, 38, 31, 39, 46, 
 	53, 60, 61, 54, 47, 55, 62, 63 
     };
+
     appli_zigzag(identite);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(zzi,identite,64);
 }

@@ -11,8 +11,8 @@ typedef enum  {
     Cr,
 }Typequant;
 
-void appli_zigzag (uint16_t bloc[64] );
+void appli_zigzag (int16_t bloc[64] );
 void applique_quant (int16_t bloc[64], uint8_t table_quantification[64]);
-void quantification (uint16_t bloc[64], Typequant type, uint8_t tab_quantif[64]);
+void quantification (int16_t bloc[64], Typequant type, uint8_t tab_quantif[64]);
 
 #endif /* _ZZ_H_ */

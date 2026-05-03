@@ -2,22 +2,18 @@
 #include "htables.h"
 #include "qtables.h"
 #include "commande.h"
-#include <lecture_ecriture.h>
+#include <lecture.h>
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
-   
-   
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
     if (!res) return EXIT_FAILURE;
 
     bool help = help_demande(&parametres);
     if (help) return EXIT_SUCCESS;
-    
 
     // suite des fonctions
 

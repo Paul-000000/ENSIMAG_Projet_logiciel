@@ -1,6 +1,6 @@
 
 
-#include "../include/commande.h"
+#include "commande.h"
 #include <unistd.h>
 #include <getopt.h>
 #include <stdio.h>
@@ -16,8 +16,45 @@ static struct option options[] = {
 };
 
 
+
+bool chemin_accessible(char *chemin) {
+
+	FILE *fichier = fopen(chemin, "rb");
+	
+	if (fichier == NULL) return false;
+
+	fclose(fichier);
+
+	return true;
+}
+
+bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
+
+	if (
+		facteurs.h1 < 1 || facteurs.h1 > 4 || 
+		facteurs.v1 < 1 || facteurs.v1 > 4 || 
+		facteurs.h2 < 1 || facteurs.h2 > 4 ||
+		facteurs.v2 < 1 || facteurs.v2 > 4 || 
+		facteurs.h3 < 1 || facteurs.h3 > 4 ||
+		facteurs.v3 < 1 || facteurs.v3 > 4
+	) return false;
+
+	if ((facteurs.h1 * facteurs.v1 + facteurs.h2 * facteurs.v2 + facteurs.h3 * facteurs.v3) > 10) return false;
+
+	if (
+		facteurs.h1 % facteurs.h2 != 0 || 
+		facteurs.h1 % facteurs.h3 != 0 ||
+		facteurs.v1 % facteurs.v2 != 0 || 
+		facteurs.v1 % facteurs.v3 != 0
+	) return false;
+
+	return true;
+}
+
+
+
 // récupère les valeurs des paramètres dans une ligne de commande
-bool recuperer_parametres_commande(int argc, char **argv, struct parametres_commande_t *parametres, bool *facteurs_initialises) {
+bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool *facteurs_initialises) {
 
 	if (argc < 2) return false;
 
@@ -109,7 +146,7 @@ char *dupliquer_chaine(char *chaine) {
 	return nouvelle_chaine;
 }
 
-bool initialiser_parametres_commande(int argc, char **argv, struct parametres_commande_t *parametres) {
+bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres) {
 
 	bool facteurs_initialises;
 	bool res = recuperer_parametres_commande(argc, argv, parametres, &facteurs_initialises);
@@ -122,28 +159,32 @@ bool initialiser_parametres_commande(int argc, char **argv, struct parametres_co
 		parametres->chemin_sortie = NULL;
 		return true;
 	}
-	if (parametres->chemin_entree == NULL) {
+	if (parametres->chemin_entree == NULL || !chemin_accessible(parametres->chemin_entree)) {
 		parametres->chemin_sortie = NULL;
 		return false;
 	}
 
 	char *chemin_sortie = (parametres->chemin_sortie == NULL) ? extension_jpg(parametres->chemin_entree) : dupliquer_chaine(parametres->chemin_sortie);
 
-	if (chemin_sortie == NULL) return false;
+	if (chemin_sortie == NULL || chemin_accessible(chemin_sortie)) return false;
 
 	parametres->chemin_sortie = chemin_sortie;
 	
-
+	
 	if (!facteurs_initialises) {
 
-		struct facteur_echantillonnage_t facteurs = {2, 2, 1, 1, 1, 1};
+		Facteurs_echantillonnage facteurs = {2, 2, 1, 1, 1, 1};
 		parametres->facteurs = facteurs;
+	
+	} else {
+		
+		if (!verifier_facteurs_echantillonnage(parametres->facteurs)) return false; 
 	}
 
 	return true;
 }
 
-bool help_demande(struct parametres_commande_t *parametres) {
+bool help_demande(Parametres_commande *parametres) {
 
 	if (!parametres->help) return false;
 
@@ -155,7 +196,7 @@ bool help_demande(struct parametres_commande_t *parametres) {
 	return true;
 }
 
-void liberer_parametres_commande(struct parametres_commande_t *parametres) {
+void liberer_parametres_commande(Parametres_commande *parametres) {
 
 	if (parametres->chemin_sortie == NULL) return;
 

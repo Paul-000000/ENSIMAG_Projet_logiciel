@@ -19,7 +19,7 @@ uint16_t tab_zz [64] = {
 };
 
 
-void appli_zigzag (uint16_t bloc[64] ){
+void appli_zigzag (int16_t bloc[64] ){
     uint16_t bloc_temp[64];
 
     for (int x=0; x<64; x++){
@@ -39,7 +39,7 @@ void applique_quant (int16_t bloc[64], uint8_t table_quantification[64]){
     }
 }
 
-void quantification (uint16_t bloc[64], Typequant type , uint8_t tab_quantif[64]){
+void quantification (int16_t bloc[64], Typequant type , uint8_t tab_quantif[64]){
 
     int16_t bloc_sq[64];
 
