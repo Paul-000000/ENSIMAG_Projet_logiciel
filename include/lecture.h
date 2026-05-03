@@ -32,7 +32,7 @@ typedef struct IterateurMCU { // itérateur sur la MCU en cours
 
     Image *image;
     uint8_t largeur_mcu, hauteur_mcu;
-    uint32_t largeur_image_mcu, hauteur_image_mcu;
+    uint32_t largeur_image_mcu, hauteur_image_mcu, nb_mcu_lus;
     uint32_t x, y, i_mcu;
 
 } IterateurMCU;

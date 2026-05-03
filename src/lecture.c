@@ -115,6 +115,7 @@ Image *lectureImage(char *nom_fichier, uint32_t largeur_bloc_en_pixels, uint32_t
     if (taille_fichier < TAILLE_ENTETE_PPM_MIN)
     {
         printf("[ERREUR] taille de fichier inferieur a l'entete");
+        fclose(fichier);
         return NULL;
     }
 
@@ -125,6 +126,7 @@ Image *lectureImage(char *nom_fichier, uint32_t largeur_bloc_en_pixels, uint32_t
     if (image == NULL) {
 
         printf("[ERREUR] lecture de l'entete");
+        fclose(fichier);
         return NULL;
     }
 
@@ -203,13 +205,11 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
     iterateur->i_mcu = 0;
     iterateur->x = 0;
     iterateur->y = 0;
+    iterateur->nb_mcu_lus = 0;
 
     Image *image = lectureImage(nom_fichier, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
-    if (image == NULL) {
-        
-        liberer_image(image, iterateur->hauteur_mcu);
-        return false;
-    }
+    
+    if (image == NULL) return false;
 
     iterateur->largeur_image_mcu = ceil((double)image->largeur / (iterateur->largeur_mcu));
     iterateur->hauteur_image_mcu = ceil((double)image->hauteur / (iterateur->hauteur_mcu));
@@ -220,31 +220,81 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
 
 bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
 
-    if (feof(iterateur->image->fichier)) return false;
+    if (feof(iterateur->image->fichier) || (iterateur->y) >= (iterateur->hauteur_image_mcu)) return false;
+
+    if (iterateur->i_mcu == iterateur->nb_mcu_lus) {
+        iterateur->i_mcu = 0;
+    }
+
+    uint8_t octets_par_pixel = (iterateur->image->type == P6) ? 3 : 1;
 
     if (iterateur->i_mcu == 0) {
 
-        lireEblocs(iterateur->image, iterateur->x, iterateur->y, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
+        lireEblocs(iterateur->image, iterateur->x * iterateur->largeur_mcu, iterateur->y * iterateur->hauteur_mcu, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
+        iterateur->nb_mcu_lus = ceil((double)iterateur->image->taille_ligne / iterateur->largeur_mcu);
+        
 
-        // if ((iterateur->image->taille_ligne % iterateur->largeur_mcu) != 0) { // répéter la dernière ligne
+        if ((iterateur->image->taille_ligne % iterateur->largeur_mcu) != 0) { // répéter la dernière colonne
+            uint32_t indice_derniere_colonne = iterateur->image->taille_ligne - 1;
 
-        // }
+            for (uint8_t i = 0; i < (iterateur->hauteur_mcu); i++) {
+                for (uint32_t j = iterateur->image->taille_ligne; j < (iterateur->nb_mcu_lus * iterateur->largeur_mcu); j++) {
+                    for (uint8_t k = 0; k < octets_par_pixel; k++) {
 
-        // if (iterateur->image->nb_lignes != iterateur->hauteur_mcu) { // répéter la dernière colonne
+                        iterateur->image->tab[i][j * octets_par_pixel + k] = iterateur->image->tab[i][indice_derniere_colonne * octets_par_pixel + k];
+                    }
+                }
+            }
+        }
+        
+        if (iterateur->image->nb_lignes != iterateur->hauteur_mcu) { // répéter la dernière ligne
 
-        // }
+            uint32_t indice_derniere_ligne = iterateur->image->nb_lignes-1;
+            uint8_t nb_lignes_vides = iterateur->hauteur_mcu - iterateur->image->nb_lignes;
+            uint32_t largeur_octets = NB_BLOCS_SUPERBLOC * iterateur->largeur_mcu * octets_par_pixel;
+
+            for (uint8_t i = 1; i < (nb_lignes_vides + 1); i++) {
+                memcpy(iterateur->image->tab[indice_derniere_ligne + i], iterateur->image->tab[indice_derniere_ligne], largeur_octets);
+            }
+        }
     }
     
-    if ((iterateur->x) == (uint32_t)(iterateur->largeur_mcu -1)) {
-        iterateur->y +=1;
-        iterateur->x = 0;
+    // remplissage du tableau
+    uint32_t debut_mcu_dans_ligne = (iterateur->i_mcu * iterateur->largeur_mcu) * octets_par_pixel;
+
+    if (iterateur->image->type == P6) {
+
+        for (uint8_t i = 0; i < iterateur->hauteur_mcu; i++) {
+            memcpy(mcu[i], &(iterateur->image->tab[i][debut_mcu_dans_ligne]), iterateur->largeur_mcu * 3);
+        }
 
     } else {
-        iterateur->x += 1;
+        for (uint8_t i = 0; i < iterateur->hauteur_mcu; i++) {
+            for (uint8_t j = 0; j < iterateur->largeur_mcu; j++) {
+            
+                uint8_t niveau_gris = iterateur->image->tab[i][debut_mcu_dans_ligne + j];
+                mcu[i][j].r = niveau_gris;
+                mcu[i][j].g = niveau_gris;
+                mcu[i][j].b = niveau_gris;
+            }
+        }
     }
 
-    // remplissage du tableau
-    //image_ppm->tab[i]
+    if ((iterateur->x) == (uint32_t)(iterateur->largeur_image_mcu -1)) {
+        
+        iterateur->y +=1;
+        iterateur->x = 0;
+        iterateur->i_mcu = 0;
+
+    } else {
+
+        iterateur->x += 1;
+        iterateur->i_mcu += 1;
+    }
+
+    if (iterateur->i_mcu == NB_BLOCS_SUPERBLOC) {
+        iterateur->i_mcu = 0;
+    }
 
     return true;
 }
