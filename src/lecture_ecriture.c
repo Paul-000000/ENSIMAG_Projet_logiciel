@@ -33,9 +33,7 @@ void ignore_commentaires(FILE *fichier)
     }
 }
 
-Image *recupEntete(FILE *fichier)
-{
-
+Image *recupEntete(FILE *fichier) {
     struct Image *image = (struct Image *)malloc(sizeof(Image));
     if (image == NULL)
         return NULL;
