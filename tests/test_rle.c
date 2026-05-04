@@ -58,7 +58,7 @@ void test_rle_milieu(void) {
     int16_t bloc[64];
 
     for (uint8_t i = 0; i < 64; i++) bloc[i] = 0;
-    bloc[20] = 1;
+    bloc[20] = -1;
 
     int16_t dc_prec = 0;
     Magnitude bloc_enc[64];
@@ -67,14 +67,14 @@ void test_rle_milieu(void) {
 
 
     TEST_ASSERT_EQUAL_UINT8(1, bloc_enc[20].class_mag); // 1
-    TEST_ASSERT_EQUAL_UINT16(1, bloc_enc[20].indice);
+    TEST_ASSERT_EQUAL_UINT16(0, bloc_enc[20].indice);
 
     TEST_ASSERT_EQUAL_UINT8(3, symboles_rle_ac.taille);
 
     TEST_ASSERT_EQUAL_UINT8(ZRL, symboles_rle_ac.symboles[0].symbole); // ZRL
 
     TEST_ASSERT_EQUAL_UINT8(0x31, symboles_rle_ac.symboles[1].symbole); // 1
-    TEST_ASSERT_EQUAL_UINT16(1, symboles_rle_ac.symboles[1].indice);
+    TEST_ASSERT_EQUAL_UINT16(0, symboles_rle_ac.symboles[1].indice);
 
     TEST_ASSERT_EQUAL_UINT8(EOB, symboles_rle_ac.symboles[2].symbole); // EOB
 }
