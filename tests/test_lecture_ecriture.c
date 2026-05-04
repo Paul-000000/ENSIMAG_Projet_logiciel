@@ -1,7 +1,7 @@
 #include "unity.h"
 #include "lecture_ecriture.h"
 #include <stdlib.h>
-
+#include <stdbool.h>
 void setUp(void) {
     // set stuff up here
 }
@@ -198,6 +198,181 @@ for (uint32_t i = 0; i < 8; i++) { // Pour chaque ligne du bloc
     remove(filename);
 }
 
+void test_lireEblocs_avec_padding_P5(void) {
+    uint32_t L = 5; // Largeur image
+    uint32_t H = 5; // Hauteur image
+    char* filename = "test_padding_p5.pgm";
+    
+    uint32_t L_bloc = 8;
+    uint32_t H_super = 8;
+    uint32_t nb_blocs = 1; // On teste sur 1 seul bloc (8 pixels de large) pour faire simple
+
+
+    FILE *f = fopen(filename, "wb");
+    fprintf(f, "P5\n%u %u\n255\n", L, H);
+    for (uint32_t y = 0; y < H; y++) {
+        for (uint32_t x = 0; x < L; x++) {
+            fputc((uint8_t)(y * 10 + x), f); 
+        }
+    }
+    fclose(f);
+
+
+    Image *img = lectureImage(filename, L_bloc, H_super, nb_blocs);
+    TEST_ASSERT_NOT_NULL(img);
+
+
+    lireEblocs(img, 0, 0, L_bloc, H_super, nb_blocs);
+
+    // --- VÉRIFICATIONS ---
+
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(44, img->tab[4][4], "Erreur zone valide");
+
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(4, img->tab[0][5], "Erreur Padding Horizontal 1");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(4, img->tab[0][7], "Erreur Padding Horizontal 2");
+
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(40, img->tab[5][0], "Erreur Padding Vertical 1");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(40, img->tab[7][0], "Erreur Padding Vertical 2");
+
+
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(44, img->tab[7][7], "Erreur Padding Coin Inferieur Droit");
+
+    // 4. Nettoyage
+    liberer_image(img, H_super);
+    remove(filename);
+}
+
+void test_lireEblocs_avec_padding_P6(void) {
+    uint32_t L = 5; // Largeur image
+    uint32_t H = 5; // Hauteur image
+    char* filename = "test_padding_p6.ppm"; 
+    
+    uint32_t L_bloc = 8;
+    uint32_t H_super = 8;
+    uint32_t nb_blocs = 1; // 1 bloc de 8x8
+
+
+    FILE *f = fopen(filename, "wb");
+    fprintf(f, "P6\n%u %u\n255\n", L, H);
+    for (uint32_t y = 0; y < H; y++) {
+        for (uint32_t x = 0; x < L; x++) {
+            fputc((uint8_t)(y * 10 + x), f);       // Canal Rouge
+            fputc((uint8_t)(y * 10 + x + 100), f); // Canal Vert
+            fputc((uint8_t)(y * 10 + x + 200), f); // Canal Bleu
+        }
+    }
+    fclose(f);
+
+    Image *img = lectureImage(filename, L_bloc, H_super, nb_blocs);
+    TEST_ASSERT_NOT_NULL(img);
+    TEST_ASSERT_EQUAL_INT(P6, img->type);
+
+    lireEblocs(img, 0, 0, L_bloc, H_super, nb_blocs);
+
+
+
+
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(44, img->tab[4][4 * 3 + 0], "Erreur Pixel (4,4) - R");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(144, img->tab[4][4 * 3 + 1], "Erreur Pixel (4,4) - G");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(244, img->tab[4][4 * 3 + 2], "Erreur Pixel (4,4) - B");
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(4, img->tab[0][7 * 3 + 0], "Erreur Pad Horiz - R");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(104, img->tab[0][7 * 3 + 1], "Erreur Pad Horiz - G");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(204, img->tab[0][7 * 3 + 2], "Erreur Pad Horiz - B");
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(40, img->tab[7][0 * 3 + 0], "Erreur Pad Vert - R");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(140, img->tab[7][0 * 3 + 1], "Erreur Pad Vert - G");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(240, img->tab[7][0 * 3 + 2], "Erreur Pad Vert - B");
+
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(44, img->tab[7][7 * 3 + 0], "Erreur Pad Coin - R");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(144, img->tab[7][7 * 3 + 1], "Erreur Pad Coin - G");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(244, img->tab[7][7 * 3 + 2], "Erreur Pad Coin - B");
+
+
+    liberer_image(img, H_super);
+    remove(filename);
+}
+
+
+void test_extraire_mcu_P5(void) {
+    uint32_t L = 16; // 2 blocs de large
+    uint32_t H = 8;  // 1 bloc de haut
+    char* filename = "test_extract_mcu.pgm";
+    
+    uint32_t L_mcu = 8;
+    uint32_t H_mcu = 8;
+
+    // 1. Création de l'image de test mathématique
+    // Pixel(x,y) = y * largeur + x
+    FILE *f = fopen(filename, "wb");
+    fprintf(f, "P5\n%u %u\n255\n", L, H);
+    for (uint32_t y = 0; y < H; y++) {
+        for (uint32_t x = 0; x < L; x++) {
+            fputc((uint8_t)(y * L + x), f); 
+        }
+    }
+    fclose(f);
+
+    // 2. Initialisation de l'image et de l'itérateur
+    Image *img = lectureImage(filename, L_mcu, H_mcu, NB_BLOCS_SUP_BLOC);
+    TEST_ASSERT_NOT_NULL(img);
+    
+    MCU_Iterator *it = initialiser_iterateur(L_mcu, H_mcu, img);
+    TEST_ASSERT_NOT_NULL(it);
+
+    // 3. Préparation du buffer de destination (Matrice 8x8)
+    uint8_t **dest = (uint8_t **)malloc(H_mcu * sizeof(uint8_t *));
+    for(uint32_t i = 0; i < H_mcu; i++) {
+        dest[i] = (uint8_t *)malloc(L_mcu * sizeof(uint8_t));
+    }
+
+    // --- TEST DU PREMIER MCU (Moitié gauche : x de 0 à 7) ---
+    bool has_next1 = extraire_mcu(it, dest);
+    TEST_ASSERT_TRUE(has_next1);
+    
+    // Vérification des 4 coins du MCU 1
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(0, dest[0][0], "MCU1 - Coin Haut Gauche (0,0)");
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(7, dest[0][7], "MCU1 - Coin Haut Droit (7,0)");
+    // y=7, x=0 -> 7 * 16 + 0 = 112
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(112, dest[7][0], "MCU1 - Coin Bas Gauche (0,7)"); 
+    // y=7, x=7 -> 7 * 16 + 7 = 119
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(119, dest[7][7], "MCU1 - Coin Bas Droit (7,7)");
+
+
+    // --- TEST DU DEUXIÈME MCU (Moitié droite : x de 8 à 15) ---
+    bool has_next2 = extraire_mcu(it, dest);
+    TEST_ASSERT_TRUE(has_next2);
+    
+    // Vérification des 4 coins du MCU 2
+    // y=0, x=8 -> 8
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(8, dest[0][0], "MCU2 - Coin Haut Gauche (8,0)");
+    // y=0, x=15 -> 15
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(15, dest[0][7], "MCU2 - Coin Haut Droit (15,0)");
+    // y=7, x=8 -> 7 * 16 + 8 = 120
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(120, dest[7][0], "MCU2 - Coin Bas Gauche (8,7)");
+    // y=7, x=15 -> 7 * 16 + 15 = 127
+    TEST_ASSERT_EQUAL_HEX8_MESSAGE(127, dest[7][7], "MCU2 - Coin Bas Droit (15,7)");
+
+
+    // --- TEST DE FIN D'IMAGE ---
+    // Le troisième appel doit échouer car l'image est terminée
+    bool has_next3 = extraire_mcu(it, dest);
+    TEST_ASSERT_FALSE_MESSAGE(has_next3, "L'iterateur aurait du renvoyer false (fin d'image)");
+
+    // 4. Nettoyage mémoire
+    for(uint32_t i = 0; i < H_mcu; i++) {
+        free(dest[i]);
+    }
+    free(dest);
+    free(it);
+    liberer_image(img, H_mcu);
+    remove(filename);
+}
 
 int main(void) {
     UNITY_BEGIN();
@@ -206,7 +381,9 @@ int main(void) {
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
     RUN_TEST(test_lireEblocs_grande_image_P6);
-
+    RUN_TEST(test_lireEblocs_avec_padding_P5);
+    RUN_TEST(test_lireEblocs_avec_padding_P6);
+    RUN_TEST(test_extraire_mcu_P5);    
     return UNITY_END();
 }
 
