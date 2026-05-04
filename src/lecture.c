@@ -220,7 +220,7 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
 
 bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
 
-    if (feof(iterateur->image->fichier) || (iterateur->y) >= (iterateur->hauteur_image_mcu)) return false;
+    if ((iterateur->y) >= (iterateur->hauteur_image_mcu)) return false;
 
     if (iterateur->i_mcu == iterateur->nb_mcu_lus) {
         iterateur->i_mcu = 0;
@@ -246,7 +246,7 @@ bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
                 }
             }
         }
-        
+
         if (iterateur->image->nb_lignes != iterateur->hauteur_mcu) { // répéter la dernière ligne
 
             uint32_t indice_derniere_ligne = iterateur->image->nb_lignes-1;
