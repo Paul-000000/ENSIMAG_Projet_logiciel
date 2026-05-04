@@ -6,7 +6,7 @@
 void codage_magnitude(int16_t bloc[64],int16_t * dc_prec,Magnitude bloc_enc[64]){
 
     bloc_enc[0]=encoder_val(bloc[0]- (*dc_prec));
-    int16_t ac_prec=0;
+    
     for (int i = 1; i < 64; i++)
     {
        bloc_enc[i]=encoder_val(bloc[i]);
@@ -36,7 +36,6 @@ Magnitude encoder_val(int16_t val){
     }
     val_enc.class_mag=magnitude;
     uint16_t indice;
-    int16_t inf_int=puissance_2/2;
     int16_t sup_int=puissance_2-1;
     
     if (val<0)
