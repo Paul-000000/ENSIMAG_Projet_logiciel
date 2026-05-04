@@ -3,7 +3,7 @@
 #include "huffman.h"
 
 
-NoeudHuffman* creer_noeud (){
+ /* NoeudHuffman* creer_noeud (){
     NoeudHuffman * noeud = (NoeudHuffman*)malloc(sizeof(NoeudHuffman));
     noeud->gauche = NULL;
     noeud->droite = NULL;
@@ -13,7 +13,7 @@ NoeudHuffman* creer_noeud (){
 }
 
 
-void inserer_symbole (NoeudHuffman* arbre, uint16_t code,int taille,uint8_t symbole ){
+ void inserer_symbole (NoeudHuffman* arbre, uint16_t code,int taille,uint8_t symbole ){
     NoeudHuffman *courant = arbre;
 
     for (int i= taille -1; i>=0; i--){
@@ -61,3 +61,35 @@ NoeudHuffman* construire_arbre_complet( uint8_t lengths[16], uint8_t* symbols[])
 
     return arbre;
 }
+*/
+
+void construction_arbre ( Huffman tab[256], uint8_t* lengths, uint8_t* symbols ){
+    for (int i=0; i<256;i++){
+        tab[i].valide = 0;
+
+    }
+
+    uint16_t code  = 0;
+    int index_symbole = 0;
+
+    for ( int longeur = 1; longeur <= 16; longeur++){
+        uint8_t  nb_code = lengths[longeur-1];
+
+        for ( int j = 0; j<nb_code;j++ ){
+            uint8_t symbol = symbols[ index_symbole];
+
+            tab[symbol].code = code;
+            tab[symbol].nb_bits = longeur;
+            tab[symbol].valide =  1;
+
+            
+            code++;
+            index_symbole++;
+        }
+        // decaler le code vers la gauche avant de passer à un autre niveau 
+        code = code << 1;
+
+    }
+
+}
+
