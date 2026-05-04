@@ -6,7 +6,7 @@
 
 # Diagramme de Gantt
 
-![diagramme](diagramme%20de%20Gantt/diagramme.png)
+![diagramme](diagramme%20de%20Gantt/Diagramme_semaine_2.png)
 
 # Structures de données utilisées
 
