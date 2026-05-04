@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="MatYlBDpQlykOgqGlAwJ">
+    <mxGraphModel dx="2394" dy="660" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-_NubxIIV17trgyvlr9o-6" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module commande&lt;/div&gt;" vertex="1">
+          <mxGeometry height="270" width="610" x="-340" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-8" parent="-_NubxIIV17trgyvlr9o-6" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;help_demande(Parametres_commande *parametres)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;liberer_parametres_commande(Parametres_commande *parametres)&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="590" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-9" parent="-_NubxIIV17trgyvlr9o-6" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Structure&amp;nbsp;&lt;font style=&quot;font-size: 13px;&quot;&gt;Parametres_commande&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="220" x="20" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-10" parent="-_NubxIIV17trgyvlr9o-9" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="char *chemin_entree&lt;br&gt;&lt;div&gt;char *chemin_sortie&lt;/div&gt;&lt;div&gt;bool help&lt;/div&gt;&lt;div&gt;Facteurs_echantilonnage facteurs&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="200" x="10" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-11" parent="-_NubxIIV17trgyvlr9o-6" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Structure Facteurs_echantillonnage" vertex="1">
+          <mxGeometry height="130" width="230" x="320" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-12" parent="-_NubxIIV17trgyvlr9o-11" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint8_t h1&lt;/div&gt;&lt;div&gt;uint8_t v1&lt;/div&gt;&lt;div&gt;uint8_t h2&lt;/div&gt;&lt;div&gt;uint8_t v2&lt;/div&gt;&lt;div&gt;uint8_t h3&lt;/div&gt;&lt;div&gt;uint8_t v3&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="120" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-14" edge="1" parent="-_NubxIIV17trgyvlr9o-6" source="-_NubxIIV17trgyvlr9o-9" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="-_NubxIIV17trgyvlr9o-11" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="260" y="150" as="sourcePoint" />
+            <mxPoint x="260" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-15" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module&amp;nbsp;rgb_to_ycbcr&lt;/div&gt;" vertex="1">
+          <mxGeometry height="260" width="530" x="310" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-16" parent="-_NubxIIV17trgyvlr9o-15" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Couleur_ycbcr rgb_to_ycbcr(Couleur_rgb couleur)&lt;/div&gt;&lt;div&gt;void matrice_rgb_to_ycbcr(&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;Couleur_rgb matrice[MCU_MAX][MCU_MAX],&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]&lt;/div&gt;&lt;div&gt;)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="500" x="20" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-17" parent="-_NubxIIV17trgyvlr9o-15" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Structure&amp;nbsp;Couleur_rgb" vertex="1">
+          <mxGeometry height="90" width="150" x="20" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-18" parent="-_NubxIIV17trgyvlr9o-17" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="uint8_t r&lt;br&gt;&lt;div&gt;uint8_t g&lt;/div&gt;&lt;div&gt;uint8_t b&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="120" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-19" parent="-_NubxIIV17trgyvlr9o-15" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Structure&amp;nbsp;Couleur_ycbcr" vertex="1">
+          <mxGeometry height="90" width="170" x="210" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-20" parent="-_NubxIIV17trgyvlr9o-19" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint8_t y&lt;/div&gt;&lt;div&gt;uint8_t cb&lt;/div&gt;&lt;div&gt;uint8_t cr&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-28" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module lecture&lt;/div&gt;" vertex="1">
+          <mxGeometry height="380" width="800" x="-340" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-29" parent="-_NubxIIV17trgyvlr9o-28" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Image* recupEntete (FILE *fichier)&lt;/div&gt;&lt;div&gt;Image *lectureImage(char *nom_fichier,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)&lt;/div&gt;&lt;div&gt;Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)&lt;/div&gt;&lt;div&gt;void liberer_image(Image *image,uint32_t nb_lignes_superbloc)&lt;/div&gt;&lt;div&gt;void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu)&lt;/div&gt;&lt;div&gt;bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs)&lt;/div&gt;&lt;div&gt;bool liberer_iterateur_mcu(IterateurMCU *iterateur, Facteurs_echantillonnage facteurs)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="145" width="870" x="20" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-30" parent="-_NubxIIV17trgyvlr9o-28" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;startSize=20;" value="Structure Image" vertex="1">
+          <mxGeometry height="160" width="150" x="340" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-31" parent="-_NubxIIV17trgyvlr9o-30" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint32_t largeur&lt;/div&gt;&lt;div&gt;uint32_t hauteur&lt;/div&gt;&lt;div&gt;uint32_t debut_pixels&lt;/div&gt;&lt;div&gt;TypeImage type&lt;/div&gt;&lt;div&gt;uint8_t **tab&lt;/div&gt;&lt;div&gt;FILE *fichier&lt;/div&gt;&lt;div&gt;uint32_t taille_ligne&lt;/div&gt;&lt;div&gt;uint32_t nb_lignes&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="150" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-32" parent="-_NubxIIV17trgyvlr9o-28" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Enum TypeImage" vertex="1">
+          <mxGeometry height="70" width="120" x="600" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-33" parent="-_NubxIIV17trgyvlr9o-32" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;P5&lt;/div&gt;&lt;div&gt;P6&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="10" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-34" edge="1" parent="-_NubxIIV17trgyvlr9o-28" source="-_NubxIIV17trgyvlr9o-30" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="-_NubxIIV17trgyvlr9o-32" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="260" y="150" as="sourcePoint" />
+            <mxPoint x="260" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-37" parent="-_NubxIIV17trgyvlr9o-28" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Structure IterateurMCU&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="190" x="20" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-38" parent="-_NubxIIV17trgyvlr9o-37" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Image *image&lt;/div&gt;&lt;div&gt;uint8_t largeur_mcu&lt;/div&gt;&lt;div&gt;uint8_t hauteur_mcu&lt;/div&gt;&lt;div&gt;uint32_t largeur_image_mcu&lt;/div&gt;&lt;div&gt;uint32_t hauteur_image_mcu&lt;/div&gt;&lt;div&gt;uint32_t x&lt;/div&gt;&lt;div&gt;uint32_t y&lt;/div&gt;&lt;div&gt;uint32_t pixel&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="200" x="10" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-39" edge="1" parent="-_NubxIIV17trgyvlr9o-28" source="-_NubxIIV17trgyvlr9o-37" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="-_NubxIIV17trgyvlr9o-30" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="190" y="260" as="sourcePoint" />
+            <mxPoint x="290" y="259.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-51" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module dct&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="460" x="520" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-52" parent="-_NubxIIV17trgyvlr9o-51" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;void init_table_cosinus()&lt;/div&gt;&lt;div&gt;void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64])&lt;/div&gt;" vertex="1">
+          <mxGeometry height="35" width="420" x="20" y="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-61" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module zz&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="460" x="520" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-62" parent="-_NubxIIV17trgyvlr9o-61" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="void appli_zigzag (uint8_t bloc[64]);" vertex="1">
+          <mxGeometry height="17.5" width="420" x="20" y="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-63" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="&lt;div&gt;Module downsampler&lt;/div&gt;" vertex="1">
+          <mxGeometry height="270" width="870" x="-340" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-64" parent="-_NubxIIV17trgyvlr9o-63" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs)&lt;/div&gt;&lt;div&gt;void decouper_matrices(&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu,&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie&lt;/div&gt;&lt;div&gt;)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="530" x="20" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-65" parent="-_NubxIIV17trgyvlr9o-63" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;startSize=20;" value="&lt;div&gt;Structure Vecteur&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="180" x="260" y="147.5" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-66" parent="-_NubxIIV17trgyvlr9o-65" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint8_t valeur[64]&lt;/div&gt;Composante composante" vertex="1">
+          <mxGeometry height="30" width="150" x="10" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-67" parent="-_NubxIIV17trgyvlr9o-63" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Enum Composante" vertex="1">
+          <mxGeometry height="90" width="120" x="490" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-68" parent="-_NubxIIV17trgyvlr9o-67" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;Y&lt;/div&gt;&lt;div&gt;CB&lt;/div&gt;&lt;div&gt;CR&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="100" x="10" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-69" edge="1" parent="-_NubxIIV17trgyvlr9o-63" source="-_NubxIIV17trgyvlr9o-65" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="-_NubxIIV17trgyvlr9o-67" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="260" y="150" as="sourcePoint" />
+            <mxPoint x="260" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-70" parent="-_NubxIIV17trgyvlr9o-63" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Vecteurs_ycbcr" vertex="1">
+          <mxGeometry height="90" width="190" x="20" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-71" parent="-_NubxIIV17trgyvlr9o-70" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint8_t nb_vecteurs&lt;/div&gt;&lt;div&gt;Vecteur vecteurs[48]&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="130" x="10" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-72" edge="1" parent="-_NubxIIV17trgyvlr9o-63" source="-_NubxIIV17trgyvlr9o-70" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="-_NubxIIV17trgyvlr9o-65" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="190" y="260" as="sourcePoint" />
+            <mxPoint x="290" y="259.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-73" parent="-_NubxIIV17trgyvlr9o-63" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=default;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;" value="Dimensions_cbcr" vertex="1">
+          <mxGeometry height="110" width="190" x="659" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="-_NubxIIV17trgyvlr9o-74" parent="-_NubxIIV17trgyvlr9o-73" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div&gt;uint8_t largeur_mcu_cb&lt;/div&gt;&lt;div&gt;uint8_t hauteur_mcu_cb&lt;/div&gt;&lt;div&gt;uint8_t largeur_mcu_cr&lt;/div&gt;&lt;div&gt;uint8_t&amp;nbsp;hauteur_mcu_cr&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="140" x="10" y="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

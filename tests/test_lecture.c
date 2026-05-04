@@ -238,26 +238,19 @@ void test_iterateur_mcu_invader(void) {
         }
     }
 
+    reste_mcu = mcu_suivant(&iterateur, mcu);
+    TEST_ASSERT_EQUAL(false, reste_mcu);
+
     liberer_iterateur_mcu(&iterateur);
 }
 
 void test_iterateur_mcu_complexe(void) {
 
-    Couleur_rgb mcu_attendu_1[64] = {
-    };
-
-    Couleur_rgb mcu_attendu_2[64] = {
-    };
-
     // fichier image ppm complexe
     uint32_t largeur = 15;
-    uint32_t hauteur = 10;
+    uint32_t hauteur = 6;
     char* chemin = "complexe.ppm";
     
-    uint32_t L_bloc = 8;
-    uint32_t H_super = 8;
-    uint32_t nb_blocs = 64;
-
     FILE *f = fopen(chemin, "wb");
     fprintf(f, "P6\n%u %u\n255\n", largeur, hauteur);
 
@@ -275,12 +268,12 @@ void test_iterateur_mcu_complexe(void) {
     bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
     TEST_ASSERT_EQUAL(true, init);
     TEST_ASSERT_EQUAL_UINT32(2, iterateur.largeur_image_mcu);
-    TEST_ASSERT_EQUAL_UINT32(2, iterateur.hauteur_image_mcu);
+    TEST_ASSERT_EQUAL_UINT32(1, iterateur.hauteur_image_mcu);
     
     bool reste_mcu = mcu_suivant(&iterateur, mcu);
     TEST_ASSERT_EQUAL(true, reste_mcu);
-    
-    for (uint32_t y = 0; y < 8; y++) {
+
+    for (uint32_t y = 0; y < 6; y++) {
         for (uint32_t x = 0; x < 8; x++) {
 
             uint32_t val_pixel = y * largeur + x;
@@ -289,10 +282,54 @@ void test_iterateur_mcu_complexe(void) {
             TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][x].b);
         }
     }
+    for (uint32_t y = 6; y < 8; y++) {
+        for (uint32_t x = 0; x < 8; x++) {
+
+            uint32_t val_pixel = 5 * largeur + x;
+            TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][x].r);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][x].g);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][x].b);
+        }
+    }
+
+    reste_mcu = mcu_suivant(&iterateur, mcu);
+    TEST_ASSERT_EQUAL(true, reste_mcu);
+
+    for (uint32_t y = 0; y < 6; y++) {
+        for (uint32_t x = 0; x < 7; x++) {
+
+            uint32_t val_pixel = y * largeur + 8 + x;
+            TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][x].r);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][x].g);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][x].b);
+        }
+
+        uint32_t val_pixel = y * largeur + 14;
+        TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][7].r);
+        TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][7].g);
+        TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][7].b);
+    }
+
+    for (uint32_t y = 6; y < 8; y++) {
+        for (uint32_t x = 0; x < 7; x++) {
+
+            uint32_t val_pixel = 5 * largeur + 8 + x;
+            TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][x].r);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][x].g);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][x].b);
+        }
+
+        uint32_t val_pixel = 5 * largeur + 14;
+        TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][7].r);
+        TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][7].g);
+        TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][7].b);
+    }
+
+    reste_mcu = mcu_suivant(&iterateur, mcu);
+    TEST_ASSERT_EQUAL(false, reste_mcu);
 
     liberer_iterateur_mcu(&iterateur);
-
-
+    
     remove(chemin);
 }
 
