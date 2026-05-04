@@ -10,7 +10,7 @@
 
 # Structures de données utilisées
 
-![structures](structures%20de%20donnees/structures%20de%20donnees.png)
+![structures](structures%20de%20donnees/structures%20de%20donnees.svg)
 
 # Notre encodeur JPEG à nous
 

@@ -1,7 +1,13 @@
 #include "unity.h"
-#include "lecture_ecriture.h"
+#include "lecture.h"
 #include <stdlib.h>
+<<<<<<< HEAD:tests/test_lecture_ecriture.c
 #include <stdbool.h>
+=======
+
+
+
+>>>>>>> 705765ad79afa5a2b3f30518625fc9f274e2ebd9:tests/test_lecture.c
 void setUp(void) {
     // set stuff up here
 }
@@ -11,7 +17,7 @@ void tearDown(void) {
 }
 void test_recupEntete_P5(void) {
 
-    const char* filename = "images/etu/gris.pgm";
+    char* filename = "images/etu/gris.pgm";
  
     FILE *f_test = fopen(filename, "rb");
     TEST_ASSERT_NOT_NULL(f_test);
@@ -28,19 +34,10 @@ void test_recupEntete_P5(void) {
     free(img); 
    
 }
-uint8_t motif_attendu[64] = {
-        0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00,
-        0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00,
-        0xff, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff,
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-        0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00,
-        0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00,
-        0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
-    };
 
 void test_lire_image(void) {
-    const char* filename = "images/etu/gris.pgm";
+    
+    char* filename = "images/etu/gris.pgm";
     
     // Paramètres pour 64 blocs de 8x8
     uint32_t L_bloc = 8;
@@ -60,7 +57,20 @@ void test_lire_image(void) {
 }
 
 void test_lectureEblocs() {
-    const char* filename = "images/etu/invader.pgm";
+    
+    uint8_t motif_attendu[64] = {
+        0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00,
+        0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00,
+        0xff, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00,
+        0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00,
+        0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
+    };
+
+    char* filename = "images/etu/invader.pgm";
+    
     uint32_t L_bloc = 8;
     uint32_t H_super = 8;
     uint32_t nb_blocs = 64;
@@ -164,40 +174,41 @@ void test_lireEblocs_grande_image_P6(void) {
     TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_R1, img->tab[0][3], "Erreur Canal Rouge Pixel suivant");
 
     // 4. Vérification mathématique sur les 3 premiers pixels de chaque ligne
-for (uint32_t i = 0; i < 8; i++) { // Pour chaque ligne du bloc
-    for (uint32_t j = 0; j < 3; j++) { // Pour les 3 premiers pixels
-        
-        uint32_t x_actuel = tx + j;
-        uint32_t y_actuel = ty + i;
+    for (uint32_t i = 0; i < 8; i++) { // Pour chaque ligne du bloc
+        for (uint32_t j = 0; j < 3; j++) { // Pour les 3 premiers pixels
+            
+            uint32_t x_actuel = tx + j;
+            uint32_t y_actuel = ty + i;
 
-        // Calcul des valeurs attendues selon ta règle de création du fichier
-        uint8_t attendu_R = (uint8_t)(x_actuel % 256);
-        uint8_t attendu_G = (uint8_t)(y_actuel % 256);
-        uint8_t attendu_B = (uint8_t)((x_actuel + y_actuel) % 256);
+            // Calcul des valeurs attendues selon ta règle de création du fichier
+            uint8_t attendu_R = (uint8_t)(x_actuel % 256);
+            uint8_t attendu_G = (uint8_t)(y_actuel % 256);
+            uint8_t attendu_B = (uint8_t)((x_actuel + y_actuel) % 256);
 
-        // Index dans la ligne : chaque pixel j occupe 3 cases (R, G, B)
-        uint32_t base_index = j * 3;
+            // Index dans la ligne : chaque pixel j occupe 3 cases (R, G, B)
+            uint32_t base_index = j * 3;
 
-        char msg[100];
-        // Test du Rouge
-        snprintf(msg, 100, "Erreur R: Ligne %u, Pixel %u", i, j);
-        TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_R, img->tab[i][base_index], msg);
+            char msg[100];
+            // Test du Rouge
+            snprintf(msg, 100, "Erreur R: Ligne %u, Pixel %u", i, j);
+            TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_R, img->tab[i][base_index], msg);
 
-        // Test du Vert
-        snprintf(msg, 100, "Erreur G: Ligne %u, Pixel %u", i, j);
-        TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_G, img->tab[i][base_index + 1], msg);
+            // Test du Vert
+            snprintf(msg, 100, "Erreur G: Ligne %u, Pixel %u", i, j);
+            TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_G, img->tab[i][base_index + 1], msg);
 
-        // Test du Bleu
-        snprintf(msg, 100, "Erreur B: Ligne %u, Pixel %u", i, j);
-        TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_B, img->tab[i][base_index + 2], msg);
+            // Test du Bleu
+            snprintf(msg, 100, "Erreur B: Ligne %u, Pixel %u", i, j);
+            TEST_ASSERT_EQUAL_HEX8_MESSAGE(attendu_B, img->tab[i][base_index + 2], msg);
+        }
     }
-}
 
     // 6. Nettoyage
     liberer_image(img, H_super);
     remove(filename);
 }
 
+<<<<<<< HEAD:tests/test_lecture_ecriture.c
 void test_lireEblocs_avec_padding_P5(void) {
     uint32_t L = 5; // Largeur image
     uint32_t H = 5; // Hauteur image
@@ -373,19 +384,120 @@ void test_extraire_mcu_P5(void) {
     liberer_image(img, H_mcu);
     remove(filename);
 }
+=======
+void test_iterateur_mcu_invader(void) {
+
+    uint8_t mcu_attendu[64] = {
+        0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00,
+        0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00,
+        0xff, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00,
+        0x00, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0x00,
+        0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
+    };
+
+    char* chemin = "images/etu/invader.pgm";
+
+    Facteurs_echantillonnage facteurs = {1, 1, 1, 1, 1, 1};
+    IterateurMCU iterateur;
+    Couleur_rgb mcu[MCU_MAX][MCU_MAX];
+
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
+
+    TEST_ASSERT_EQUAL(true, init);
+
+    bool reste_mcu = mcu_suivant(&iterateur, mcu);
+    
+    TEST_ASSERT_EQUAL(true, reste_mcu);
+    
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+
+            TEST_ASSERT_EQUAL_UINT8(mcu_attendu[i*8 + j], mcu[i][j].r);
+            TEST_ASSERT_EQUAL_UINT8(mcu_attendu[i*8 + j], mcu[i][j].g);
+            TEST_ASSERT_EQUAL_UINT8(mcu_attendu[i*8 + j], mcu[i][j].b);
+        }
+    }
+
+    liberer_iterateur_mcu(&iterateur);
+}
+
+void test_iterateur_mcu_complexe(void) {
+
+    Couleur_rgb mcu_attendu_1[64] = {
+    };
+
+    Couleur_rgb mcu_attendu_2[64] = {
+    };
+
+    // fichier image ppm complexe
+    uint32_t largeur = 15;
+    uint32_t hauteur = 10;
+    char* chemin = "complexe.ppm";
+    
+    uint32_t L_bloc = 8;
+    uint32_t H_super = 8;
+    uint32_t nb_blocs = 64;
+
+    FILE *f = fopen(chemin, "wb");
+    fprintf(f, "P6\n%u %u\n255\n", largeur, hauteur);
+
+    for (uint32_t i = 0; i < largeur * hauteur; i++) {
+        fputc((uint8_t)(i % 256), f);
+        fputc((uint8_t)((i + 1) % 256), f);
+        fputc((uint8_t)((i + 2) % 256), f);
+    }
+    fclose(f);
+
+    Facteurs_echantillonnage facteurs = {1, 1, 1, 1, 1, 1};
+    IterateurMCU iterateur;
+    Couleur_rgb mcu[MCU_MAX][MCU_MAX];
+
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
+    TEST_ASSERT_EQUAL(true, init);
+    TEST_ASSERT_EQUAL_UINT32(2, iterateur.largeur_image_mcu);
+    TEST_ASSERT_EQUAL_UINT32(2, iterateur.hauteur_image_mcu);
+    
+    bool reste_mcu = mcu_suivant(&iterateur, mcu);
+    TEST_ASSERT_EQUAL(true, reste_mcu);
+    
+    for (uint32_t y = 0; y < 8; y++) {
+        for (uint32_t x = 0; x < 8; x++) {
+
+            uint32_t val_pixel = y * largeur + x;
+            TEST_ASSERT_EQUAL_UINT8(val_pixel % 256, mcu[y][x].r);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 1) % 256, mcu[y][x].g);
+            TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][x].b);
+        }
+    }
+
+    liberer_iterateur_mcu(&iterateur);
+
+
+    remove(chemin);
+}
+
+
+
+>>>>>>> 705765ad79afa5a2b3f30518625fc9f274e2ebd9:tests/test_lecture.c
 
 int main(void) {
+
     UNITY_BEGIN();
     RUN_TEST(test_lire_image);
     RUN_TEST(test_recupEntete_P5);
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
     RUN_TEST(test_lireEblocs_grande_image_P6);
+<<<<<<< HEAD:tests/test_lecture_ecriture.c
     RUN_TEST(test_lireEblocs_avec_padding_P5);
     RUN_TEST(test_lireEblocs_avec_padding_P6);
     RUN_TEST(test_extraire_mcu_P5);    
+=======
+    RUN_TEST(test_iterateur_mcu_complexe);
+
+>>>>>>> 705765ad79afa5a2b3f30518625fc9f274e2ebd9:tests/test_lecture.c
     return UNITY_END();
 }
-
-
-

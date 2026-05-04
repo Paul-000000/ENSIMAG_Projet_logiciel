@@ -12,15 +12,15 @@ void tearDown(void) {
 void test_commande_simple(void) {
 
     int argc = 2;
-    char *argv[] = {"./ppm2jpeg","shaun_the_sheep.ppm"};
+    char *argv[] = {"./ppm2jpeg","test_lignes.pgm"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
     TEST_ASSERT_EQUAL(true,res);
-    TEST_ASSERT_EQUAL_STRING("shaun_the_sheep.ppm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("shaun_the_sheep.jpg",parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);
+    TEST_ASSERT_EQUAL_STRING("test_lignes.jpg",parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
     TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.h1);
@@ -36,15 +36,15 @@ void test_commande_simple(void) {
 void test_commande_outfile_arguments_inverses(void) {
 
     int argc = 3;
-    char *argv[] = {"./ppm2jpeg","--outfile=../chemin/complique/mouton.jpg","./images/shaun_the_sheep.ppm"};
+    char *argv[] = {"./ppm2jpeg","--outfile=images/etu/gris.jpg","./images/etu/gris.pgm"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
     TEST_ASSERT_EQUAL(true,res);
-    TEST_ASSERT_EQUAL_STRING("./images/shaun_the_sheep.ppm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("../chemin/complique/mouton.jpg", parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("./images/etu/gris.pgm", parametres.chemin_entree);
+    TEST_ASSERT_EQUAL_STRING("images/etu/gris.jpg", parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
     liberer_parametres_commande(&parametres);
@@ -53,9 +53,9 @@ void test_commande_outfile_arguments_inverses(void) {
 void test_commande_help_infile(void) {
 
     int argc = 3;
-    char *argv[] = {"./ppm2jpeg","--help","shaun_the_sheep.ppm"};
+    char *argv[] = {"./ppm2jpeg","--help","test_lignes.pgm"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
@@ -70,7 +70,7 @@ void test_commande_help(void) {
     int argc = 2;
     char *argv[] = {"./ppm2jpeg","--help"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
@@ -85,7 +85,7 @@ void test_commande_vide(void) {
     int argc = 1;
     char *argv[] = {"./ppm2jpeg"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
@@ -99,7 +99,7 @@ void test_commande_invalide(void) {
     int argc = 2;
     char *argv[] = {"./ppm2jpeg", "--truc"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
@@ -111,15 +111,15 @@ void test_commande_invalide(void) {
 void test_commande_sample(void) {
 
     int argc = 3;
-    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1x2","shaun_the_sheep.ppm"};
+    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1x2","test_lignes.pgm"};
 
-    struct parametres_commande_t parametres;
+    Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres);
 
     TEST_ASSERT_EQUAL(true,res);
-    TEST_ASSERT_EQUAL_STRING("shaun_the_sheep.ppm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("shaun_the_sheep.jpg", parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);
+    TEST_ASSERT_EQUAL_STRING("test_lignes.jpg", parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
     TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.h1);
@@ -138,12 +138,12 @@ int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_commande_simple);
-    // RUN_TEST(test_commande_outfile_arguments_inverses);
-    // RUN_TEST(test_commande_help_infile);
-    // RUN_TEST(test_commande_help);
-    // RUN_TEST(test_commande_vide);
-    // RUN_TEST(test_commande_invalide);
-    // RUN_TEST(test_commande_sample);
+    RUN_TEST(test_commande_outfile_arguments_inverses);
+    RUN_TEST(test_commande_help_infile);
+    RUN_TEST(test_commande_help);
+    RUN_TEST(test_commande_vide);
+    RUN_TEST(test_commande_invalide);
+    RUN_TEST(test_commande_sample);
     
     return UNITY_END();
 }

@@ -11,8 +11,8 @@ void tearDown(void) {
 
 void test_valeurs_min_y(void) {
 
-    struct couleur_rgb_t couleur = {0,0,0};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {0,0,0};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_EQUAL_UINT8(0, ycbcr.y);
     TEST_ASSERT_EQUAL_UINT8(128, ycbcr.cb);
@@ -21,8 +21,8 @@ void test_valeurs_min_y(void) {
 
 void test_valeurs_max_y(void) {
 
-    struct couleur_rgb_t couleur = {255,255,255};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {255,255,255};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_EQUAL_UINT8(255, ycbcr.y);
     TEST_ASSERT_EQUAL_UINT8(128, ycbcr.cb);
@@ -31,8 +31,8 @@ void test_valeurs_max_y(void) {
 
 void test_valeurs_min_cb(void) {
 
-    struct couleur_rgb_t couleur = {255,255,0};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {255,255,0};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_UINT8_WITHIN(1, 226, ycbcr.y);
     TEST_ASSERT_EQUAL_UINT8(0, ycbcr.cb);
@@ -41,8 +41,8 @@ void test_valeurs_min_cb(void) {
 
 void test_valeurs_max_cb(void) {
 
-    struct couleur_rgb_t couleur = {0,0,255};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {0,0,255};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_UINT8_WITHIN(1, 29, ycbcr.y);
     TEST_ASSERT_EQUAL_UINT8(255, ycbcr.cb);
@@ -51,8 +51,8 @@ void test_valeurs_max_cb(void) {
 
 void test_valeurs_min_cr(void) {
 
-    struct couleur_rgb_t couleur = {0,255,255};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {0,255,255};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_UINT8_WITHIN(1, 179, ycbcr.y);
     TEST_ASSERT_UINT8_WITHIN(1, 171, ycbcr.cb);
@@ -61,8 +61,8 @@ void test_valeurs_min_cr(void) {
 
 void test_valeurs_max_cr(void) {
 
-    struct couleur_rgb_t couleur = {255,0,0};
-    struct couleur_ycbcr_t ycbcr = rgb_to_ycbcr(couleur);
+    Couleur_rgb couleur = {255,0,0};
+    Couleur_ycbcr ycbcr = rgb_to_ycbcr(couleur);
 
     TEST_ASSERT_UINT8_WITHIN(1, 76, ycbcr.y);
     TEST_ASSERT_UINT8_WITHIN(1, 85, ycbcr.cb);
