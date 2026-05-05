@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <libgen.h>
+
 
 
 static struct option options[] = {
@@ -16,6 +19,32 @@ static struct option options[] = {
 };
 
 
+
+char *dupliquer_chaine(char *chaine) {
+
+	char *nouvelle_chaine = malloc(strlen(chaine) + 1);
+	
+	if (nouvelle_chaine == NULL) return NULL;
+
+	strcpy(nouvelle_chaine, chaine);
+
+	return nouvelle_chaine;
+}
+
+bool dossier_chemin_existe(char *chemin) {
+
+	char *chemin_dup = dupliquer_chaine(chemin);
+	if (chemin_dup == NULL) return false;
+
+	char *chemin_dossier = dirname(chemin_dup);
+
+    struct stat stat_;
+    bool res = (stat(chemin_dossier, &stat_) == 0 && S_ISDIR(stat_.st_mode));
+
+	free(chemin_dup);
+
+	return res;
+}
 
 bool chemin_accessible(char *chemin) {
 
@@ -135,17 +164,6 @@ char *extension_jpg(char *chemin) {
 	return chaine;
 }
 
-char *dupliquer_chaine(char *chaine) {
-
-	char *nouvelle_chaine = malloc(strlen(chaine) + 1);
-	
-	if (nouvelle_chaine == NULL) return NULL;
-
-	strcpy(nouvelle_chaine, chaine);
-
-	return nouvelle_chaine;
-}
-
 bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres) {
 
 	bool facteurs_initialises;
@@ -159,14 +177,14 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		parametres->chemin_sortie = NULL;
 		return true;
 	}
-	if (parametres->chemin_entree == NULL || !chemin_accessible(parametres->chemin_entree)) {
+	if (parametres->chemin_entree == NULL || !chemin_accessible(parametres->chemin_entree) || !dossier_chemin_existe(parametres->chemin_entree)) {
 		parametres->chemin_sortie = NULL;
 		return false;
 	}
 
 	char *chemin_sortie = (parametres->chemin_sortie == NULL) ? extension_jpg(parametres->chemin_entree) : dupliquer_chaine(parametres->chemin_sortie);
 
-	if (chemin_sortie == NULL || chemin_accessible(chemin_sortie)) return false;
+	if (chemin_sortie == NULL || chemin_accessible(chemin_sortie) || !dossier_chemin_existe(chemin_sortie)) return false;
 
 	parametres->chemin_sortie = chemin_sortie;
 	
