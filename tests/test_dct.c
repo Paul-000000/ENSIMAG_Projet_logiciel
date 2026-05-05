@@ -12,6 +12,7 @@ void tearDown(void) {
 }
 
 void test_wikipedia(void) {
+    
     /* Exemple de wikipedia. */
     uint8_t ref[] = {
         52, 55, 61, 66, 70, 61, 64, 73,
@@ -36,7 +37,6 @@ void test_wikipedia(void) {
     };
     int16_t bloc_sq[64];
     
-    init_table_cosinus();
     applique_dct(ref,bloc_sq);
     
     TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,bloc_sq,64); // On est bon à la louche

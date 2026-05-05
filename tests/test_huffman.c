@@ -190,6 +190,7 @@ void test_huffman_bloc_vide(void) {
 
 
 int main(void) {
+    
     UNITY_BEGIN();
     
     // On lance notre super test !

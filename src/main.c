@@ -27,8 +27,6 @@ int main(int argc, char **argv) {
 
 
     bool reste_mcu;
-    
-    init_table_cosinus(); // pour la dct
 
     if (image_couleur(&iterateur)) { // image couleur
 

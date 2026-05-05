@@ -6,12 +6,23 @@
 
 
 
-float tab_cos[8][8];
+static double tab_cos[8][8] = {
+
+    { 1.0, 0.98078528040323043,  0.92387953251128674,    0.83146961230254524,    0.70710678118654757,    0.55557023301960229,    0.38268343236508984,    0.19509032201612833    }, 
+    { 1.0, 0.83146961230254524,  0.38268343236508984,    -0.19509032201612819,   -0.70710678118654746,   -0.98078528040323043,   -0.92387953251128685,   -0.55557023301960218   }, 
+    { 1.0, 0.55557023301960229,  -0.38268343236508973,   -0.98078528040323043,   -0.70710678118654768,   0.1950903220161283,     0.92387953251128652,    0.83146961230254546    }, 
+    { 1.0, 0.19509032201612833,  -0.92387953251128674,   -0.55557023301960218,   0.70710678118654735,    0.83146961230254546,    -0.38268343236508989,   -0.98078528040323065   }, 
+    { 1.0, -0.19509032201612819, -0.92387953251128685,   0.55557023301960184,    0.70710678118654768,    -0.83146961230254512,   -0.38268343236509056,   0.98078528040323043    }, 
+    { 1.0, -0.55557023301960196, -0.38268343236509034,   0.98078528040323043,    -0.70710678118654668,   -0.19509032201612803,   0.92387953251128674,    -0.83146961230254501   }, 
+    { 1.0, -0.83146961230254535, 0.38268343236509,       0.19509032201612878,    -0.70710678118654713,   0.98078528040323065,    -0.92387953251128641,   0.55557023301960151    }, 
+    { 1.0, -0.98078528040323043, 0.92387953251128652,    -0.83146961230254512,   0.70710678118654657,    -0.55557023301960151,   0.38268343236508956,    -0.19509032201612858   }
+};
 
 void init_table_cosinus() {
 
     for (int x=0;x<8; x++) {
         for (int i=0;i<8;i++) {
+
             tab_cos[x][i] = cos(((2.0*x+1.0)*i*M_PI)/16.0);
         }
     }
@@ -19,9 +30,9 @@ void init_table_cosinus() {
 
 void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
-    float somme;
-    float raci = 1.0/sqrt(2.0);
-    float c_i,c_j;
+    double somme;
+    double raci = 1.0/sqrt(2.0);
+    double c_i,c_j;
 
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
@@ -30,20 +41,20 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
             for (int x=0;x<8;x++){
 
-                float cos_x = tab_cos[x][i];
+                double cos_x = tab_cos[x][i];
 
                 for(int y=0;y<8;y++){
 
                     int valeur_decal = (int16_t)(bloc_spatial[x*8 + y]) - 128;
 
-                    float cos_y = tab_cos[y][j];
+                    double cos_y = tab_cos[y][j];
                     somme += valeur_decal*cos_x*cos_y;
                 }
             }
             c_i = (i == 0) ? raci : 1.0;
             c_j = (j == 0) ? raci : 1.0;
 
-            float freq = 0.25*c_i*c_j*somme;
+            double freq = 0.25*c_i*c_j*somme;
             bloc_frequentiel[i*8 + j] = (int16_t)(freq);
 
 
@@ -54,9 +65,9 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 /*void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
     
     int16_t temp[8][8];
-    float somme_x, somme_y;
-    float raci = 1.0/sqrt(2.0);
-    float c_i,c_j;
+    double somme_x, somme_y;
+    double raci = 1.0/sqrt(2.0);
+    double c_i,c_j;
 
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
@@ -65,20 +76,20 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
             for (int x=0;x<8;x++){
 
-                float cos_x = tab_cos[x][i];
+                double cos_x = tab_cos[x][i];
 
                 for(int y=0;y<8;y++){
 
                     int valeur_decal = bloc_spatial[x*8 + y] - 128;
 
-                    float cos_y = tab_cos[y][j];
+                    double cos_y = tab_cos[y][j];
                     somme += valeur_decal*cos_x*cos_y;
                 }
             }
             c_i = (i == 0) ? raci : 1.0;
             c_j = (j == 0) ? raci : 1.0;
 
-            float freq = 0.25*c_i*c_j*somme;
+            double freq = 0.25*c_i*c_j*somme;
             bloc_frequentiel[i*8 + j] = (int16_t)(freq);
 
 

@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 
+
 // crée une table de cosinus pour ne pas les recalculer par la suite
 void init_table_cosinus();
 
