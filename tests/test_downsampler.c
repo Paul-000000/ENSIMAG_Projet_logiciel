@@ -40,7 +40,7 @@ void test_simple_2x2(void) {
     }
 
     Vecteurs_ycbcr vecteurs_sortie;
-    decouper_matrices(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
+    decouper_matrices_couleur(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
 
     TEST_ASSERT_EQUAL_UINT8(6,vecteurs_sortie.nb_vecteurs);
 
@@ -111,7 +111,7 @@ void test_aucune_perte_1x1(void) {
     }
 
     Vecteurs_ycbcr vecteurs_sortie;
-    decouper_matrices(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
+    decouper_matrices_couleur(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
 
     TEST_ASSERT_EQUAL_UINT8(3,vecteurs_sortie.nb_vecteurs);
 
@@ -169,7 +169,7 @@ void test_aucune_perte_2x2(void) {
     }
 
     Vecteurs_ycbcr vecteurs_sortie;
-    decouper_matrices(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
+    decouper_matrices_couleur(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
 
     TEST_ASSERT_EQUAL_UINT8(12,vecteurs_sortie.nb_vecteurs);
 
@@ -210,7 +210,7 @@ void test_3x3(void) {
     }
 
     Vecteurs_ycbcr vecteurs_sortie;
-    decouper_matrices(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
+    decouper_matrices_couleur(matrice, largeur_mcu, hauteur_mcu, dim_cb_cr, &vecteurs_sortie);
 
     TEST_ASSERT_EQUAL_UINT8(13, vecteurs_sortie.nb_vecteurs);
 
