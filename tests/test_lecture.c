@@ -225,7 +225,7 @@ void test_iterateur_mcu_invader(void) {
 
     TEST_ASSERT_EQUAL(true, init);
 
-    bool reste_mcu = mcu_suivant(&iterateur, mcu);
+    bool reste_mcu = mcu_couleur_suivant(&iterateur, mcu);
     
     TEST_ASSERT_EQUAL(true, reste_mcu);
     
@@ -238,7 +238,7 @@ void test_iterateur_mcu_invader(void) {
         }
     }
 
-    reste_mcu = mcu_suivant(&iterateur, mcu);
+    reste_mcu = mcu_couleur_suivant(&iterateur, mcu);
     TEST_ASSERT_EQUAL(false, reste_mcu);
 
     liberer_iterateur_mcu(&iterateur);
@@ -270,7 +270,7 @@ void test_iterateur_mcu_complexe(void) {
     TEST_ASSERT_EQUAL_UINT32(2, iterateur.largeur_image_mcu);
     TEST_ASSERT_EQUAL_UINT32(1, iterateur.hauteur_image_mcu);
     
-    bool reste_mcu = mcu_suivant(&iterateur, mcu);
+    bool reste_mcu = mcu_couleur_suivant(&iterateur, mcu);
     TEST_ASSERT_EQUAL(true, reste_mcu);
 
     for (uint32_t y = 0; y < 6; y++) {
@@ -292,7 +292,7 @@ void test_iterateur_mcu_complexe(void) {
         }
     }
 
-    reste_mcu = mcu_suivant(&iterateur, mcu);
+    reste_mcu = mcu_couleur_suivant(&iterateur, mcu);
     TEST_ASSERT_EQUAL(true, reste_mcu);
 
     for (uint32_t y = 0; y < 6; y++) {
@@ -325,7 +325,7 @@ void test_iterateur_mcu_complexe(void) {
         TEST_ASSERT_EQUAL_UINT8((val_pixel + 2) % 256, mcu[y][7].b);
     }
 
-    reste_mcu = mcu_suivant(&iterateur, mcu);
+    reste_mcu = mcu_couleur_suivant(&iterateur, mcu);
     TEST_ASSERT_EQUAL(false, reste_mcu);
 
     liberer_iterateur_mcu(&iterateur);

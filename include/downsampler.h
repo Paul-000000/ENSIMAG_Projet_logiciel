@@ -37,7 +37,9 @@ typedef struct dimensions_cbcr { // permet d'avoir les dimensions des sous-matri
 Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs); 
 
 // decoupe la matrice de dimensions du MCU en un vecteur de vecteurs avec les 3 composantes
-void decouper_matrices(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie);
+void decouper_matrices_couleur(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie);
+
+void decouper_matrice_gris(uint8_t matrice[8][8], Vecteur *vecteur);
 
 
 

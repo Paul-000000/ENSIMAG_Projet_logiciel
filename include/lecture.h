@@ -53,9 +53,13 @@ void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur
 
 bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs);
 
-bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]);
+bool mcu_couleur_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]);
+
+bool mcu_gris_suivant(IterateurMCU *iterateur, uint8_t mcu[8][8]);
 
 void liberer_iterateur_mcu(IterateurMCU *iterateur);
+
+bool image_couleur(IterateurMCU *iterateur);
 
 
 

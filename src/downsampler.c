@@ -54,7 +54,7 @@ void ajouter_vecteur(Vecteurs_ycbcr *vecteurs_sortie, uint8_t *nb_vecteurs, Comp
 	*nb_vecteurs += 1;
 }
 
-void decouper_matrices(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
+void decouper_matrices_couleur(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
 
 	uint8_t nb_vecteurs = 0;
 
@@ -128,4 +128,15 @@ void decouper_matrices(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_
 
 
 	vecteurs_sortie->nb_vecteurs = nb_vecteurs;
+}
+
+void decouper_matrice_gris(uint8_t matrice[8][8], Vecteur *vecteur) {
+
+	vecteur->composante = Y;
+
+	for (uint8_t i = 0; i < 8; i++) {
+		for (uint8_t j = 0; j < 8; j++) {
+			vecteur->valeur[i * 8 + j] = matrice[i][j];		
+ 		}
+	}
 }

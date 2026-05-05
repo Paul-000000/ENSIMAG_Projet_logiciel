@@ -3,11 +3,16 @@
 #include <stdint.h>
 #include "huffman.h"
 #include "qtables.h"
+#include "string.h"
+
+
 
 void setUp(void) {
+
 }
 
 void tearDown(void) {
+
 }
 
 void test_huffman_construction_table_encodage(void) {

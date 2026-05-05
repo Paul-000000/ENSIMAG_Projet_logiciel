@@ -218,7 +218,7 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
     return true;
 }
 
-bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
+bool mcu_suivant(IterateurMCU *iterateur, bool couleur, uint8_t mcu_gris[8][8], Couleur_rgb mcu_couleur[MCU_MAX][MCU_MAX]) {
 
     if ((iterateur->y) >= (iterateur->hauteur_image_mcu)) return false;
 
@@ -226,19 +226,21 @@ bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
         iterateur->i_mcu = 0;
     }
 
-    uint8_t octets_par_pixel = (iterateur->image->type == P6) ? 3 : 1;
+    uint8_t octets_par_pixel = couleur ? 3 : 1;
+    uint8_t largeur_mcu = couleur ? iterateur->largeur_mcu : 8;
+    uint8_t hauteur_mcu = couleur ? iterateur->hauteur_mcu : 8;
 
     if (iterateur->i_mcu == 0) {
 
-        lireEblocs(iterateur->image, iterateur->x * iterateur->largeur_mcu, iterateur->y * iterateur->hauteur_mcu, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
-        iterateur->nb_mcu_lus = ceil((double)iterateur->image->taille_ligne / iterateur->largeur_mcu);
+        lireEblocs(iterateur->image, iterateur->x * largeur_mcu, iterateur->y * hauteur_mcu, largeur_mcu, hauteur_mcu, NB_BLOCS_SUPERBLOC);
+        iterateur->nb_mcu_lus = ceil((double)iterateur->image->taille_ligne / largeur_mcu);
         
 
-        if ((iterateur->image->taille_ligne % iterateur->largeur_mcu) != 0) { // répéter la dernière colonne
+        if ((iterateur->image->taille_ligne % largeur_mcu) != 0) { // répéter la dernière colonne
             uint32_t indice_derniere_colonne = iterateur->image->taille_ligne - 1;
 
-            for (uint8_t i = 0; i < (iterateur->hauteur_mcu); i++) {
-                for (uint32_t j = iterateur->image->taille_ligne; j < (iterateur->nb_mcu_lus * iterateur->largeur_mcu); j++) {
+            for (uint8_t i = 0; i < hauteur_mcu; i++) {
+                for (uint32_t j = iterateur->image->taille_ligne; j < (iterateur->nb_mcu_lus * largeur_mcu); j++) {
                     for (uint8_t k = 0; k < octets_par_pixel; k++) {
 
                         iterateur->image->tab[i][j * octets_par_pixel + k] = iterateur->image->tab[i][indice_derniere_colonne * octets_par_pixel + k];
@@ -247,11 +249,11 @@ bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
             }
         }
 
-        if (iterateur->image->nb_lignes != iterateur->hauteur_mcu) { // répéter la dernière ligne
+        if (iterateur->image->nb_lignes != hauteur_mcu) { // répéter la dernière ligne
 
             uint32_t indice_derniere_ligne = iterateur->image->nb_lignes-1;
-            uint8_t nb_lignes_vides = iterateur->hauteur_mcu - iterateur->image->nb_lignes;
-            uint32_t largeur_octets = NB_BLOCS_SUPERBLOC * iterateur->largeur_mcu * octets_par_pixel;
+            uint8_t nb_lignes_vides = hauteur_mcu - iterateur->image->nb_lignes;
+            uint32_t largeur_octets = NB_BLOCS_SUPERBLOC * largeur_mcu * octets_par_pixel;
 
             for (uint8_t i = 1; i < (nb_lignes_vides + 1); i++) {
                 memcpy(iterateur->image->tab[indice_derniere_ligne + i], iterateur->image->tab[indice_derniere_ligne], largeur_octets);
@@ -260,22 +262,21 @@ bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
     }
     
     // remplissage du tableau
-    uint32_t debut_mcu_dans_ligne = (iterateur->i_mcu * iterateur->largeur_mcu) * octets_par_pixel;
+    uint32_t debut_mcu_dans_ligne = (iterateur->i_mcu * largeur_mcu) * octets_par_pixel;
 
-    if (iterateur->image->type == P6) {
+    if (couleur) {
 
-        for (uint8_t i = 0; i < iterateur->hauteur_mcu; i++) {
-            memcpy(mcu[i], &(iterateur->image->tab[i][debut_mcu_dans_ligne]), iterateur->largeur_mcu * 3);
+        for (uint8_t i = 0; i < hauteur_mcu; i++) {
+            memcpy(mcu_couleur[i], &(iterateur->image->tab[i][debut_mcu_dans_ligne]), largeur_mcu * 3);
         }
 
     } else {
-        for (uint8_t i = 0; i < iterateur->hauteur_mcu; i++) {
-            for (uint8_t j = 0; j < iterateur->largeur_mcu; j++) {
+
+        for (uint8_t i = 0; i < hauteur_mcu; i++) {
+            for (uint8_t j = 0; j < largeur_mcu; j++) {
             
                 uint8_t niveau_gris = iterateur->image->tab[i][debut_mcu_dans_ligne + j];
-                mcu[i][j].r = niveau_gris;
-                mcu[i][j].g = niveau_gris;
-                mcu[i][j].b = niveau_gris;
+                mcu_gris[i][j] = niveau_gris;
             }
         }
     }
@@ -299,7 +300,22 @@ bool mcu_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
     return true;
 }
 
+bool mcu_couleur_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]) {
+
+    return mcu_suivant(iterateur, true, NULL, mcu);
+}
+
+bool mcu_gris_suivant(IterateurMCU *iterateur, uint8_t mcu[8][8]) {
+
+    return mcu_suivant(iterateur, false, mcu, NULL);
+}
+
 void liberer_iterateur_mcu(IterateurMCU *iterateur) {
 
     liberer_image(iterateur->image, iterateur->hauteur_mcu);
+}
+
+bool image_couleur(IterateurMCU *iterateur) {
+
+    return iterateur->image->type == P6;
 }
