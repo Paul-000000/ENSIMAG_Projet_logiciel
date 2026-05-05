@@ -6,10 +6,14 @@
 #include <stdbool.h>
 
 
-#define Marqueur_APP0 0xffe0
 
-
-bool ecrire_appx(FILE *f);
+bool ecrire_entete(
+    FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool couleur, Facteurs_echantillonnage facteurs,
+    const uint8_t *table_q_y, const uint8_t *table_q_cbcr,
+    const uint8_t longueurs_huffman[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS][16],
+    const uint8_t *table_symboles_huffman[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS],
+    const uint8_t taille_table_huffman[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS]
+);
 
 
 
