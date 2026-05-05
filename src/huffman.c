@@ -36,7 +36,7 @@
     courant -> symbole = symbole;
 }
 
-NoeudHuffman* construire_arbre_complet( uint8_t lengths[16], uint8_t* symbols[]){
+NoeudHuffman* construire_arbre_complet( uint8_t lengths[16], uint8_t symbols[]){
 
     NoeudHuffman* arbre = creer_noeud();
 
