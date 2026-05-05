@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include "huffman.h"
-
+#include "rle.h"
 
  /* NoeudHuffman* creer_noeud (){
     NoeudHuffman * noeud = (NoeudHuffman*)malloc(sizeof(NoeudHuffman));
@@ -63,12 +63,10 @@ NoeudHuffman* construire_arbre_complet( uint8_t lengths[16], uint8_t* symbols[])
 }
 */
 
-void construction_arbre ( Huffman tab[256], uint8_t* lengths, uint8_t* symbols ){
+void construction_arbre_huffman ( Huffman tab[256], uint8_t* lengths, uint8_t* symbols ){
     for (int i=0; i<256;i++){
         tab[i].valide = 0;
-
     }
-
     uint16_t code  = 0;
     int index_symbole = 0;
 
@@ -92,4 +90,6 @@ void construction_arbre ( Huffman tab[256], uint8_t* lengths, uint8_t* symbols )
     }
 
 }
+
+
 

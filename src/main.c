@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
 
-    /*
+    
     // commande
     Parametres_commande parametres;
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     // commande
     liberer_parametres_commande(&parametres);
 
-    */
+    
 
     return EXIT_SUCCESS;
 }

@@ -17,7 +17,7 @@ void test_huffman_construction_table_encodage(void) {
 
     Huffman table_test[256];
 
-    construction_arbre(table_test, longueurs, symboles);
+    construction_arbre_huffman(table_test, longueurs, symboles);
 
   
 
