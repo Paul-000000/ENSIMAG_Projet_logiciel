@@ -8,7 +8,7 @@
 void init_table_cosinus();
 
 // transforme la matrice bloc_spatial en matrice sous forme fréquentielle
-void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]);
+void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]);
 
 
 

@@ -64,15 +64,12 @@ int main(int argc, char **argv) {
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
-                Vecteur vec = vecteurs.vecteurs[i];
-                int16_t bloc_spatial[64], bloc_frequentiel[64];
+                Vecteur vecteur = vecteurs.vecteurs[i];
+                int16_t bloc_frequentiel[64];
                 
-                for (uint8_t j = 0; j <64; j++) bloc_spatial[j] = vec.valeur[j];
-                applique_dct(bloc_spatial ,bloc_frequentiel);
-
+                applique_dct(vecteur.valeur ,bloc_frequentiel);
                 zigzag(bloc_frequentiel);
-
-                quantification(bloc_frequentiel, vec.composante);
+                quantification(bloc_frequentiel, vecteur.composante);
             }
         }
 
@@ -88,13 +85,10 @@ int main(int argc, char **argv) {
 
             decouper_matrice_gris(mcu_gris, &vecteur);
 
-            int16_t bloc_spatial[64], bloc_frequentiel[64];
+            int16_t bloc_frequentiel[64];
             
-            for (uint8_t j = 0; j <64; j++) bloc_spatial[j] = vecteur.valeur[j];
-            applique_dct(bloc_spatial ,bloc_frequentiel);
-
+            applique_dct(vecteur.valeur ,bloc_frequentiel);
             zigzag(bloc_frequentiel);
-
             quantification(bloc_frequentiel, vecteur.composante);
 
         }

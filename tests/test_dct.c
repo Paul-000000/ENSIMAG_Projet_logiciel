@@ -13,7 +13,7 @@ void tearDown(void) {
 
 void test_wikipedia(void) {
     /* Exemple de wikipedia. */
-    int16_t ref[] = {
+    uint8_t ref[] = {
         52, 55, 61, 66, 70, 61, 64, 73,
         63, 59, 55, 90, 109, 85, 69, 72,
         62, 59, 68, 113, 144, 104, 66, 73,

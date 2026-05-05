@@ -17,7 +17,7 @@ void init_table_cosinus() {
     }
 }
 
-void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
+void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
     float somme;
     float raci = 1.0/sqrt(2.0);
@@ -34,7 +34,7 @@ void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
                 for(int y=0;y<8;y++){
 
-                    int valeur_decal = bloc_spatial[x*8 + y] - 128;
+                    int valeur_decal = (int16_t)(bloc_spatial[x*8 + y]) - 128;
 
                     float cos_y = tab_cos[y][j];
                     somme += valeur_decal*cos_x*cos_y;
