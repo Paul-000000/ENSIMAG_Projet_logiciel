@@ -104,6 +104,7 @@ void ajouter_octets(uint8_t *octets, uint32_t taille_octets, FILE *fichier, Buff
 
 void ajouter_marqueur(uint8_t code_marqueur, FILE *fichier, Buffer_ecriture *buffer) {
 
+    completer_derniers_bits(fichier, buffer);
     ajouter_octet(OCTET_DEBUT_MARQUEUR, false, fichier, buffer);
     ajouter_octet(code_marqueur, false, fichier, buffer);
 }
@@ -154,7 +155,9 @@ void completer_derniers_bits(FILE *fichier, Buffer_ecriture *buffer) {
 
     if (buffer->taille_bits == 0) return;
 
-    ecrire_octet_buffer(masquer_derniers_bits(buffer->buffer_bits, buffer->taille_bits), true, fichier, buffer);
+    uint8_t complement = (1 << (8 - buffer->taille_bits)) - 1;
+
+    ecrire_octet_buffer(complement | buffer->buffer_bits, true, fichier, buffer); // on ajoute des 1
 
     buffer->taille_bits = 0;
 }
@@ -164,7 +167,6 @@ void completer_derniers_bits(FILE *fichier, Buffer_ecriture *buffer) {
 
 void fermer_fichier_sortie(FILE *fichier, Buffer_ecriture *buffer) {
 
-    completer_derniers_bits(fichier, buffer);
     ajouter_marqueur(MARQUEUR_EOI_FIN_IMAGE, fichier, buffer);
 
     ecrire_donnees(fichier, buffer);

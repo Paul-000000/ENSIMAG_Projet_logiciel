@@ -78,8 +78,7 @@ void test_ecriture_octets_bits(void) {
     TEST_ASSERT_EQUAL_UINT8(OCTET_BYTE_STUFFING, octets[9]);
     TEST_ASSERT_EQUAL_UINT8(OCTET_AJOUT_BYTE_STUFFING, octets[10]);
     TEST_ASSERT_EQUAL_UINT8(0b10101010, octets[11]);
-    TEST_ASSERT_EQUAL_UINT8(0b11101000, octets[12]);
-
+    TEST_ASSERT_EQUAL_UINT8(0b11101011, octets[12]);
     
     TEST_ASSERT_EQUAL_UINT8(OCTET_DEBUT_MARQUEUR, octets[13]);
     TEST_ASSERT_EQUAL_UINT8(MARQUEUR_EOI_FIN_IMAGE, octets[14]);
@@ -87,11 +86,51 @@ void test_ecriture_octets_bits(void) {
     remove(chemin_sortie);
 }
 
+void test_ecriture_deccalage(void) {
+
+    char *chemin_sortie = "test.jpeg";
+
+    Buffer_ecriture buffer;
+    FILE *fichier = ouvrir_fichier_sortie(chemin_sortie, &buffer);
+    TEST_ASSERT_NOT_NULL(fichier);
+
+    uint8_t bits = 0b00011111;
+    uint8_t octets_ecrire[3] = {0,1,2};
+
+    ajouter_bits(&bits, 3, fichier, &buffer);
+    ajouter_octets(octets_ecrire, 3, fichier, &buffer);
+
+    fermer_fichier_sortie(fichier, &buffer);
+    
+
+
+    fichier = fopen(chemin_sortie, "rb");
+    TEST_ASSERT_NOT_NULL(fichier);
+
+    uint8_t octets[8];
+    int octets_lus = fread(octets, sizeof(uint8_t), 8, fichier);
+    
+    TEST_ASSERT_EQUAL_UINT8(8, octets_lus);
+    TEST_ASSERT_EQUAL_UINT8(OCTET_DEBUT_MARQUEUR, octets[0]);
+    TEST_ASSERT_EQUAL_UINT8(MARQUEUR_SOI_DEBUT_IMAGE, octets[1]);
+
+    TEST_ASSERT_EQUAL_UINT8(0b00000000, octets[2]);
+    TEST_ASSERT_EQUAL_UINT8(0b00000000, octets[3]);
+    TEST_ASSERT_EQUAL_UINT8(0b00100000, octets[4]);
+    TEST_ASSERT_EQUAL_UINT8(0b01011111, octets[5]);
+    
+    TEST_ASSERT_EQUAL_UINT8(OCTET_DEBUT_MARQUEUR, octets[6]);
+    TEST_ASSERT_EQUAL_UINT8(MARQUEUR_EOI_FIN_IMAGE, octets[7]);
+
+    remove(chemin_sortie);
+}
 
 int main(void) {
 
     UNITY_BEGIN();
+    RUN_TEST(test_ecriture_vide);
     RUN_TEST(test_ecriture_octets_bits);
+    RUN_TEST(test_ecriture_deccalage);
 
     return UNITY_END();
 }

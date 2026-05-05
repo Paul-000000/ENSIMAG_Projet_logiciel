@@ -18,20 +18,6 @@
 
 
 
-typedef struct octets_successifs
-{
-	uint8_t msb;
-	uint8_t lsb;
-
-} Octets_successifs;
-
-typedef union decoupage_2_octets
-{
-	uint16_t deux_octets;
-	Octets_successifs un_octet;
-
-} Decoupage_2_octets;
-
 typedef struct buffer_ecriture {
 	uint8_t buffer_octets[TAILLE_BUFFER_ECRITURE];
 	uint32_t taille_octets;
