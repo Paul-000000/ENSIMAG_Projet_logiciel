@@ -83,9 +83,12 @@ bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
 
 
 // récupère les valeurs des paramètres dans une ligne de commande
-bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool *facteurs_initialises) {
+bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool *facteurs_initialises, bool messages_erreur) {
 
-	if (argc < 2) return false;
+	if (argc < 2) {
+		if (messages_erreur) perror("Erreur : moins de deux arguments");
+		return false;
+	}
 
 	parametres->chemin_entree = NULL;
 	parametres->chemin_sortie = NULL;
@@ -105,8 +108,10 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				break;
 
 			case 1: // sample
-				if (optarg == NULL) return false;
-				
+				if (optarg == NULL) {
+					if (messages_erreur) perror("Erreur : optarg NULL");
+					return false;
+				}
 				int args_corrects = sscanf(
 					optarg,
 					"%hhux%hhu,%hhux%hhu,%hhux%hhu",
@@ -118,7 +123,10 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 					&(parametres->facteurs.v3)
 				);
 
-				if (args_corrects != 6) return false;
+				if (args_corrects != 6) {
+					if (messages_erreur) perror("Erreur dans la récupération des facteurs d'échantillonnage");
+					return false;
+				}
 
 				*facteurs_initialises = true;
 				break;
@@ -128,11 +136,15 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				return true;
 			
 			default:
+				if (messages_erreur) perror("Erreur : cas option par défaut");
 				return false;
 			}
 	}
 
-	if (optind >= argc) return false;
+	if (optind >= argc) {
+		if (messages_erreur) perror("Erreur : option hors des arguments");
+		return false;
+	}
 
 	parametres->chemin_entree = argv[optind];
 
@@ -164,10 +176,10 @@ char *extension_jpg(char *chemin) {
 	return chaine;
 }
 
-bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres) {
+bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool messages_erreur) {
 
 	bool facteurs_initialises;
-	bool res = recuperer_parametres_commande(argc, argv, parametres, &facteurs_initialises);
+	bool res = recuperer_parametres_commande(argc, argv, parametres, &facteurs_initialises, messages_erreur);
 
 	if (!res) {
 		parametres->chemin_sortie = NULL;
@@ -177,14 +189,40 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		parametres->chemin_sortie = NULL;
 		return true;
 	}
-	if (parametres->chemin_entree == NULL || !chemin_accessible(parametres->chemin_entree) || !dossier_chemin_existe(parametres->chemin_entree)) {
+	if (parametres->chemin_entree == NULL) {
+		if (messages_erreur) perror("Erreur : moins de deux arguments");
+		parametres->chemin_sortie = NULL;
+		return false;
+	}
+
+	if (!chemin_accessible(parametres->chemin_entree)) {
+		if (messages_erreur) perror("Erreur : fichier en entrée inaccessible");
+		parametres->chemin_sortie = NULL;
+		return false;
+	}
+
+	if (!dossier_chemin_existe(parametres->chemin_entree)) {
+		if (messages_erreur) perror("Erreur : dossier du du fichier d'entrée inaccessible");
 		parametres->chemin_sortie = NULL;
 		return false;
 	}
 
 	char *chemin_sortie = (parametres->chemin_sortie == NULL) ? extension_jpg(parametres->chemin_entree) : dupliquer_chaine(parametres->chemin_sortie);
 
-	if (chemin_sortie == NULL || chemin_accessible(chemin_sortie) || !dossier_chemin_existe(chemin_sortie)) return false;
+	if (chemin_sortie == NULL) {
+		if (messages_erreur) perror("Erreur : chemin de sortie NULL");
+		return false;
+	}
+
+	if (chemin_accessible(chemin_sortie)) {
+		if (messages_erreur) perror("Erreur : le fichier de sortie existe deja");
+		return false;
+	}
+	
+	if (!dossier_chemin_existe(chemin_sortie)) {
+		if (messages_erreur) perror("Erreur : le dossier du fichier de sortie est inaccessible");
+		return false;
+	}
 
 	parametres->chemin_sortie = chemin_sortie;
 	

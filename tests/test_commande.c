@@ -16,7 +16,7 @@ void test_commande_simple(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);
@@ -40,7 +40,7 @@ void test_commande_outfile_arguments_inverses(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("./images/etu/gris.pgm", parametres.chemin_entree);
@@ -57,7 +57,7 @@ void test_commande_help_infile(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -72,7 +72,7 @@ void test_commande_help(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -87,7 +87,7 @@ void test_commande_vide(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(false,res);
 
@@ -101,7 +101,7 @@ void test_commande_invalide(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(false,res);
 
@@ -115,7 +115,7 @@ void test_commande_sample(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);

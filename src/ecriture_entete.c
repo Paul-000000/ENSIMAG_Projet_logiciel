@@ -241,7 +241,10 @@ bool ecrire_entete(
     if (!ecrire_appx(f)) return false;
 
     if (!ecrire_DQT(f, table_q_y, false)) return false;
-    if (couleur) if (!ecrire_DQT(f, table_q_cbcr, true)) return false;
+    
+    if (couleur) {
+        if (!ecrire_DQT(f, table_q_cbcr, true)) return false;
+    }
 
     if (!ecrire_SOFx(f, hauteur_image, largeur_image, couleur, facteurs)) return false;
 

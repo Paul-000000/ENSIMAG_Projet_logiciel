@@ -26,7 +26,7 @@ récupère les valeurs des paramètres dans une ligne de commande
 et renvoir un booléen qui est à vrai si la commande contient des arguments corrects
 parametres est une structure non initialisée qui sera remplie à la fin de l'appel de fonction
 */
-bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres);
+bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool messages_erreur);
 
 // affiche l'aide si l'argument help à été détecté
 bool help_demande(Parametres_commande *parametres);
