@@ -46,6 +46,12 @@ bool dossier_chemin_existe(char *chemin) {
 	return res;
 }
 
+bool chemin_est_fichier(char *chemin) {
+
+	struct stat stat_;
+	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
+}
+
 bool chemin_accessible(char *chemin) {
 
 	FILE *fichier = fopen(chemin, "rb");
@@ -197,13 +203,19 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	}
 
 	if (!chemin_accessible(parametres->chemin_entree)) {
-		if (messages_erreur) perror("Erreur : fichier en entrée inaccessible");
+		if (messages_erreur) perror("Erreur : fichier en entree inaccessible");
 		parametres->chemin_sortie = NULL;
 		return false;
 	}
 
 	if (!dossier_chemin_existe(parametres->chemin_entree)) {
-		if (messages_erreur) perror("Erreur : dossier du du fichier d'entrée inaccessible");
+		if (messages_erreur) perror("Erreur : dossier du du fichier d'entree inaccessible");
+		parametres->chemin_sortie = NULL;
+		return false;
+	}
+
+	if (!chemin_est_fichier(parametres->chemin_entree)) {
+		if (messages_erreur) perror("Erreur : le chemin donne en entree n'est pas un fichier");
 		parametres->chemin_sortie = NULL;
 		return false;
 	}
@@ -223,6 +235,15 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	}
 	*/
 	
+	if (chemin_accessible(chemin_sortie)) {
+
+		if (!chemin_est_fichier(chemin_sortie)) {
+			free(chemin_sortie);
+			if (messages_erreur) perror("Erreur : le chemin de sortie n'est pas un fichier");
+			return false;
+		}
+	}
+
 	if (!dossier_chemin_existe(chemin_sortie)) {
 		free(chemin_sortie);
 		if (messages_erreur) perror("Erreur : le dossier du fichier de sortie est inaccessible");

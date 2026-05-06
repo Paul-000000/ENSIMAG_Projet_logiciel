@@ -53,7 +53,7 @@ void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
 // permet d'obtenir les dimensions du MCU en pixels à partir des facteurs
 void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu); 
 
-bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage *facteurs);
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs);
 
 bool mcu_couleur_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]);
 

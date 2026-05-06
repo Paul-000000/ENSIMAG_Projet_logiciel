@@ -227,7 +227,7 @@ void test_iterateur_mcu_invader(void) {
     IterateurMCU iterateur;
     Couleur_rgb mcu[MCU_MAX][MCU_MAX];
 
-    bool init = initialiser_iterateur_mcu(&iterateur, chemin, &facteurs);
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
 
     TEST_ASSERT_EQUAL(true, init);
 
@@ -271,7 +271,7 @@ void test_iterateur_mcu_complexe(void) {
     IterateurMCU iterateur;
     Couleur_rgb mcu[MCU_MAX][MCU_MAX];
 
-    bool init = initialiser_iterateur_mcu(&iterateur, chemin, &facteurs);
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
     TEST_ASSERT_EQUAL(true, init);
     TEST_ASSERT_EQUAL_UINT32(2, iterateur.largeur_image_mcu);
     TEST_ASSERT_EQUAL_UINT32(1, iterateur.hauteur_image_mcu);

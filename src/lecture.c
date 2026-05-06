@@ -204,7 +204,7 @@ void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur
 	*hauteur_mcu = 8 * facteurs.v1;
 }
 
-bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage *facteurs) {
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs) {
 
     iterateur->i_mcu = 0;
     iterateur->x = 0;
@@ -214,12 +214,7 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
     Image *image = lectureImage(nom_fichier);
     if (image == NULL) return false;
 
-    // if (image->type == P5) {
-    //     facteurs->h1 = 1;
-    //     facteurs->v1 = 1;
-    // }
-
-    determiner_facteurs_mcu(*facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
+    determiner_facteurs_mcu(facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
 
     image = allouer_image(image, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
     if (image == NULL) return false;

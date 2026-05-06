@@ -15,7 +15,7 @@
 
 int main(int argc, char **argv) {
     
-    time_t debut = time(NULL);
+    clock_t debut = clock(); // a retirer
 
     // commande
     Parametres_commande parametres;
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 
     // lecture
     IterateurMCU iterateur;
-    bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, &(parametres.facteurs));
+    bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, parametres.facteurs);
     if (!init) {
         perror("erreur d'initialisation de l'itérateur de lecture");
         liberer_parametres_commande(&parametres);
@@ -75,30 +75,38 @@ int main(int argc, char **argv) {
         Couleur_rgb mcu_couleur[MCU_MAX][MCU_MAX];
         Couleur_ycbcr mcu_ycbcr[MCU_MAX][MCU_MAX];
         Vecteurs_ycbcr vecteurs;
+        Dimensions_cbcr dim_cbcr = determiner_dimensions_cb_cr(parametres.facteurs);
 
         while (true) {
 
+            clock_t d = clock(); // a retirer
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) break;
+            // printf("iterateur_lecture en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
-            Dimensions_cbcr dim_cbcr = determiner_dimensions_cb_cr(parametres.facteurs);
+            d = clock();
             matrice_rgb_to_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, mcu_ycbcr);
+            // printf("pasasge ycbcr en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
+            d = clock();
             decouper_matrices_couleur(mcu_ycbcr, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
+            // printf("decoupage en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
                 Vecteur vecteur = vecteurs.vecteurs[i];
                 int16_t bloc_frequentiel[64];
                 
+                d = clock(); // a retirer
                 applique_dct(vecteur.valeur ,bloc_frequentiel);
+                // printf("dct en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
+                
                 zigzag(bloc_frequentiel);
                 quantification(bloc_frequentiel, vecteur.composante);
 
                 codage_magnitude(bloc_frequentiel, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
-                
                 rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
-                
+
                 if (vecteur.composante == Y) huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
                 else huffman(bloc_enc, &symboles_rle_ac, CbCr_DC, CbCr_AC, &ac_dc);
 
@@ -137,7 +145,8 @@ int main(int argc, char **argv) {
 
     // commande
     liberer_parametres_commande(&parametres);
-
-    printf("effectué en : %.3lds\n", time(NULL) - debut);
+    
+    
+    printf("effectué en : %.3fs\n", (double)(clock() - debut) / CLOCKS_PER_SEC); // a retirer
     return EXIT_SUCCESS;
 }
