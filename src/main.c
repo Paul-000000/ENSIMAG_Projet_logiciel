@@ -27,13 +27,13 @@ int main(int argc, char **argv) {
     IterateurMCU iterateur;
     
 
+
+    // parametres.facteurs.h1 = 1;
+    // parametres.facteurs.v1 = 1;
     
-    parametres.facteurs.h1 = 1;
-    parametres.facteurs.v1 = 1;
     
     
-    
-    bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, parametres.facteurs);
+    bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, &(parametres.facteurs));
     if (!init) perror("erreur d'initialisation de l'itérateur de lecture\n");
 
     // ecriture 
@@ -50,6 +50,12 @@ int main(int argc, char **argv) {
     printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu);
     printf("chemin sortie: %s\n", parametres.chemin_sortie);
 
+    int16_t dc_prec = 0;
+    AC_DC ac_dc;
+    Magnitude bloc_enc[64];
+    Symboles_RLE symboles_rle_ac;
+
+    initialise_huffman();
 
     if (image_couleur(&iterateur)) { // image couleur
         //uint32_t nb_mcu = 0;
@@ -89,6 +95,15 @@ int main(int argc, char **argv) {
                 applique_dct(vecteur.valeur ,bloc_frequentiel);
                 zigzag(bloc_frequentiel);
                 quantification(bloc_frequentiel, vecteur.composante);
+
+
+                codage_magnitude(bloc_frequentiel, &dc_prec, bloc_enc);
+                rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
+                
+                if (vecteur.composante == Y) huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
+                else huffman(bloc_enc, &symboles_rle_ac, CbCr_DC, CbCr_AC, &ac_dc);
+
+                ajouter_donnees_compressees(&ac_dc, fichier_sortie, &buffer_ecriture);
             }
         }
 
@@ -97,14 +112,10 @@ int main(int argc, char **argv) {
         
         uint8_t mcu_gris[8][8];
         Vecteur vecteur;
-        int16_t dc_prec = 0;
-        AC_DC ac_dc;
-        Magnitude bloc_enc[64];
-        Symboles_RLE symboles_rle_ac;
 
         while (true) {
 
-            printf("x:%d y:%d i:%d, (%dx%d)\n",iterateur.x ,iterateur.y, iterateur.i_mcu,iterateur.hauteur_mcu, iterateur.largeur_mcu);
+            //printf("x:%d y:%d i:%d, (%dx%d)\n",iterateur.x ,iterateur.y, iterateur.i_mcu,iterateur.hauteur_mcu, iterateur.largeur_mcu);
 
             reste_mcu = mcu_gris_suivant(&iterateur, mcu_gris);
             if (!reste_mcu) break;
@@ -160,7 +171,7 @@ int main(int argc, char **argv) {
             // }
 
             rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
-            initialise_huffman();
+            
             huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
 
             //huffman_rle_magnitude(bloc_frequentiel, &dc_prec, Y_DC, Y_DC, &ac_dc);
@@ -179,7 +190,6 @@ int main(int argc, char **argv) {
 
     fermer_fichier_sortie(fichier_sortie, &buffer_ecriture);
 
-    
     // lecture
     liberer_iterateur_mcu(&iterateur);
 

@@ -99,7 +99,22 @@ void positionner_curseur(Image *img, uint32_t x, uint32_t y)
     fseek(img->fichier, position, SEEK_SET);
 }
 
-Image *lectureImage(char *nom_fichier, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs)
+Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs) {
+
+    int multiplicateur = (image->type == P6) ? 3 : 1;
+
+    image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
+    if (image->tab == NULL) return NULL;
+
+    for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
+        image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
+        if (image->tab == NULL) return NULL;
+    }
+
+    return image;
+}
+
+Image *lectureImage(char *nom_fichier)
 {
 
     FILE *fichier = fopen(nom_fichier, "rb");
@@ -128,15 +143,6 @@ Image *lectureImage(char *nom_fichier, uint32_t largeur_bloc_en_pixels, uint32_t
         printf("[ERREUR] lecture de l'entete");
         fclose(fichier);
         return NULL;
-    }
-
-    int multiplicateur = (image->type == P6) ? 3 : 1;
-
-    image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
-    
-
-    for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
-        image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
     }
 
     return image;
@@ -198,17 +204,24 @@ void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur
 	*hauteur_mcu = 8 * facteurs.v1;
 }
 
-bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs) {
-
-    determiner_facteurs_mcu(facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage *facteurs) {
 
     iterateur->i_mcu = 0;
     iterateur->x = 0;
     iterateur->y = 0;
     iterateur->nb_mcu_lus = 0;
 
-    Image *image = lectureImage(nom_fichier, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
-    
+    Image *image = lectureImage(nom_fichier);
+    if (image == NULL) return false;
+
+    if (image->type == P5) {
+        facteurs->h1 = 1;
+        facteurs->v1 = 1;
+    }
+
+    determiner_facteurs_mcu(*facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
+
+    image = allouer_image(image, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
     if (image == NULL) return false;
 
     iterateur->largeur_image_mcu = ceil((double)image->largeur / (iterateur->largeur_mcu));

@@ -38,7 +38,8 @@ void test_lire_image(void) {
     uint32_t H_super = 8;
     uint32_t nb_blocs = 64;
 
-    Image* img = lectureImage(filename, L_bloc, H_super, nb_blocs);
+    Image* img = lectureImage(filename);
+    img = allouer_image(img, L_bloc, H_super, nb_blocs);
 
     TEST_ASSERT_NOT_NULL(img);
     TEST_ASSERT_NOT_NULL(img->fichier);
@@ -69,8 +70,9 @@ void test_lectureEblocs() {
     uint32_t H_super = 8;
     uint32_t nb_blocs = 64;
 
-    Image* img = lectureImage(filename, L_bloc, H_super, nb_blocs);
-    
+    Image* img = lectureImage(filename);
+    img = allouer_image(img, L_bloc, H_super, nb_blocs);
+
     // Appel avec la nouvelle signature
     lireEblocs(img, 0, 0, L_bloc, H_super, nb_blocs);
     
@@ -103,7 +105,9 @@ void test_lireEblocs_grande_image(void) {
     fclose(f);
 
     // 2. Chargement
-    Image *img = lectureImage(filename, L_bloc, H_super, nb_blocs);
+    Image *img = lectureImage(filename);
+    img = allouer_image(img, L_bloc, H_super, nb_blocs);
+
     TEST_ASSERT_NOT_NULL(img);
 
     // 3. Lecture au milieu
@@ -145,7 +149,9 @@ void test_lireEblocs_grande_image_P6(void) {
     fclose(f);
 
     // 2. Chargement de l'image (doit allouer 3 octets par pixel)
-    Image *img = lectureImage(filename, L_bloc, H_super, nb_blocs);
+    Image *img = lectureImage(filename);
+    img = allouer_image(img, L_bloc, H_super, nb_blocs);
+
     TEST_ASSERT_NOT_NULL(img);
     TEST_ASSERT_EQUAL_INT(P6, img->type);
 
@@ -221,7 +227,7 @@ void test_iterateur_mcu_invader(void) {
     IterateurMCU iterateur;
     Couleur_rgb mcu[MCU_MAX][MCU_MAX];
 
-    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, &facteurs);
 
     TEST_ASSERT_EQUAL(true, init);
 
@@ -265,7 +271,7 @@ void test_iterateur_mcu_complexe(void) {
     IterateurMCU iterateur;
     Couleur_rgb mcu[MCU_MAX][MCU_MAX];
 
-    bool init = initialiser_iterateur_mcu(&iterateur, chemin, facteurs);
+    bool init = initialiser_iterateur_mcu(&iterateur, chemin, &facteurs);
     TEST_ASSERT_EQUAL(true, init);
     TEST_ASSERT_EQUAL_UINT32(2, iterateur.largeur_image_mcu);
     TEST_ASSERT_EQUAL_UINT32(1, iterateur.hauteur_image_mcu);
