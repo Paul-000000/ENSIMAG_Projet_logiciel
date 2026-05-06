@@ -214,10 +214,10 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facte
     Image *image = lectureImage(nom_fichier);
     if (image == NULL) return false;
 
-    if (image->type == P5) {
-        facteurs->h1 = 1;
-        facteurs->v1 = 1;
-    }
+    // if (image->type == P5) {
+    //     facteurs->h1 = 1;
+    //     facteurs->v1 = 1;
+    // }
 
     determiner_facteurs_mcu(*facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
 

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <inttypes.h>
+#include <time.h>
 #include "commande.h"
 #include "lecture.h"
 #include "rgb_to_ycbcr.h"
@@ -13,13 +14,14 @@
 
 
 int main(int argc, char **argv) {
+    
+    time_t debut = time(NULL);
 
     // commande
     Parametres_commande parametres;
 
     bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
     if (!res) {
-        liberer_parametres_commande(&parametres);
         return EXIT_FAILURE;
     }
 
@@ -57,6 +59,7 @@ int main(int argc, char **argv) {
 
     bool reste_mcu;
 
+    // affichages de débug
     printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu);
     printf("chemin sortie: %s\n", parametres.chemin_sortie);
 
@@ -67,7 +70,6 @@ int main(int argc, char **argv) {
     initialise_huffman();
 
     if (image_couleur(&iterateur)) { // image couleur
-        //uint32_t nb_mcu = 0;
 
         int16_t dc_prec_y_cb_cr[3] = {0, 0, 0};
         Couleur_rgb mcu_couleur[MCU_MAX][MCU_MAX];
@@ -76,21 +78,8 @@ int main(int argc, char **argv) {
 
         while (true) {
 
-            //printf("mcu: %d x: %d y: %d\n", nb_mcu, iterateur.x, iterateur.y);
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) break;
-
-            /*
-            for (int i = 0; i < iterateur.largeur_mcu; i++) {
-                for (int j = 0; j < iterateur.hauteur_mcu; j++) {
-
-                    printf("%02x%02x%02x ",mcu[i][j].r, mcu[i][j].g ,mcu[i][j].b);
-                    //printf("(%3d,%3d,%3d) ",mcu[i][j].r, mcu[i][j].g ,mcu[i][j].b);
-                }
-                printf("\n");
-            }
-            nb_mcu++;
-            */
 
             Dimensions_cbcr dim_cbcr = determiner_dimensions_cb_cr(parametres.facteurs);
             matrice_rgb_to_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, mcu_ycbcr);
@@ -149,16 +138,6 @@ int main(int argc, char **argv) {
     // commande
     liberer_parametres_commande(&parametres);
 
-    
-
-
-    ////////////////
-    remove(parametres.chemin_sortie);
-
-
-
-
-
-
+    printf("effectué en : %.3lds\n", time(NULL) - debut);
     return EXIT_SUCCESS;
 }

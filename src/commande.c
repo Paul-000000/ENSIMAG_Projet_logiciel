@@ -85,13 +85,14 @@ bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
 // récupère les valeurs des paramètres dans une ligne de commande
 bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool *facteurs_initialises, bool messages_erreur) {
 
+	parametres->chemin_sortie = NULL;
+
 	if (argc < 2) {
 		if (messages_erreur) perror("Erreur : moins de deux arguments");
 		return false;
 	}
 
 	parametres->chemin_entree = NULL;
-	parametres->chemin_sortie = NULL;
 	parametres->help = false;
 	*facteurs_initialises = false;
 
@@ -214,12 +215,16 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		return false;
 	}
 
+	/*
 	if (chemin_accessible(chemin_sortie)) {
+		free(chemin_sortie);
 		if (messages_erreur) perror("Erreur : le fichier de sortie existe deja");
 		return false;
 	}
+	*/
 	
 	if (!dossier_chemin_existe(chemin_sortie)) {
+		free(chemin_sortie);
 		if (messages_erreur) perror("Erreur : le dossier du fichier de sortie est inaccessible");
 		return false;
 	}
@@ -229,12 +234,16 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	
 	if (!facteurs_initialises) {
 
-		Facteurs_echantillonnage facteurs = {2, 2, 1, 1, 1, 1};
+		Facteurs_echantillonnage facteurs = {1, 1, 1, 1, 1, 1};
 		parametres->facteurs = facteurs;
 	
 	} else {
 		
-		if (!verifier_facteurs_echantillonnage(parametres->facteurs)) return false; 
+		if (!verifier_facteurs_echantillonnage(parametres->facteurs)) {
+			liberer_parametres_commande(parametres);
+			if (messages_erreur) perror("Erreur : facteurs d'echantillonnage incorrects");
+			return false;
+		} 
 	}
 
 	return true;

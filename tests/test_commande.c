@@ -23,8 +23,8 @@ void test_commande_simple(void) {
     TEST_ASSERT_EQUAL_STRING("test_lignes.jpg",parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
-    TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.h1);
-    TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.v1);
+    TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h1);
+    TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.v1);
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h2);
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.v2);
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h3);
