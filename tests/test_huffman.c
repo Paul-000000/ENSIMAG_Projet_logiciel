@@ -81,7 +81,13 @@ void test_huffman_rle_magnitude(void) {
 
    
     AC_DC resultat;
-    huffman_rle_magnitude(bloc, &dc_prec, tab_dc, tab_ac, &resultat);
+    Symboles_RLE symboles_rle_ac;
+    Magnitude bloc_enc[64];
+
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
+    initialise_huffman();
+    huffman(bloc_enc, &symboles_rle_ac, tab_dc, tab_ac, &resultat);
 
 
     
@@ -136,7 +142,13 @@ void test_huffman_long_zero_run(void) {
     tab_ac[0x00].nb_bits = 2;
 
     AC_DC resultat;
-    huffman_rle_magnitude(bloc, &dc_prec, tab_dc, tab_ac, &resultat);
+    Symboles_RLE symboles_rle_ac;
+    Magnitude bloc_enc[64];
+
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
+    initialise_huffman();
+    huffman(bloc_enc, &symboles_rle_ac, tab_dc, tab_ac, &resultat);
 
     // On s'attend à 3 symboles AC : ZRL, le "3", et l'EOB
     TEST_ASSERT_EQUAL_UINT8(3, resultat.taille);
@@ -160,7 +172,13 @@ void test_huffman_indices_negatifs(void) {
     tab_ac[0x00].valide = 1; // EOB
 
     AC_DC resultat;
-    huffman_rle_magnitude(bloc, &dc_prec, tab_dc, tab_ac, &resultat);
+    Symboles_RLE symboles_rle_ac;
+    Magnitude bloc_enc[64];
+
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
+    initialise_huffman();
+    huffman(bloc_enc, &symboles_rle_ac, tab_dc, tab_ac, &resultat);
 
     // Vérification de la magnitude du DC
     TEST_ASSERT_EQUAL_UINT16(3, resultat.DC.nb_bits); 
@@ -181,7 +199,13 @@ void test_huffman_bloc_vide(void) {
     tab_ac[0x00].code = 0b1010;
 
     AC_DC resultat;
-    huffman_rle_magnitude(bloc, &dc_prec, tab_dc, tab_ac, &resultat);
+    Symboles_RLE symboles_rle_ac;
+    Magnitude bloc_enc[64];
+
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
+    initialise_huffman();
+    huffman(bloc_enc, &symboles_rle_ac, tab_dc, tab_ac, &resultat);
 
     // Taille doit être 1 (uniquement le symbole EOB)
     TEST_ASSERT_EQUAL_UINT8(1, resultat.taille);

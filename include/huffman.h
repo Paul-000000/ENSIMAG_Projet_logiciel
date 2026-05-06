@@ -30,12 +30,18 @@ typedef struct AC_DC
 
 typedef struct NoeudHuffman
 {
-
     uint16_t code;
     uint8_t nb_bits; 
     uint8_t valide;
 
 } Huffman;
+
+
+
+extern Huffman Y_DC[256];
+extern Huffman Y_AC[256];
+extern Huffman CbCr_DC[256];
+extern Huffman CbCr_AC[256];
 
 
 
@@ -50,6 +56,6 @@ void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const 
 // Fonctions pour l'assemblage de Huffman, rle et magnitude
 void initialise_huffman();
 
-void huffman_rle_magnitude(int16_t bloc[64], int16_t *dc_prec, Huffman tab_dc[256], Huffman tab_ac[256], AC_DC *resultat);
+void huffman(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, Huffman tab_dc[256], Huffman tab_ac[256], AC_DC *resultat);
 
 #endif

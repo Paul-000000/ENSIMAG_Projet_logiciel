@@ -1,4 +1,5 @@
 #include "ecriture.h"
+#include "ecriture_entete.h"
 #include <math.h>
 
 
@@ -11,7 +12,7 @@ FILE *ouvrir_fichier_sortie(char *chemin_sortie, Buffer_ecriture *buffer) {
     buffer->taille_bits = 0;
     buffer->taille_octets = 0;
 
-    ajouter_marqueur(MARQUEUR_SOI_DEBUT_IMAGE, fichier, buffer);
+    if (!ecrire_SOI(fichier)) return NULL;
 
     return fichier;
 }
@@ -23,12 +24,12 @@ void ecrire_donnees(FILE *fichier, Buffer_ecriture *buffer) {
     buffer->taille_octets = 0;
 }
 
-void ecrire_octet_buffer(uint8_t octet_a_ecrire, bool stuffing, FILE *fichier, Buffer_ecriture *buffer) {
+void ecrire_octet_buffer(uint8_t octet_a_ecrire, FILE *fichier, Buffer_ecriture *buffer) {
 
     buffer->buffer_octets[buffer->taille_octets] = octet_a_ecrire;
     buffer->taille_octets += 1;
 
-    if (stuffing && octet_a_ecrire == OCTET_BYTE_STUFFING) {
+    if (octet_a_ecrire == OCTET_BYTE_STUFFING) {
         buffer->buffer_octets[buffer->taille_octets] = OCTET_AJOUT_BYTE_STUFFING;
         buffer->taille_octets += 1;
     }
@@ -38,50 +39,20 @@ void ecrire_octet_buffer(uint8_t octet_a_ecrire, bool stuffing, FILE *fichier, B
     }
 }
 
-void ajouter_octet(uint8_t octet, bool stuffing, FILE *fichier, Buffer_ecriture *buffer) {
-
-    uint8_t octet_a_ecrire;
-
-    if (buffer->taille_bits == 0) {
-        octet_a_ecrire = octet;
-        ecrire_octet_buffer(octet_a_ecrire, stuffing, fichier, buffer);
-
-    } else {
-
-        ajouter_bits((uint16_t)octet, 8, fichier, buffer);
-    }
-}
-
-void ajouter_octets(uint8_t *octets, uint32_t taille_octets, FILE *fichier, Buffer_ecriture *buffer) {
-
-    for (uint32_t i = 0; i < taille_octets; i++) {
-
-        ajouter_octet(octets[i], true, fichier, buffer);
-    }
-}
-
-void ajouter_marqueur(uint8_t code_marqueur, FILE *fichier, Buffer_ecriture *buffer) {
-
-    completer_derniers_bits(fichier, buffer);
-    ajouter_octet(OCTET_DEBUT_MARQUEUR, false, fichier, buffer);
-    ajouter_octet(code_marqueur, false, fichier, buffer);
-}
-
 void vider_buffer_bits(FILE *fichier, Buffer_ecriture *buffer) {
 
-    if (buffer->taille_bits < 8) return;
+    while (buffer->taille_bits >= 8) {
 
-    for (uint8_t i = 0; i < (buffer->taille_bits / 8) ; i++) {
-
-        uint8_t octet = (uint8_t)buffer->buffer_bits;
-        buffer->buffer_bits = buffer->buffer_bits >> 8;
+        uint8_t octet = (buffer->buffer_bits >> (buffer->taille_bits - 8));
         buffer->taille_bits -= 8;
 
-        ecrire_octet_buffer(octet, true, fichier, buffer);
+        ecrire_octet_buffer(octet, fichier, buffer);
     }
 }
 
 void ajouter_bits(uint16_t bits, uint8_t taille_bits, FILE *fichier, Buffer_ecriture *buffer) {
+
+    if (taille_bits == 0) return;
 
     buffer->buffer_bits = (buffer->buffer_bits << taille_bits) | bits;
     buffer->taille_bits += taille_bits;
@@ -90,21 +61,27 @@ void ajouter_bits(uint16_t bits, uint8_t taille_bits, FILE *fichier, Buffer_ecri
 }
 
 void completer_derniers_bits(FILE *fichier, Buffer_ecriture *buffer) {
-
+    
     if (buffer->taille_bits == 0) return;
 
-    uint8_t complement = (1 << (8 - buffer->taille_bits)) - 1;
+    if ((buffer->taille_bits % 8 ) == 0) {
+        
+        vider_buffer_bits(fichier, buffer);
+        return;
+    }
 
-    ecrire_octet_buffer(complement | buffer->buffer_bits, true, fichier, buffer); // on ajoute des 1
+    uint8_t taille_complement = 8 - (buffer->taille_bits % 8);
+    uint16_t complement = (1 << taille_complement) - 1;
+    ajouter_bits(complement, taille_complement, fichier, buffer);
 
     buffer->taille_bits = 0;
 }
 
 void fermer_fichier_sortie(FILE *fichier, Buffer_ecriture *buffer) {
 
-    ajouter_marqueur(MARQUEUR_EOI_FIN_IMAGE, fichier, buffer);
-
+    completer_derniers_bits(fichier, buffer);
     ecrire_donnees(fichier, buffer);
+    ecrire_EOI(fichier);
 
     fclose(fichier);
 }

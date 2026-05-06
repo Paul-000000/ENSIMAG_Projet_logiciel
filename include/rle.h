@@ -24,8 +24,7 @@ typedef struct symboles_RLE {
 
 
 
-void rle_magnitude(int16_t bloc[64], int16_t * dc_prec, Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac);
-
+void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]);
 
 
 #endif /* _RLE_H_ */

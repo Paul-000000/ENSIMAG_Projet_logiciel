@@ -8,7 +8,30 @@
 #include "qtables.h"
 #include "htables.h"
 
+#define DEBUT_MARQUEUR 0xff
+#define MARQUEUR_APP0 0xe0
+#define MARQEUR_DQT 0xdb
+#define MARQUEUR_SOF0 0xc0
+#define MARQUEUR_DHT 0xc4
+#define MARQUEUR_SOS 0xda
+#define MARQUEUR_SOI 0xd8
+#define MARQUEUR_EOI 0xd9
 
+#define ID_QUANTIFICATION_Y 0
+#define ID_QUANTIFICATION_CBCR 1
+
+#define ID_COMPOSANTE_Y 1
+#define ID_COMPOSANTE_CB 2
+#define ID_COMPOSANTE_CR 3
+
+#define ID_DC 0
+#define ID_AC 1
+
+
+
+bool ecrire_SOI(FILE *f);
+
+bool ecrire_EOI(FILE *f);
 
 bool ecrire_entete(
     FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool couleur, Facteurs_echantillonnage facteurs,

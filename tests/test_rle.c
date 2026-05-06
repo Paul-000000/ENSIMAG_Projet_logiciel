@@ -27,7 +27,8 @@ void test_rle_simple(void) {
     int16_t dc_prec = 4;
     Magnitude bloc_enc[64];
 
-    rle_magnitude(bloc, &dc_prec, bloc_enc, &symboles_rle_ac);
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
 
     TEST_ASSERT_EQUAL_UINT8(2, bloc_enc[0].class_mag); // -3
     TEST_ASSERT_EQUAL_UINT16(0, bloc_enc[0].indice);
@@ -63,8 +64,8 @@ void test_rle_milieu(void) {
     int16_t dc_prec = 0;
     Magnitude bloc_enc[64];
 
-    rle_magnitude(bloc, &dc_prec, bloc_enc, &symboles_rle_ac);
-
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
 
     TEST_ASSERT_EQUAL_UINT8(1, bloc_enc[20].class_mag); // 1
     TEST_ASSERT_EQUAL_UINT16(0, bloc_enc[20].indice);

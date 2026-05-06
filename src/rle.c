@@ -44,11 +44,3 @@ void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]) {
         symboles_rle->taille += 1;
     }
 }
-
-void rle_magnitude(int16_t bloc[64],int16_t * dc_prec, Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac) {
-
-    codage_magnitude(bloc, dc_prec, bloc_enc);
-
-    rle(bloc, symboles_rle_ac, bloc_enc);
-
-}

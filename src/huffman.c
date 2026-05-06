@@ -112,13 +112,8 @@ void initialise_huffman() {
     construction_arbre_huffman(CbCr_AC, htables_nb_symb_per_lengths[1][1], htables_symbols[1][1]);
 }
 
-void huffman_rle_magnitude(int16_t bloc[64], int16_t *dc_prec, Huffman tab_dc[256], Huffman tab_ac[256], AC_DC *resultat) {
+void huffman(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, Huffman tab_dc[256], Huffman tab_ac[256], AC_DC *resultat) {
     
-    Magnitude bloc_enc[64];
-    Symboles_RLE symboles_rle_ac;
-
-    rle_magnitude(bloc, dc_prec, bloc_enc, &symboles_rle_ac);
-
     uint8_t symbole_dc = bloc_enc[0].class_mag;    
     
     resultat->DC.indice = bloc_enc[0].indice;
@@ -134,14 +129,14 @@ void huffman_rle_magnitude(int16_t bloc[64], int16_t *dc_prec, Huffman tab_dc[25
     }
 
     
-    resultat->taille = symboles_rle_ac.taille; 
+    resultat->taille = symboles_rle_ac->taille; 
 
-    for (int i = 0; i < symboles_rle_ac.taille; i++) {
+    for (int i = 0; i < symboles_rle_ac->taille; i++) {
         
-        uint8_t symbole_ac = symboles_rle_ac.symboles[i].symbole;
+        uint8_t symbole_ac = symboles_rle_ac->symboles[i].symbole;
         
-        resultat->AC[i].indice = symboles_rle_ac.symboles[i].indice;
-        resultat->AC[i].classe_mag = symboles_rle_ac.symboles[i].classe_mag;
+        resultat->AC[i].indice = symboles_rle_ac->symboles[i].indice;
+        resultat->AC[i].classe_mag = symboles_rle_ac->symboles[i].classe_mag;
         
         if (tab_ac[symbole_ac].valide) {
             resultat->AC[i].code = tab_ac[symbole_ac].code;

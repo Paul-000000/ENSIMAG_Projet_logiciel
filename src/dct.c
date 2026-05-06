@@ -55,7 +55,7 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
             c_j = (j == 0) ? raci : 1.0;
 
             double freq = 0.25*c_i*c_j*somme;
-            bloc_frequentiel[i*8 + j] = (int16_t)(freq);
+            bloc_frequentiel[i*8 + j] = (int16_t)round(freq);
 
 
         }
