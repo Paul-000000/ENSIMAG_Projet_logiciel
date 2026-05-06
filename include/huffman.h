@@ -14,6 +14,7 @@
 typedef struct contenu
 {
     uint16_t indice;
+    uint8_t classe_mag;
     uint16_t code;
     uint8_t nb_bits;
 

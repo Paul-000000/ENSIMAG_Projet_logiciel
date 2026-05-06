@@ -11,7 +11,7 @@ typedef struct Magnitude
 } Magnitude;
 
 
-void codage_magnitude(int16_t bloc[64],int16_t * dc_prec,Magnitude bloc_enc[64]);
+void codage_magnitude(int16_t bloc[64], int16_t * dc_prec, Magnitude bloc_enc[64]);
 
 Magnitude encoder_val(int16_t val);
 

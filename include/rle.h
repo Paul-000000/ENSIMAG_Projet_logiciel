@@ -11,6 +11,7 @@
 
 typedef struct symbole_RLE {
 	uint8_t symbole; // 4 bits pour les coefficients nuls précédents, 4 bits pour la magnitude ou ZRL ou EOB
+	uint8_t classe_mag;
 	uint16_t indice; // m bits pour l'indice, avec 0 <= m <= 10
 
 } Symbole_RLE; 

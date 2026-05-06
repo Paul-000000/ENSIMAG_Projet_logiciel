@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "commande.h"
+#include "qtables.h"
+#include "htables.h"
 
 
 

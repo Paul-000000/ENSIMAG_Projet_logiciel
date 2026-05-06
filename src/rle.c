@@ -18,6 +18,7 @@ void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]) {
         if (bloc[i] != 0) {
             symboles_rle->symboles[symboles_rle->taille].symbole = ((nb_zero << 4) + bloc_enc[i].class_mag);
             symboles_rle->symboles[symboles_rle->taille].indice = bloc_enc[i].indice;
+            symboles_rle->symboles[symboles_rle->taille].classe_mag = bloc_enc[i].class_mag;
 
             nb_zero = 0;
             symboles_rle->taille += 1;
@@ -27,6 +28,8 @@ void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]) {
 
             if (nb_zero == 16) {
                 symboles_rle->symboles[symboles_rle->taille].symbole = ZRL;
+                symboles_rle->symboles[symboles_rle->taille].indice = 0;
+                symboles_rle->symboles[symboles_rle->taille].classe_mag = 0;
                 nb_zero = 0;
                 symboles_rle->taille += 1;
             }
@@ -36,6 +39,8 @@ void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]) {
     if (indice_fin < 63) {// ajout des derniers 0
 
         symboles_rle->symboles[symboles_rle->taille].symbole = EOB;
+        symboles_rle->symboles[symboles_rle->taille].indice = 0;
+        symboles_rle->symboles[symboles_rle->taille].classe_mag = 0;
         symboles_rle->taille += 1;
     }
 }

@@ -125,12 +125,61 @@ void test_ecriture_deccalage(void) {
     remove(chemin_sortie);
 }
 
+void test_ecriture_ac_dc(void) {
+
+    char *chemin_sortie = "test.jpeg";
+
+    Buffer_ecriture buffer;
+    FILE *fichier = ouvrir_fichier_sortie(chemin_sortie, &buffer);
+    TEST_ASSERT_NOT_NULL(fichier);
+
+    AC_DC ac_dc;
+    contenu dc = {2,2,64,7};
+    ac_dc.DC = dc;
+    contenu ac_1 = {1,3,0,0};
+    contenu ac_2 = {22,5,2,9};
+    ac_dc.AC[0] = ac_1;
+    ac_dc.AC[1] = ac_2;
+    ac_dc.taille = 2;
+
+    ajouter_donnees_compressees(&ac_dc, fichier, &buffer);
+
+    fermer_fichier_sortie(fichier, &buffer);
+    
+
+
+    fichier = fopen(chemin_sortie, "rb");
+    TEST_ASSERT_NOT_NULL(fichier);
+
+    uint8_t octets[8];
+    int octets_lus = fread(octets, sizeof(uint8_t), 8, fichier);
+    
+    TEST_ASSERT_EQUAL_UINT8(8, octets_lus);
+    TEST_ASSERT_EQUAL_UINT8(OCTET_DEBUT_MARQUEUR, octets[0]);
+    TEST_ASSERT_EQUAL_UINT8(MARQUEUR_SOI_DEBUT_IMAGE, octets[1]);
+
+    // DC = 100000010
+    // AC[0] = 001
+    // AC[1] = 10110000000010
+
+    TEST_ASSERT_EQUAL_UINT8(0b10000001, octets[2]);
+    TEST_ASSERT_EQUAL_UINT8(0b00011011, octets[3]);
+    TEST_ASSERT_EQUAL_UINT8(0b00000000, octets[4]);
+    TEST_ASSERT_EQUAL_UINT8(0b10111111, octets[5]);
+    
+    TEST_ASSERT_EQUAL_UINT8(OCTET_DEBUT_MARQUEUR, octets[6]);
+    TEST_ASSERT_EQUAL_UINT8(MARQUEUR_EOI_FIN_IMAGE, octets[7]);
+
+    remove(chemin_sortie);
+}
+
 int main(void) {
 
     UNITY_BEGIN();
     RUN_TEST(test_ecriture_vide);
     RUN_TEST(test_ecriture_octets_bits);
     RUN_TEST(test_ecriture_deccalage);
-
+    RUN_TEST(test_ecriture_ac_dc);
+    
     return UNITY_END();
 }

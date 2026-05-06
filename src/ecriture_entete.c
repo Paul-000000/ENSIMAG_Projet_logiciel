@@ -4,8 +4,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <zz_quant.h>
-#include "qtables.h"
-#include "htables.h"
 
 #define DEBUT_MARQUEUR 0xff
 #define MARQUEUR_APP0 0xe0
@@ -129,7 +127,7 @@ bool ecrire_SOFx(FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool c
         buf[18] = ID_QUANTIFICATION_CBCR;
     }
 
-    if (fwrite(buf, 1, (taille_marqueur + 2), f) != (taille_marqueur + 2))
+    if (fwrite(buf, 1, (taille_marqueur + 2), f) != ((size_t)taille_marqueur + 2))
     {
         return false;
     }
@@ -203,7 +201,7 @@ bool ecrire_SOS(FILE *f, bool couleur)
     buf[taille_marqueur] = 63;
     buf[taille_marqueur + 1] = 0;
 
-    if (fwrite(buf, 1, (taille_marqueur + 2), f) != (taille_marqueur + 2))
+    if (fwrite(buf, 1, (taille_marqueur + 2), f) != ((size_t)taille_marqueur + 2))
     {
         return false;
     }

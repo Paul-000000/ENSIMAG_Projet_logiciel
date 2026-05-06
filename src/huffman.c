@@ -122,11 +122,12 @@ void huffman_rle_magnitude(int16_t bloc[64], int16_t *dc_prec, Huffman tab_dc[25
     uint8_t symbole_dc = bloc_enc[0].class_mag;    
     
     resultat->DC.indice = bloc_enc[0].indice;
-    
+    resultat->DC.classe_mag = bloc_enc[0].class_mag;
     
     if (tab_dc[symbole_dc].valide) {
         resultat->DC.code = tab_dc[symbole_dc].code;
         resultat->DC.nb_bits = tab_dc[symbole_dc].nb_bits;
+
     } else {
         resultat->DC.code = 0;
         resultat->DC.nb_bits = 0;
@@ -140,7 +141,7 @@ void huffman_rle_magnitude(int16_t bloc[64], int16_t *dc_prec, Huffman tab_dc[25
         uint8_t symbole_ac = symboles_rle_ac.symboles[i].symbole;
         
         resultat->AC[i].indice = symboles_rle_ac.symboles[i].indice;
-
+        resultat->AC[i].classe_mag = symboles_rle_ac.symboles[i].classe_mag;
         
         if (tab_ac[symbole_ac].valide) {
             resultat->AC[i].code = tab_ac[symbole_ac].code;
