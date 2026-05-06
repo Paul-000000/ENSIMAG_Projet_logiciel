@@ -26,6 +26,13 @@ int main(int argc, char **argv) {
     // lecture
     IterateurMCU iterateur;
     
+
+    
+    parametres.facteurs.h1 = 1;
+    parametres.facteurs.v1 = 1;
+    
+    
+    
     bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, parametres.facteurs);
     if (!init) perror("erreur d'initialisation de l'itérateur de lecture\n");
 
@@ -87,6 +94,7 @@ int main(int argc, char **argv) {
 
     } else { // image en niveaux de gris 
 
+        
         uint8_t mcu_gris[8][8];
         Vecteur vecteur;
         int16_t dc_prec = 0;
@@ -95,6 +103,8 @@ int main(int argc, char **argv) {
         Symboles_RLE symboles_rle_ac;
 
         while (true) {
+
+            printf("x:%d y:%d i:%d, (%dx%d)\n",iterateur.x ,iterateur.y, iterateur.i_mcu,iterateur.hauteur_mcu, iterateur.largeur_mcu);
 
             reste_mcu = mcu_gris_suivant(&iterateur, mcu_gris);
             if (!reste_mcu) break;
