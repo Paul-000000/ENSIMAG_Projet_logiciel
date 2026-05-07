@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "dct.h"
 #include <math.h>
-
+#include "fast-dct-8.h"
 # define M_PI		3.14159265358979323846	/* pi */
 
 
@@ -63,7 +63,7 @@ void init_table_cosinus() {
 // }
 
 
-void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
+/*void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
     double temp[64];
     double raci = 1.0 / sqrt(2.0);
 
@@ -95,7 +95,7 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) 
 
 
 
-
+}*/
 /*void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
     
     int16_t temp[8][8];
@@ -130,3 +130,48 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) 
         }
     }
 } */
+
+
+
+
+
+void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
+    
+    double bloc[8][8];
+
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            bloc[i][j] = (double)bloc_spatial[i * 8 + j] - 128.0;
+        }
+    }
+
+   // applique ligne 
+    for (int i = 0; i < 8; i++) {
+        FastDct8_transform(bloc[i]);
+    }
+
+  
+    for (int j = 0; j < 8; j++) {
+        double colonne[8];
+        
+        for (int i = 0; i < 8; i++) {
+            colonne[i] = bloc[i][j];
+        }
+        
+        // applique colonne
+        FastDct8_transform(colonne);
+        
+        // stock val
+        for (int i = 0; i < 8; i++) {
+            bloc[i][j] = colonne[i];
+        }
+    }
+
+    // reporte frequentiel 
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            
+            bloc_frequentiel[i * 8 + j] = (int16_t)round(bloc[i][j]);
+        }
+    }
+}
