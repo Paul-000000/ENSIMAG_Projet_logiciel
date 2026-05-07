@@ -28,39 +28,73 @@ void init_table_cosinus() {
     }
 }
 
-void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
+// void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
 
-    double somme;
-    double raci = 1.0/sqrt(2.0);
-    double c_i,c_j;
+//     double somme;
+//     double raci = 1.0/sqrt(2.0);
+//     double c_i,c_j;
 
-    for(int i=0;i<8;i++){
-        for(int j=0;j<8;j++){
+//     for(int i=0;i<8;i++){
+//         for(int j=0;j<8;j++){
 
-            somme = 0.0;
+//             somme = 0.0;
 
-            for (int x=0;x<8;x++){
+//             for (int x=0;x<8;x++){
 
-                double cos_x = tab_cos[x][i];
+//                 double cos_x = tab_cos[x][i];
 
-                for(int y=0;y<8;y++){
+//                 for(int y=0;y<8;y++){
 
-                    int valeur_decal = (int16_t)(bloc_spatial[x*8 + y]) - 128;
+//                     int valeur_decal = (int16_t)(bloc_spatial[x*8 + y]) - 128;
 
-                    double cos_y = tab_cos[y][j];
-                    somme += valeur_decal*cos_x*cos_y;
-                }
+//                     double cos_y = tab_cos[y][j];
+//                     somme += valeur_decal*cos_x*cos_y;
+//                 }
+//             }
+//             c_i = (i == 0) ? raci : 1.0;
+//             c_j = (j == 0) ? raci : 1.0;
+
+//             double freq = 0.25*c_i*c_j*somme;
+//             bloc_frequentiel[i*8 + j] = (int16_t)round(freq);
+
+
+//         }
+//     }
+// }
+
+
+void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
+    double temp[64];
+    double raci = 1.0 / sqrt(2.0);
+
+
+    for (int x = 0; x < 8; x++) {
+        for (int j = 0; j < 8; j++) {
+            double somme_y = 0.0;
+            double c_j = (j == 0) ? raci : 1.0;
+            for (int y = 0; y < 8; y++) {
+                int valeur_decal = (int16_t)bloc_spatial[x * 8 + y] - 128;
+                somme_y += valeur_decal * tab_cos[y][j];
             }
-            c_i = (i == 0) ? raci : 1.0;
-            c_j = (j == 0) ? raci : 1.0;
-
-            double freq = 0.25*c_i*c_j*somme;
-            bloc_frequentiel[i*8 + j] = (int16_t)round(freq);
-
-
+            temp[x * 8 + j] = somme_y * c_j;
         }
     }
-}
+
+
+    for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            double somme_x = 0.0;
+            double c_i = (i == 0) ? raci : 1.0;
+            for (int x = 0; x < 8; x++) {
+                somme_x += temp[x * 8 + j] * tab_cos[x][i];
+            }
+            // Le facteur 0.25 (1/4) vient de (1/2 * 1/2) des deux DCT-1D
+            bloc_frequentiel[i * 8 + j] = (int16_t)(0.25 * c_i * somme_x);
+        }
+    }
+
+
+
 
 /*void applique_dct(const int16_t bloc_spatial[64], int16_t bloc_frequentiel[64]){
     

@@ -37,6 +37,7 @@ void test_wikipedia(void) {
     };
     int16_t bloc_sq[64];
     
+    // applique_dct(ref,bloc_sq);
     applique_dct(ref,bloc_sq);
     
     TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,bloc_sq,64); // On est bon à la louche
