@@ -20,6 +20,18 @@ static struct option options[] = {
 
 
 
+bool chemin_est_dossier(char *chemin) {
+
+	struct stat stat_;
+    return (stat(chemin, &stat_) == 0 && S_ISDIR(stat_.st_mode));
+}
+
+bool chemin_est_fichier(char *chemin) {
+
+	struct stat stat_;
+	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
+}
+
 char *dupliquer_chaine(char *chaine) {
 
 	char *nouvelle_chaine = malloc(strlen(chaine) + 1);
@@ -38,18 +50,11 @@ bool dossier_chemin_existe(char *chemin) {
 
 	char *chemin_dossier = dirname(chemin_dup);
 
-    struct stat stat_;
-    bool res = (stat(chemin_dossier, &stat_) == 0 && S_ISDIR(stat_.st_mode));
+    bool res = chemin_est_dossier(chemin_dossier);
 
 	free(chemin_dup);
 
 	return res;
-}
-
-bool chemin_est_fichier(char *chemin) {
-
-	struct stat stat_;
-	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
 }
 
 bool chemin_accessible(char *chemin) {
@@ -158,27 +163,48 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 	return true;
 }
 
-char *extension_jpg(char *chemin) {
+char *chemin_par_defaut(char *chemin) {
 
-	char *dernier_point = strrchr(chemin,'.');
-	int len = strlen(chemin);
+	char *chemin_dup = dupliquer_chaine(chemin);
+	if (chemin_dup == NULL) return NULL;
+
+	char *chemin_fichier = basename(chemin_dup);
+
+	if (!chemin_est_dossier("out")) {
+		if (mkdir("out", 0777) != 0) {
+			free(chemin_dup);
+            return NULL;
+        }
+	}
+
+	char *dernier_point = strrchr(chemin_fichier,'.');
+	int len = strlen(chemin_fichier);
 
 	if (dernier_point == NULL) {
 
-		char *chaine = (char *)malloc(len + 5);
-		if (chaine == NULL) return NULL;
-
-		snprintf(chaine ,len + 5, "%s.jpg", chemin);
-		
+		char *chaine = (char *)malloc(len + 9);
+		if (chaine == NULL) {
+			free(chemin_dup);
+			return NULL;
+		}
+		snprintf(chaine ,len + 9, "out/%s.jpg", chemin_fichier);
+		free(chemin_dup);
 		return chaine;
 	}
 	
-	int len_avant_point = (int)(dernier_point - chemin);
-	char *chaine = (char *)malloc(len_avant_point + 5);
-	if (chaine == NULL) return NULL;
+	int len_avant_point = (int)(dernier_point - chemin_fichier);
+	char *chaine = (char *)malloc(len_avant_point + 9);
+	if (chaine == NULL) {
+		free(chemin_dup);
+		return NULL;
+	}
 
-	memcpy(chaine, chemin, len_avant_point);
-	memcpy(chaine + len_avant_point, ".jpg", 5);
+	snprintf(chaine, len_avant_point + 9, "out/%.*s.jpg", len_avant_point, chemin_fichier);
+	free(chemin_dup);
+	
+	// memcpy(chaine, "out/",4);
+	// memcpy(chaine + 4, chemin_fichier, len_avant_point);
+	// memcpy(chaine + 4 + len_avant_point, ".jpg", 5);
 
 	return chaine;
 }
@@ -220,7 +246,7 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		return false;
 	}
 
-	char *chemin_sortie = (parametres->chemin_sortie == NULL) ? extension_jpg(parametres->chemin_entree) : dupliquer_chaine(parametres->chemin_sortie);
+	char *chemin_sortie = (parametres->chemin_sortie == NULL) ? chemin_par_defaut(parametres->chemin_entree) : dupliquer_chaine(parametres->chemin_sortie);
 
 	if (chemin_sortie == NULL) {
 		if (messages_erreur) perror("Erreur : chemin de sortie NULL");
