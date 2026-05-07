@@ -87,9 +87,9 @@ void test_ecriture_ac_dc(void) {
     TEST_ASSERT_NOT_NULL(flux.fichier_sortie);
 
     AC_DC ac_dc;
-    contenu dc =    {.indice = 0b10,   .classe_mag = 2,    .code = 0b0110000,   .nb_bits = 7};
-    contenu ac_1 =  {.indice = 0,       .classe_mag = 0,   .code = 0b001,       .nb_bits = 3};
-    contenu ac_2 =  {.indice = 0b1011, .classe_mag = 5,    .code = 0b10,        .nb_bits = 9};
+    Contenu dc =    {.indice = 0b10,   .classe_mag = 2,    .code = 0b0110000,   .nb_bits = 7};
+    Contenu ac_1 =  {.indice = 0,       .classe_mag = 0,   .code = 0b001,       .nb_bits = 3};
+    Contenu ac_2 =  {.indice = 0b1011, .classe_mag = 5,    .code = 0b10,        .nb_bits = 9};
     ac_dc.DC = dc;
     ac_dc.AC[0] = ac_1;
     ac_dc.AC[1] = ac_2;

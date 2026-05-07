@@ -18,12 +18,12 @@ typedef struct contenu
     uint16_t code;
     uint8_t nb_bits;
 
-} contenu;
+} Contenu;
 
 typedef struct AC_DC
 {
-    contenu AC[63];
-    contenu DC;
+    Contenu AC[63];
+    Contenu DC;
     uint8_t taille;
 
 } AC_DC;
@@ -44,12 +44,6 @@ extern Huffman CbCr_DC[256];
 extern Huffman CbCr_AC[256];
 
 
-
-/*
-NoeudHuffman* creer_noeud ();
-void inserer_symbole (NoeudHuffman* arbre, uint16_t code,int taille,uint8_t symbole );
-NoeudHuffman* construire_arbre_complet( uint8_t lengths[16], uint8_t* symbols[]);
-*/
 
 void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const uint8_t *symbols);
 
