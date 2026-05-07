@@ -12,15 +12,15 @@ void tearDown(void) {
 void test_commande_simple(void) {
 
     int argc = 2;
-    char *argv[] = {"./ppm2jpeg","test_lignes.pgm"};
+    char *argv[] = {"./ppm2jpeg","images/etu/invader.pgm"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(true,res);
-    TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("test_lignes.jpg",parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("images/etu/invader.pgm", parametres.chemin_entree);
+    TEST_ASSERT_EQUAL_STRING("out/invader.jpg",parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h1);
@@ -40,7 +40,7 @@ void test_commande_outfile_arguments_inverses(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("./images/etu/gris.pgm", parametres.chemin_entree);
@@ -57,7 +57,7 @@ void test_commande_help_infile(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -72,7 +72,7 @@ void test_commande_help(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -87,7 +87,7 @@ void test_commande_vide(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
 
@@ -101,7 +101,7 @@ void test_commande_invalide(void) {
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
 
@@ -111,15 +111,15 @@ void test_commande_invalide(void) {
 void test_commande_sample(void) {
 
     int argc = 3;
-    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1x2","test_lignes.pgm"};
-
+    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1x2","images/etu/invader.pgm"};
+    
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, false);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(true,res);
-    TEST_ASSERT_EQUAL_STRING("test_lignes.pgm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("test_lignes.jpg", parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("images/etu/invader.pgm", parametres.chemin_entree);
+    TEST_ASSERT_EQUAL_STRING("out/invader.jpg", parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
 
     TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.h1);
