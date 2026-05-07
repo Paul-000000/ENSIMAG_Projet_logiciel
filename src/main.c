@@ -41,17 +41,17 @@ int main(int argc, char **argv) {
     }
 
     // ecriture 
-    Buffer_ecriture buffer_ecriture;
-    FILE *fichier_sortie = ouvrir_fichier_sortie(parametres.chemin_sortie, &buffer_ecriture);
+    Flux_Ecriture flux;
+    ouvrir_fichier_sortie(parametres.chemin_sortie, &flux);
     
     bool entete = ecrire_entete(
-        fichier_sortie, iterateur.image->hauteur, iterateur.image->largeur, iterateur.image->type == P6, parametres.facteurs, quantification_table_Y, quantification_table_CbCr,
+        flux.fichier_sortie, iterateur.image->hauteur, iterateur.image->largeur, iterateur.image->type == P6, parametres.facteurs, quantification_table_Y, quantification_table_CbCr,
         htables_nb_symb_per_lengths, htables_symbols, htables_nb_symbols
     );
 
     if (!entete) {
         perror("erreur d'initialisation de l'entete dans le fichier de sortie");
-        fermer_fichier_sortie(fichier_sortie, &buffer_ecriture);
+        fermer_fichier_sortie(&flux);
         remove(parametres.chemin_sortie);
         liberer_parametres_commande(&parametres);
         return EXIT_FAILURE;
@@ -60,8 +60,8 @@ int main(int argc, char **argv) {
     bool reste_mcu;
 
     // affichages de débug
-    printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu);
-    printf("chemin sortie: %s\n", parametres.chemin_sortie);
+    //printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu);
+    //printf("chemin sortie: %s\n", parametres.chemin_sortie);
 
     AC_DC ac_dc;
     Magnitude bloc_enc[64];
@@ -79,16 +79,16 @@ int main(int argc, char **argv) {
 
         while (true) {
 
-            clock_t d = clock(); // a retirer
+            //clock_t d = clock(); // a retirer
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) break;
             // printf("iterateur_lecture en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
-            d = clock();
+            //d = clock();
             matrice_rgb_to_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, mcu_ycbcr);
             // printf("pasasge ycbcr en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
-            d = clock();
+            //d = clock();
             decouper_matrices_couleur(mcu_ycbcr, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
             // printf("decoupage en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
 
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
                 Vecteur vecteur = vecteurs.vecteurs[i];
                 int16_t bloc_frequentiel[64];
                 
-                d = clock(); // a retirer
+                //d = clock(); // a retirer
                 applique_dct(vecteur.valeur ,bloc_frequentiel);
                 // printf("dct en : %.7fs\n", (double)(clock() - d) / CLOCKS_PER_SEC); // a retirer
                 
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
                 if (vecteur.composante == Y) huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
                 else huffman(bloc_enc, &symboles_rle_ac, CbCr_DC, CbCr_AC, &ac_dc);
 
-                ajouter_donnees_compressees(&ac_dc, fichier_sortie, &buffer_ecriture);
+                ajouter_donnees_compressees(&ac_dc, &flux);
             }
         }
 
@@ -133,12 +133,12 @@ int main(int argc, char **argv) {
             codage_magnitude(bloc_frequentiel, &dc_prec, bloc_enc);
             rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
             huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
-            ajouter_donnees_compressees(&ac_dc, fichier_sortie, &buffer_ecriture);
+            ajouter_donnees_compressees(&ac_dc, &flux);
         }
 
     }
 
-    fermer_fichier_sortie(fichier_sortie, &buffer_ecriture);
+    fermer_fichier_sortie(&flux);
 
     // lecture
     liberer_iterateur_mcu(&iterateur);

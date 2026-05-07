@@ -101,5 +101,5 @@ realclean: clean ##! Nettoie à fond : idéal avant un commit
 	find . -type d -name ".pytest_cache" -exec rm -rf {} +
 
 
-compile: clean
-	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm
+#compile: clean
+#	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm

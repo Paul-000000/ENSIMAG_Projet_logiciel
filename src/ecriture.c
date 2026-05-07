@@ -4,97 +4,97 @@
 
 
 
-FILE *ouvrir_fichier_sortie(char *chemin_sortie, Buffer_ecriture *buffer) {
+bool ouvrir_fichier_sortie(char *chemin_sortie, Flux_Ecriture *flux) {
 
     FILE *fichier = fopen(chemin_sortie, "wb");
-    if (fichier == NULL) return NULL;
+    if (fichier == NULL) return false;
 
-    buffer->taille_bits = 0;
-    buffer->taille_octets = 0;
+    flux->fichier_sortie = fichier;
+    flux->buffer_bits.taille = 0;
+    flux->buffer_octets.taille = 0;
 
-    if (!ecrire_SOI(fichier)) return NULL;
+    if (!ecrire_SOI(fichier)) return false;
 
-    return fichier;
+    return true;
 }
 
-void ecrire_donnees(FILE *fichier, Buffer_ecriture *buffer) {
+void ecrire_donnees(Flux_Ecriture *flux) {
 
-    fwrite(buffer->buffer_octets, sizeof(uint8_t), buffer->taille_octets, fichier);
+    fwrite(flux->buffer_octets.buffer, sizeof(uint8_t), flux->buffer_octets.taille, flux->fichier_sortie);
 
-    buffer->taille_octets = 0;
+    flux->buffer_octets.taille = 0;
 }
 
-void ecrire_octet_buffer(uint8_t octet_a_ecrire, FILE *fichier, Buffer_ecriture *buffer) {
+void ecrire_octet_buffer(uint8_t octet_a_ecrire, Flux_Ecriture *flux) {
 
-    buffer->buffer_octets[buffer->taille_octets] = octet_a_ecrire;
-    buffer->taille_octets += 1;
+    flux->buffer_octets.buffer[flux->buffer_octets.taille] = octet_a_ecrire;
+    flux->buffer_octets.taille += 1;
 
     if (octet_a_ecrire == OCTET_BYTE_STUFFING) {
-        buffer->buffer_octets[buffer->taille_octets] = OCTET_AJOUT_BYTE_STUFFING;
-        buffer->taille_octets += 1;
+        flux->buffer_octets.buffer[flux->buffer_octets.taille] = OCTET_AJOUT_BYTE_STUFFING;
+        flux->buffer_octets.taille += 1;
     }
 
-    if (buffer->taille_octets >= LIMITE_ECRITURE) {
-        ecrire_donnees(fichier, buffer);
-    }
-}
-
-void vider_buffer_bits(FILE *fichier, Buffer_ecriture *buffer) {
-
-    while (buffer->taille_bits >= 8) {
-
-        uint8_t octet = (buffer->buffer_bits >> (buffer->taille_bits - 8));
-        buffer->taille_bits -= 8;
-
-        ecrire_octet_buffer(octet, fichier, buffer);
+    if (flux->buffer_octets.taille >= LIMITE_ECRITURE) {
+        ecrire_donnees(flux);
     }
 }
 
-void ajouter_bits(uint16_t bits, uint8_t taille_bits, FILE *fichier, Buffer_ecriture *buffer) {
+void vider_buffer_bits(Flux_Ecriture *flux) {
+
+    while (flux->buffer_bits.taille >= 8) {
+
+        uint8_t octet = (flux->buffer_bits.buffer >> (flux->buffer_bits.taille - 8));
+        flux->buffer_bits.taille -= 8;
+
+        ecrire_octet_buffer(octet, flux);
+    }
+}
+
+void ajouter_bits(uint16_t bits, uint8_t taille_bits, Flux_Ecriture *flux) {
 
     if (taille_bits == 0) return;
 
-    buffer->buffer_bits = (buffer->buffer_bits << taille_bits) | bits;
-    buffer->taille_bits += taille_bits;
+    flux->buffer_bits.buffer = (flux->buffer_bits.buffer << taille_bits) | bits;
+    flux->buffer_bits.taille += taille_bits;
 
-    vider_buffer_bits(fichier, buffer);
+    vider_buffer_bits(flux);
 }
 
-void completer_derniers_bits(FILE *fichier, Buffer_ecriture *buffer) {
+void completer_derniers_bits(Flux_Ecriture *flux) {
     
-    if (buffer->taille_bits == 0) return;
+    if (flux->buffer_bits.taille == 0) return;
 
-    if ((buffer->taille_bits % 8 ) == 0) {
+    if ((flux->buffer_bits.taille % 8 ) == 0) {
         
-        vider_buffer_bits(fichier, buffer);
+        vider_buffer_bits(flux);
         return;
     }
 
-    uint8_t taille_complement = 8 - (buffer->taille_bits % 8);
+    uint8_t taille_complement = 8 - (flux->buffer_bits.taille % 8);
     uint16_t complement = (1 << taille_complement) - 1;
-    ajouter_bits(complement, taille_complement, fichier, buffer);
+    ajouter_bits(complement, taille_complement, flux);
 
-    buffer->taille_bits = 0;
+    flux->buffer_bits.taille = 0;
 }
 
-void fermer_fichier_sortie(FILE *fichier, Buffer_ecriture *buffer) {
+void fermer_fichier_sortie(Flux_Ecriture *flux) {
 
-    completer_derniers_bits(fichier, buffer);
-    ecrire_donnees(fichier, buffer);
-    ecrire_EOI(fichier);
+    completer_derniers_bits(flux);
+    ecrire_donnees(flux);
+    ecrire_EOI(flux->fichier_sortie);
 
-    fclose(fichier);
+    fclose(flux->fichier_sortie);
 }
 
+void ajouter_donnees_compressees(AC_DC *coefficients_ac_dc, Flux_Ecriture *flux) {
 
-void ajouter_donnees_compressees(AC_DC *coefficients_ac_dc, FILE *fichier, Buffer_ecriture *buffer) {
-
-    ajouter_bits(coefficients_ac_dc->DC.code, coefficients_ac_dc->DC.nb_bits, fichier, buffer);
-    ajouter_bits(coefficients_ac_dc->DC.indice, coefficients_ac_dc->DC.classe_mag, fichier, buffer);
+    ajouter_bits(coefficients_ac_dc->DC.code, coefficients_ac_dc->DC.nb_bits, flux);
+    ajouter_bits(coefficients_ac_dc->DC.indice, coefficients_ac_dc->DC.classe_mag, flux);
 
     for (uint8_t i = 0; i < coefficients_ac_dc->taille; i++) {
 
-        ajouter_bits(coefficients_ac_dc->AC[i].code, coefficients_ac_dc->AC[i].nb_bits, fichier, buffer);
-        ajouter_bits(coefficients_ac_dc->AC[i].indice, coefficients_ac_dc->AC[i].classe_mag, fichier, buffer);
+        ajouter_bits(coefficients_ac_dc->AC[i].code, coefficients_ac_dc->AC[i].nb_bits, flux);
+        ajouter_bits(coefficients_ac_dc->AC[i].indice, coefficients_ac_dc->AC[i].classe_mag, flux);
     }
 }

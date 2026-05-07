@@ -16,13 +16,13 @@ void test_ecriture_vide(void) {
 
     char *chemin_sortie = "test.jpeg";
 
-    Buffer_ecriture buffer;
-    FILE *fichier = ouvrir_fichier_sortie(chemin_sortie, &buffer);
-    TEST_ASSERT_NOT_NULL(fichier);
+    Flux_Ecriture flux;
+    ouvrir_fichier_sortie(chemin_sortie, &flux);
+    TEST_ASSERT_NOT_NULL(flux.fichier_sortie);
 
-    fermer_fichier_sortie(fichier, &buffer);
+    fermer_fichier_sortie(&flux);
     
-    fichier = fopen(chemin_sortie, "rb");
+    FILE *fichier = fopen(chemin_sortie, "rb");
     TEST_ASSERT_NOT_NULL(fichier);
 
     uint8_t octets[4];
@@ -41,23 +41,23 @@ void test_ecriture_octets_bits(void) {
 
     char *chemin_sortie = "test.jpeg";
 
-    Buffer_ecriture buffer;
-    FILE *fichier = ouvrir_fichier_sortie(chemin_sortie, &buffer);
-    TEST_ASSERT_NOT_NULL(fichier);
+    Flux_Ecriture flux;
+    ouvrir_fichier_sortie(chemin_sortie, &flux);
+    TEST_ASSERT_NOT_NULL(flux.fichier_sortie);
 
     uint16_t bits_1 = OCTET_BYTE_STUFFING;
-    ajouter_bits(bits_1, 8, fichier, &buffer);
+    ajouter_bits(bits_1, 8, &flux);
 
     uint16_t bits_2 = 0b0000001101110101;
     uint16_t bits_3 = 0b0000000000001000;
-    ajouter_bits(bits_2, 10, fichier, &buffer);
-    ajouter_bits(bits_3, 4, fichier, &buffer);
+    ajouter_bits(bits_2, 10, &flux);
+    ajouter_bits(bits_3, 4, &flux);
 
-    fermer_fichier_sortie(fichier, &buffer);
+    fermer_fichier_sortie(&flux);
     
 
 
-    fichier = fopen(chemin_sortie, "rb");
+    FILE *fichier = fopen(chemin_sortie, "rb");
     TEST_ASSERT_NOT_NULL(fichier);
 
     uint8_t octets[8];
@@ -82,9 +82,9 @@ void test_ecriture_ac_dc(void) {
 
     char *chemin_sortie = "test.jpeg";
 
-    Buffer_ecriture buffer;
-    FILE *fichier = ouvrir_fichier_sortie(chemin_sortie, &buffer);
-    TEST_ASSERT_NOT_NULL(fichier);
+    Flux_Ecriture flux;
+    ouvrir_fichier_sortie(chemin_sortie, &flux);
+    TEST_ASSERT_NOT_NULL(flux.fichier_sortie);
 
     AC_DC ac_dc;
     contenu dc =    {.indice = 0b10,   .classe_mag = 2,    .code = 0b0110000,   .nb_bits = 7};
@@ -95,13 +95,13 @@ void test_ecriture_ac_dc(void) {
     ac_dc.AC[1] = ac_2;
     ac_dc.taille = 2;
 
-    ajouter_donnees_compressees(&ac_dc, fichier, &buffer);
+    ajouter_donnees_compressees(&ac_dc, &flux);
 
-    fermer_fichier_sortie(fichier, &buffer);
+    fermer_fichier_sortie(&flux);
     
 
 
-    fichier = fopen(chemin_sortie, "rb");
+    FILE *fichier = fopen(chemin_sortie, "rb");
     TEST_ASSERT_NOT_NULL(fichier);
 
     uint8_t octets[9];
