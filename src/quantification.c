@@ -21,9 +21,9 @@ void applique_quant(int16_t bloc[64], const uint8_t table_quantification[64]){
 void quantification(int16_t bloc[64], Composante composante){
 
     if (composante == Y) {
-        applique_quant (bloc, quantification_table_Y);
+        applique_quant(bloc, quantification_table_Y);
     
     } else {
-        applique_quant (bloc, quantification_table_CbCr);
+        applique_quant(bloc, quantification_table_CbCr);
     }
 }

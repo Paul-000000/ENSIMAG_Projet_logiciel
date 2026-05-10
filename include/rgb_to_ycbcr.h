@@ -25,7 +25,7 @@ typedef struct couleur_ycbcr { // les 3 composantes Y, Cb et Cr des pixels
 Couleur_ycbcr rgb_to_ycbcr(Couleur_rgb couleur);
 
 // convertit une matrice du format RGB au format YCbCr
-void matrice_rgb_to_ycbcr(Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]);
+void matrice_rgb_to_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]);
 
 
 

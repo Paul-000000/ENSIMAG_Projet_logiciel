@@ -25,7 +25,7 @@ typedef struct symboles_RLE {
 
 
 // applique l'encodage RLE a la variable bloc en utilisant les magnitudes de bloc_enc
-void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]);
+void rle(const int16_t bloc[64], Symboles_RLE *symboles_rle, const Magnitude bloc_enc[64]);
 
 
 

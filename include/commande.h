@@ -29,7 +29,7 @@ parametres est une structure non initialisée qui sera remplie à la fin de l'ap
 bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande *parametres, bool messages_erreur);
 
 // affiche l'aide si l'argument help à été détecté
-bool help_demande(Parametres_commande *parametres);
+bool help_demande(const Parametres_commande *parametres);
 
 // libère les paramètres récupérés
 void liberer_parametres_commande(Parametres_commande *parametres);

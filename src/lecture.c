@@ -92,7 +92,7 @@ Image *recupEntete(FILE *fichier) {
     return image;
 }
 
-void positionner_curseur(Image *img, uint32_t x, uint32_t y)
+void positionner_curseur(const Image *img, uint32_t x, uint32_t y)
 {
     int multiplicateur = (img->type == P6) ? 3 : 1;
     long position = img->debut_pixels + (((long)y * img->largeur) + (long)x) * multiplicateur;
@@ -114,7 +114,7 @@ Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_
     return image;
 }
 
-Image *lectureImage(char *nom_fichier)
+Image *lectureImage(const char *nom_fichier)
 {
 
     FILE *fichier = fopen(nom_fichier, "rb");
@@ -204,7 +204,7 @@ void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur
 	*hauteur_mcu = 8 * facteurs.v1;
 }
 
-bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs) {
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, const char *nom_fichier, Facteurs_echantillonnage facteurs) {
 
     iterateur->i_mcu = 0;
     iterateur->x = 0;
@@ -323,7 +323,7 @@ void liberer_iterateur_mcu(IterateurMCU *iterateur) {
     liberer_image(iterateur->image, iterateur->hauteur_mcu);
 }
 
-bool image_couleur(IterateurMCU *iterateur) {
+bool image_couleur(const IterateurMCU *iterateur) {
 
     return iterateur->image->type == P6;
 }

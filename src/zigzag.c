@@ -27,5 +27,5 @@ void zigzag(int16_t bloc[64] ){
     for (int x=0; x<64; x++){
         bloc_temp[x] = bloc[tab_zz[x]];
     }
-    memcpy(bloc,bloc_temp,64*sizeof(int16_t));
+    memcpy(bloc, bloc_temp, 64*sizeof(int16_t));
 }

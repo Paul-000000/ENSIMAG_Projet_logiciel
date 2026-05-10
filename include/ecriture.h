@@ -35,7 +35,7 @@ typedef struct flux_ecriture { // structure gérant l'écriture dans le fichier 
 
 
 // ouvre le fichier ou sera écrit le contenu du JPEG
-bool ouvrir_fichier_sortie(char *chemin_sortie, Flux_Ecriture *flux);
+bool ouvrir_fichier_sortie(const char *chemin_sortie, Flux_Ecriture *flux);
 
 // ajoute des bits dans le fichier de sortie
 void ajouter_bits(uint16_t bits, uint8_t taille_bits, Flux_Ecriture *flux);
@@ -47,7 +47,7 @@ void completer_derniers_bits(Flux_Ecriture *flux);
 void fermer_fichier_sortie(Flux_Ecriture *flux);
 
 // ajoute les coefficients AC et DC compressés avec Huffman au flux d'écriture
-void ajouter_donnees_compressees(AC_DC *coefficients_ac_dc, Flux_Ecriture *flux);
+void ajouter_donnees_compressees(const AC_DC *coefficients_ac_dc, Flux_Ecriture *flux);
 
 
 

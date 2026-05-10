@@ -44,7 +44,7 @@ typedef struct IterateurMCU { // itérateur sur la MCU en cours
 Image* recupEntete(FILE *fichier);
 
 // ouvre le fichier et récupère l'entête a partir de son nom
-Image *lectureImage(char *nom_fichier);
+Image *lectureImage(const char *nom_fichier);
 
 // alloue un superbloc pour commencer à lire les données
 Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
@@ -60,7 +60,7 @@ void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
 void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu); 
 
 // crée un itérateur d'un fichier avec son nom
-bool initialiser_iterateur_mcu(IterateurMCU *iterateur, char *nom_fichier, Facteurs_echantillonnage facteurs);
+bool initialiser_iterateur_mcu(IterateurMCU *iterateur, const char *nom_fichier, Facteurs_echantillonnage facteurs);
 
 // retourne la prochaine MCU en couleur de l'itérateur d'image, retourne false si il n'y en a plus
 bool mcu_couleur_suivant(IterateurMCU *iterateur, Couleur_rgb mcu[MCU_MAX][MCU_MAX]);
@@ -72,7 +72,7 @@ bool mcu_gris_suivant(IterateurMCU *iterateur, uint8_t mcu[8][8]);
 void liberer_iterateur_mcu(IterateurMCU *iterateur);
 
 // détermine si l'image actuelle est en couleur ou en niveaux de gris
-bool image_couleur(IterateurMCU *iterateur);
+bool image_couleur(const IterateurMCU *iterateur);
 
 
 

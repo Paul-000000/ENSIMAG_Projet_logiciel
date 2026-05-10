@@ -22,7 +22,7 @@ Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 	return dimensions;
 }
 
-uint8_t moyenne_micro_matrice(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
+uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
 
 	uint32_t somme = 0;
 
@@ -40,7 +40,7 @@ uint8_t moyenne_micro_matrice(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t h
 }
 
 
-void ajouter_vecteur(Vecteurs_ycbcr *vecteurs_sortie, uint8_t *nb_vecteurs, Composante composante, uint8_t hauteur, uint8_t largeur, uint8_t matrice_cb[hauteur][largeur], uint8_t i, uint8_t j) {
+void ajouter_vecteur(Vecteurs_ycbcr *vecteurs_sortie, uint8_t *nb_vecteurs, Composante composante, uint8_t hauteur, uint8_t largeur, const uint8_t matrice_cb[hauteur][largeur], uint8_t i, uint8_t j) {
 
 	Vecteur vec = {.composante = composante};
 
@@ -54,7 +54,7 @@ void ajouter_vecteur(Vecteurs_ycbcr *vecteurs_sortie, uint8_t *nb_vecteurs, Comp
 	*nb_vecteurs += 1;
 }
 
-void decouper_matrices_couleur(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
+void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
 
 	uint8_t nb_vecteurs = 0;
 
@@ -130,7 +130,7 @@ void decouper_matrices_couleur(Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t 
 	vecteurs_sortie->nb_vecteurs = nb_vecteurs;
 }
 
-void decouper_matrice_gris(uint8_t matrice[8][8], Vecteur *vecteur) {
+void decouper_matrice_gris(const uint8_t matrice[8][8], Vecteur *vecteur) {
 
 	vecteur->composante = Y;
 

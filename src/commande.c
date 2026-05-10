@@ -20,19 +20,19 @@ static struct option options[] = {
 
 
 
-bool chemin_est_dossier(char *chemin) {
+bool chemin_est_dossier(const char *chemin) {
 
 	struct stat stat_;
     return (stat(chemin, &stat_) == 0 && S_ISDIR(stat_.st_mode));
 }
 
-bool chemin_est_fichier(char *chemin) {
+bool chemin_est_fichier(const char *chemin) {
 
 	struct stat stat_;
 	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
 }
 
-char *dupliquer_chaine(char *chaine) {
+char *dupliquer_chaine(const char *chaine) {
 
 	char *nouvelle_chaine = malloc(strlen(chaine) + 1);
 	
@@ -43,7 +43,7 @@ char *dupliquer_chaine(char *chaine) {
 	return nouvelle_chaine;
 }
 
-bool dossier_chemin_existe(char *chemin) {
+bool dossier_chemin_existe(const char *chemin) {
 
 	char *chemin_dup = dupliquer_chaine(chemin);
 	if (chemin_dup == NULL) return false;
@@ -57,7 +57,7 @@ bool dossier_chemin_existe(char *chemin) {
 	return res;
 }
 
-bool chemin_accessible(char *chemin) {
+bool chemin_accessible(const char *chemin) {
 
 	FILE *fichier = fopen(chemin, "rb");
 	
@@ -163,7 +163,7 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 	return true;
 }
 
-char *chemin_par_defaut(char *chemin) {
+char *chemin_par_defaut(const char *chemin) {
 
 	char *chemin_dup = dupliquer_chaine(chemin);
 	if (chemin_dup == NULL) return NULL;
@@ -296,7 +296,7 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	return true;
 }
 
-bool help_demande(Parametres_commande *parametres) {
+bool help_demande(const Parametres_commande *parametres) {
 
 	if (!parametres->help) return false;
 

@@ -3,7 +3,7 @@
 
 
 
-void rle(int16_t bloc[64], Symboles_RLE *symboles_rle, Magnitude bloc_enc[64]) {
+void rle(const int16_t bloc[64], Symboles_RLE *symboles_rle, const Magnitude bloc_enc[64]) {
 
     symboles_rle->taille = 0;
     uint8_t indice_fin = 63;

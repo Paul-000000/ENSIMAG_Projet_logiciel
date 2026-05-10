@@ -4,7 +4,7 @@
 
 
 
-bool ouvrir_fichier_sortie(char *chemin_sortie, Flux_Ecriture *flux) {
+bool ouvrir_fichier_sortie(const char *chemin_sortie, Flux_Ecriture *flux) {
 
     FILE *fichier = fopen(chemin_sortie, "wb");
     if (fichier == NULL) return false;
@@ -87,7 +87,7 @@ void fermer_fichier_sortie(Flux_Ecriture *flux) {
     fclose(flux->fichier_sortie);
 }
 
-void ajouter_donnees_compressees(AC_DC *coefficients_ac_dc, Flux_Ecriture *flux) {
+void ajouter_donnees_compressees(const AC_DC *coefficients_ac_dc, Flux_Ecriture *flux) {
 
     ajouter_bits(coefficients_ac_dc->DC.code, coefficients_ac_dc->DC.nb_bits, flux);
     ajouter_bits(coefficients_ac_dc->DC.indice, coefficients_ac_dc->DC.classe_mag, flux);

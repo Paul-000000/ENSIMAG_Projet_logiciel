@@ -12,7 +12,7 @@ Couleur_ycbcr rgb_to_ycbcr(Couleur_rgb couleur) {
     return resultat;
 }
 
-void matrice_rgb_to_ycbcr(Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]) {
+void matrice_rgb_to_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]) {
 
     for (uint8_t i = 0; i < hauteur; i++) {
         
