@@ -29,10 +29,13 @@
 
 
 
+// écris le marqueur SOI de début de fichier dans le fichier de sortie
 bool ecrire_SOI(FILE *f);
 
+// écris le marqueur EOI de fin de fichier dans le fichier de sortie
 bool ecrire_EOI(FILE *f);
 
+// écris l'entête du fichier de sortie en fonction des spécifications de l'image
 bool ecrire_entete(
     FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool couleur, Facteurs_echantillonnage facteurs,
     const uint8_t *table_q_y, const uint8_t *table_q_cbcr,

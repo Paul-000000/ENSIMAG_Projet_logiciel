@@ -16,7 +16,7 @@
 
 int main(int argc, char **argv) {
     
-    //double t_dct = 0, t_lecture =0, t_ecriture = 0,t_ycbcr = 0, t_decoupage = 0, t_zigzag = 0, t_quantification = 0, t_magnitude = 0, t_rle = 0, t_huffman = 0;
+    //double t_dct = 0, t_lecture =0, t_ecriture = 0,t_ycbcr = 0, t_decoupage = 0, t_zigzag = 0, t_quantification = 0, t_magnitude = 0, t_rle = 0, t_huffman = 0; // a retirer
     //clock_t debut = clock(); // a retirer
 
     // commande
@@ -61,9 +61,9 @@ int main(int argc, char **argv) {
 
     bool reste_mcu;
 
-    // affichages de débug
-    // printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu);
-    // printf("chemin sortie: %s\n", parametres.chemin_sortie);
+    // affichages de débug a retirer
+    // printf("dimensions d'une mcu (%dx%d)\ndimensions de l'image (%dx%d) (%dx%d mcu)\n",iterateur.largeur_mcu, iterateur.hauteur_mcu, iterateur.image->largeur,iterateur.image->hauteur, iterateur.largeur_image_mcu, iterateur.hauteur_image_mcu); // a retirer
+    // printf("chemin sortie: %s\n", parametres.chemin_sortie); // a retirer
 
     AC_DC ac_dc;
     Magnitude bloc_enc[64];
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
                 
                 //d = clock(); // a retirer
                 applique_dct(vecteur.valeur ,bloc_frequentiel);
-                //t_dct += (clock() - d);
+                //t_dct += (clock() - d); // a retirer
                 
                 //d = clock(); // a retirer
                 zigzag(bloc_frequentiel);
@@ -120,13 +120,12 @@ int main(int argc, char **argv) {
                 //t_rle += (clock() - d); // a retirer
 
                 //d = clock(); // a retirer
-                if (vecteur.composante == Y) huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
-                else huffman(bloc_enc, &symboles_rle_ac, CbCr_DC, CbCr_AC, &ac_dc);
+                encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
                 //t_huffman += (clock() - d); // a retirer
 
                 //d = clock(); // a retirer
                 ajouter_donnees_compressees(&ac_dc, &flux);
-                //t_ecriture += (clock() - d);
+                //t_ecriture += (clock() - d); // a retirer
             }   
         }
 
@@ -148,7 +147,7 @@ int main(int argc, char **argv) {
             quantification(bloc_frequentiel, vecteur.composante);
             codage_magnitude(bloc_frequentiel, &dc_prec, bloc_enc);
             rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
-            huffman(bloc_enc, &symboles_rle_ac, Y_DC, Y_AC, &ac_dc);
+            huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
             ajouter_donnees_compressees(&ac_dc, &flux);
         }
 

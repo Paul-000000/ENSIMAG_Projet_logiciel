@@ -112,6 +112,26 @@ void initialise_huffman() {
     construction_arbre_huffman(CbCr_AC, htables_nb_symb_per_lengths[1][1], htables_symbols[1][1]);
 }
 
+void huffman_y(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
+
+    huffman(bloc_enc, symboles_rle_ac, Y_DC, Y_AC, resultat);
+}
+
+void huffman_cbcr(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
+
+    huffman(bloc_enc, symboles_rle_ac, CbCr_DC, CbCr_AC, resultat);
+}
+
+void encoder_coefficients_huffman(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat) {
+
+    if (composante == Y) {
+        huffman_y(bloc_enc, symboles_rle_ac, resultat);
+
+    } else {
+        huffman_cbcr(bloc_enc, symboles_rle_ac, resultat);
+    }
+}
+
 void huffman(Magnitude bloc_enc[64], Symboles_RLE *symboles_rle_ac, Huffman tab_dc[256], Huffman tab_ac[256], AC_DC *resultat) {
     
     uint8_t symbole_dc = bloc_enc[0].class_mag;    
