@@ -6,7 +6,7 @@
 
 
 
-// divise le vecteur par certains coefficiients selon sa composante
+// divise le vecteur par certains coefficients selon sa composante
 void quantification(int16_t bloc[64], Composante composante);
 
 
