@@ -319,8 +319,8 @@ int main(void) {
     RUN_TEST(test_huffman_long_zero_run);
     RUN_TEST(test_huffman_bloc_vide);
     RUN_TEST(test_huffman_indices_negatifs);
-    //RUN_TEST(test_huffman_y);
-    //RUN_TEST(test_huffman_cbcr);
+    RUN_TEST(test_huffman_y);
+    RUN_TEST(test_huffman_cbcr);
     
     return UNITY_END();
 }

@@ -153,7 +153,7 @@ int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_commande_simple);
-    // RUN_TEST(test_commande_outfile_arguments_inverses);
+    RUN_TEST(test_commande_outfile_arguments_inverses);
     RUN_TEST(test_commande_help_infile);
     RUN_TEST(test_commande_help);
     RUN_TEST(test_commande_vide);
