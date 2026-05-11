@@ -265,12 +265,13 @@ int main(void) {
     
     // On lance notre super test !
     RUN_TEST(test_huffman_construction_table_encodage);
-    
+
     // pour huffman rle magnitude
     RUN_TEST(test_huffman_rle_magnitude);
     RUN_TEST(test_huffman_long_zero_run);
     RUN_TEST(test_huffman_bloc_vide);
     RUN_TEST(test_huffman_indices_negatifs);
-
+    RUN_TEST(test_huffman_y);
+    
     return UNITY_END();
 }
