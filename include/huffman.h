@@ -52,6 +52,9 @@ void huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, 
 // encode les AC et le DC ayant la composante Y avec Huffman
 void huffman_y(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
 
+// encode les AC et le DC ayant la composante CbCr avec Huffman
+void huffman_cbcr(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
+
 // encode les AC et le DC avec Huffman en fonction de sa composante
 void encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat);
 

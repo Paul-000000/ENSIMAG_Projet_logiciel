@@ -147,6 +147,148 @@ void test_commande_sample(void) {
     liberer_parametres_commande(&parametres);
 }
 
+void test_commande_samples_incorrect(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1xb","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_null(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=0", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_option_invalide(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--truc=abc", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_sortie_dossier(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--outfile=images", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_2_chemins_sortie(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--outfile=images", "--outfile=images", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_sortie_dossier_2(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--outfile=images/etu", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_sortie_inexistant(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--outfile=truc/truc.ppm", "images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_limite(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=2x5,2x1,1x1","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_limite_2(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,0x1","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_superieurs_a_10(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=2x4,2x2,2x2","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_indivisibles(void) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=2x3,2x2,2x1","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
 
 int main(void) {
 
@@ -159,6 +301,17 @@ int main(void) {
     RUN_TEST(test_commande_vide);
     RUN_TEST(test_commande_invalide);
     RUN_TEST(test_commande_sample);
-    
+    RUN_TEST(test_commande_samples_incorrect);
+    RUN_TEST(test_commande_samples_null);
+    RUN_TEST(test_commande_option_invalide);
+    RUN_TEST(test_commande_sortie_dossier);
+    RUN_TEST(test_commande_sortie_dossier_2);
+    RUN_TEST(test_commande_2_chemins_sortie);
+    RUN_TEST(test_commande_sortie_inexistant);
+    RUN_TEST(test_commande_samples_limite);
+    RUN_TEST(test_commande_samples_limite_2);
+    RUN_TEST(test_commande_samples_superieurs_a_10);
+    RUN_TEST(test_commande_samples_indivisibles);
+
     return UNITY_END();
 }
