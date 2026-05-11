@@ -11,10 +11,9 @@ void tearDown(void) {
 
 void test_encoder_val(){
 
-       Magnitude res=encoder_val(7);
-        TEST_ASSERT_EQUAL_UINT8(3, res.class_mag);
-        TEST_ASSERT_EQUAL_UINT16(0b111,res.indice);
-
+    Magnitude res=encoder_val(7);
+    TEST_ASSERT_EQUAL_UINT8(3, res.class_mag);
+    TEST_ASSERT_EQUAL_UINT16(0b111,res.indice);
 }
 
 void test_encoder_val_complet(void) {

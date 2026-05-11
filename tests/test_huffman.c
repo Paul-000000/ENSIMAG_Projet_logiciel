@@ -4,6 +4,7 @@
 #include "huffman.h"
 #include "qtables.h"
 #include "string.h"
+#include "magnitude.h"
 
 
 
@@ -212,6 +213,51 @@ void test_huffman_bloc_vide(void) {
     TEST_ASSERT_EQUAL_UINT16(0b1010, resultat.AC[0].code);
 }
 
+void test_huffman_y(void) {
+
+    int16_t dc_prec = 0;
+    int16_t bloc[64];
+    Magnitude bloc_enc[64];
+    Symboles_RLE symboles_rle_ac;
+    AC_DC resultat;
+
+    for (uint8_t i = 0; i < 64; i++) {
+        bloc[i] = 0;
+    }
+
+    bloc[0] = 1;
+    bloc[1] = 3;
+    bloc[2] = 0;
+    bloc[3] = 2;
+
+    codage_magnitude(bloc, &dc_prec, bloc_enc);
+    rle(bloc, &symboles_rle_ac, bloc_enc);
+
+    encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, Y, &resultat);
+
+    TEST_ASSERT_EQUAL_UINT8(1, resultat.DC.classe_mag);
+    TEST_ASSERT_EQUAL_UINT16(1, resultat.DC.indice);
+
+    TEST_ASSERT_EQUAL_UINT16(0b010, resultat.DC.code);
+    TEST_ASSERT_EQUAL_UINT8(3, resultat.DC.nb_bits);
+
+    TEST_ASSERT_EQUAL_UINT8(3, resultat.taille);
+
+    TEST_ASSERT_EQUAL_UINT8(2, resultat.AC[0].classe_mag);
+    TEST_ASSERT_EQUAL_UINT16(3, resultat.AC[0].indice);
+    TEST_ASSERT_EQUAL_UINT16(0b01, resultat.AC[0].code);
+    TEST_ASSERT_EQUAL_UINT8(2, resultat.AC[0].nb_bits);
+
+    TEST_ASSERT_EQUAL_UINT8(2, resultat.AC[1].classe_mag);
+    TEST_ASSERT_EQUAL_UINT16(2, resultat.AC[1].indice);
+    TEST_ASSERT_EQUAL_UINT16(0b11011, resultat.AC[1].code);
+    TEST_ASSERT_EQUAL_UINT8(5, resultat.AC[1].nb_bits);
+
+    TEST_ASSERT_EQUAL_UINT8(0, resultat.AC[2].classe_mag);
+    TEST_ASSERT_EQUAL_UINT16(0, resultat.AC[2].indice);
+    TEST_ASSERT_EQUAL_UINT16(0b1010, resultat.AC[2].code);
+    TEST_ASSERT_EQUAL_UINT8(4, resultat.AC[2].nb_bits);
+}
 
 int main(void) {
     
