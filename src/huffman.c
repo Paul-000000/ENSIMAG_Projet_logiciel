@@ -78,7 +78,7 @@ void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const 
     for (int i = 0; i < 256; i++)
     {
 
-        tab[i].valide = 0;
+        tab[i].valide = false;
     }
 
     uint16_t code = 0;
@@ -94,7 +94,7 @@ void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const 
 
             tab[symbol].code = code;
             tab[symbol].nb_bits = longeur;
-            tab[symbol].valide = 1;
+            tab[symbol].valide = true;
 
             code++;
             index_symbole++;

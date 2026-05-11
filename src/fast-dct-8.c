@@ -96,6 +96,7 @@ void FastDct8_transform(double vector[static 8]) {
 
 
 // DCT type III, scaled. A straightforward inverse of the forward algorithm.
+/*
 void FastDct8_inverseTransform(double vector[static 8]) {
 	const double v15 = vector[0] / S[0];
 	const double v26 = vector[1] / S[1];
@@ -142,3 +143,4 @@ void FastDct8_inverseTransform(double vector[static 8]) {
 	vector[6] = (v1 - v6) / 2;
 	vector[7] = (v0 - v7) / 2;
 }
+*/

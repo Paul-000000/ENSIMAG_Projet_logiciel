@@ -30,6 +30,9 @@ void test_commande_simple(void) {
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h3);
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.v3);
 
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(false, help);
+
     liberer_parametres_commande(&parametres);
 }
 
@@ -44,8 +47,11 @@ void test_commande_outfile_arguments_inverses(void) {
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("./images/etu/gris.pgm", parametres.chemin_entree);
-    TEST_ASSERT_EQUAL_STRING("images/etu/gris.jpg", parametres.chemin_sortie);
+    TEST_ASSERT_EQUAL_STRING("images/etu/truc.jpg", parametres.chemin_sortie);
     TEST_ASSERT_EQUAL(false,parametres.help);
+
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(false, help);
 
     liberer_parametres_commande(&parametres);
 }
@@ -62,6 +68,9 @@ void test_commande_help_infile(void) {
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
 
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(true, help);
+
     liberer_parametres_commande(&parametres);
 } 
 
@@ -77,6 +86,9 @@ void test_commande_help(void) {
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
 
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(true, help);
+
     liberer_parametres_commande(&parametres);
 }
 
@@ -90,6 +102,9 @@ void test_commande_vide(void) {
     bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
+    
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(false, help);
 
     liberer_parametres_commande(&parametres);
 }
@@ -104,6 +119,9 @@ void test_commande_invalide(void) {
     bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
+
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(false, help);
 
     liberer_parametres_commande(&parametres);
 }
@@ -129,6 +147,9 @@ void test_commande_sample(void) {
     TEST_ASSERT_EQUAL_UINT8(1, parametres.facteurs.h3);
     TEST_ASSERT_EQUAL_UINT8(2, parametres.facteurs.v3);
 
+    bool help = help_demande(&parametres);
+    TEST_ASSERT_EQUAL(false, help);
+    
     liberer_parametres_commande(&parametres);
 }
 

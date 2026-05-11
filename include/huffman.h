@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "rle.h"
 #include "magnitude.h"
 #include "htables.h"
@@ -33,7 +34,7 @@ typedef struct NoeudHuffman // noeud de l'abre d'Huffman
 {
     uint16_t code; // code binaire du noeud
     uint8_t nb_bits; // nombre de bits de ce code binaire
-    uint8_t valide; // indique si l'entrée est valide ou non
+    bool valide; // indique si l'entrée est valide ou non
 
 } Huffman;
 
