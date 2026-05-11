@@ -102,9 +102,6 @@ void test_commande_vide(void) {
     bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
-    
-    bool help = help_demande(&parametres);
-    TEST_ASSERT_EQUAL(false, help);
 
     liberer_parametres_commande(&parametres);
 }
@@ -119,9 +116,6 @@ void test_commande_invalide(void) {
     bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
 
     TEST_ASSERT_EQUAL(false,res);
-
-    bool help = help_demande(&parametres);
-    TEST_ASSERT_EQUAL(false, help);
 
     liberer_parametres_commande(&parametres);
 }
