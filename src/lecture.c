@@ -49,6 +49,7 @@ Image *recupEntete(FILE *fichier) {
 
     if (fscanf(fichier, "%c%c\n", &c1, &c2) != 2)
     { // P5 ou P6
+        free(image);
         return NULL;
     }
     else
@@ -64,14 +65,16 @@ Image *recupEntete(FILE *fichier) {
         }
         else
         {
+            free(image);
             return NULL;
         }
     }
 
     ignore_commentaires(fichier);
 
-    if (fscanf(fichier, "%u %u\n", &l, &h) != 2)
-    { // largeur et hauteur
+    if (fscanf(fichier, "%u %u\n", &l, &h) != 2) // largeur et hauteur
+    { 
+        free(image);
         return NULL;
     }
 
@@ -82,12 +85,24 @@ Image *recupEntete(FILE *fichier) {
 
     if (fscanf(fichier, "%u\n", &profondeur) != 1)
     {
+        free(image);
         return NULL;
     }
 
     ignore_commentaires(fichier);
 
     image->debut_pixels = ftell(fichier);
+
+    fseek(fichier, 0, SEEK_END);
+    size_t taille_fichier = ftell(fichier);
+    fseek(fichier, image->debut_pixels, SEEK_SET);
+
+    if (taille_fichier < (image->largeur * image->hauteur * ((image->type == P6) ? 3 : 1) + image->debut_pixels)) {
+
+        free(image);
+        return NULL;
+    }
+
     image->fichier = fichier;
     return image;
 }

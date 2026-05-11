@@ -60,4 +60,4 @@ void encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_R
 
 
 
-#endif 
+#endif
