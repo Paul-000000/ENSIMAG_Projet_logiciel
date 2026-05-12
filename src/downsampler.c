@@ -25,13 +25,25 @@ Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
 
 	uint32_t somme = 0;
+	uint16_t i_hauteur = i * hauteur;
+	uint16_t j_largeur = j * largeur;
 
-	for (uint8_t y = 0; y < hauteur; y++) {
+	if (cb) {
 
-		for (uint8_t x = 0; x < largeur; x++) {
+		for (uint8_t y = 0; y < hauteur; y++) {
+			for (uint8_t x = 0; x < largeur; x++) {
 
-			Couleur_ycbcr couleur = matrice[i * hauteur + y][j * largeur + x];
-			somme += cb ? couleur.cb : couleur.cr;
+				somme += matrice[i_hauteur + y][j_largeur + x].cb;
+			}
+		}
+
+	} else {
+
+		for (uint8_t y = 0; y < hauteur; y++) {
+			for (uint8_t x = 0; x < largeur; x++) {
+
+				somme += matrice[i_hauteur + y][j_largeur + x].cr;
+			}
 		}
 	}
 
