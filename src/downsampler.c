@@ -39,21 +39,6 @@ uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uin
 
 }
 
-
-void ajouter_vecteur(Vecteurs_ycbcr *vecteurs_sortie, uint8_t *nb_vecteurs, Composante composante, uint8_t hauteur, uint8_t largeur, const uint8_t matrice_cb[hauteur][largeur], uint8_t i, uint8_t j) {
-
-	Vecteur vec = {.composante = composante};
-
-	for (uint8_t x = 0; x < 8; x++) {
-		for (uint8_t y = 0; y < 8; y++) {
-			vec.valeur[x * 8 + y] = matrice_cb[8 * i + x][8 * j + y];
-		}
-	}
-
-	vecteurs_sortie->vecteurs[*nb_vecteurs] = vec;
-	*nb_vecteurs += 1;
-}
-
 void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
 
 	uint8_t nb_vecteurs = 0;
@@ -78,54 +63,51 @@ void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], ui
  		}
 	}
 
-
 	// cb
-	uint8_t matrice_cb[dimensions_sortie.hauteur_mcu_cb][dimensions_sortie.largeur_mcu_cb];
-
 	uint8_t largeur_micro_matrices_cb = largeur_mcu / dimensions_sortie.largeur_mcu_cb;
 	uint8_t hauteur_micro_matrices_cb = hauteur_mcu / dimensions_sortie.hauteur_mcu_cb;
-
-	for (uint8_t i = 0; i < dimensions_sortie.hauteur_mcu_cb; i++) {
-		for (uint8_t j = 0; j < dimensions_sortie.largeur_mcu_cb; j++) {
-
-			matrice_cb[i][j] = moyenne_micro_matrice(matrice ,hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i, j, true);
-		}
-	}
-
 	uint8_t nb_blocs_largeur_cb = dimensions_sortie.largeur_mcu_cb / 8;
 	uint8_t nb_blocs_hauteur_cb = dimensions_sortie.hauteur_mcu_cb / 8;
 
 	for (uint8_t i = 0; i < nb_blocs_hauteur_cb; i++) {
 		for (uint8_t j = 0; j < nb_blocs_largeur_cb; j++) {
 
-			ajouter_vecteur(vecteurs_sortie, &nb_vecteurs, CB, dimensions_sortie.hauteur_mcu_cb, dimensions_sortie.largeur_mcu_cb, matrice_cb, i, j);
+			Vecteur vec = {.composante = CB};
+
+			for (uint8_t x = 0; x < 8; x++) {
+				for (uint8_t y = 0; y < 8; y++) {
+
+					vec.valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i*8+x, j*8+y, true);
+				}
+			}
+
+			vecteurs_sortie->vecteurs[nb_vecteurs] = vec;
+			nb_vecteurs++;
 		}
 	}
-
 
 	// cr
-	uint8_t matrice_cr[dimensions_sortie.hauteur_mcu_cr][dimensions_sortie.largeur_mcu_cr];
-
 	uint8_t largeur_micro_matrices_cr = largeur_mcu / dimensions_sortie.largeur_mcu_cr;
 	uint8_t hauteur_micro_matrices_cr = hauteur_mcu / dimensions_sortie.hauteur_mcu_cr;
-
-	for (uint8_t i = 0; i < dimensions_sortie.hauteur_mcu_cr; i++) {
-		for (uint8_t j = 0; j < dimensions_sortie.largeur_mcu_cr; j++) {
-
-			matrice_cr[i][j] = moyenne_micro_matrice(matrice ,hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i, j, false);
-		}
-	}
-
 	uint8_t nb_blocs_largeur_cr = dimensions_sortie.largeur_mcu_cr / 8;
 	uint8_t nb_blocs_hauteur_cr = dimensions_sortie.hauteur_mcu_cr / 8;
 
 	for (uint8_t i = 0; i < nb_blocs_hauteur_cr; i++) {
 		for (uint8_t j = 0; j < nb_blocs_largeur_cr; j++) {
 
-			ajouter_vecteur(vecteurs_sortie, &nb_vecteurs, CR, dimensions_sortie.hauteur_mcu_cr, dimensions_sortie.largeur_mcu_cr, matrice_cr, i, j);
+			Vecteur vec = {.composante = CR};
+
+			for (uint8_t x = 0; x < 8; x++) {
+				for (uint8_t y = 0; y < 8; y++) {
+
+					vec.valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i*8+x, j*8+y, false);
+				}
+			}
+
+			vecteurs_sortie->vecteurs[nb_vecteurs] = vec;
+			nb_vecteurs++;
 		}
 	}
-
 
 	vecteurs_sortie->nb_vecteurs = nb_vecteurs;
 }
