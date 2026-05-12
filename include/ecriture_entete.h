@@ -35,6 +35,17 @@ bool ecrire_SOI(FILE *f);
 // écris le marqueur EOI de fin de fichier dans le fichier de sortie
 bool ecrire_EOI(FILE *f);
 
+// marqueurs écrits dans la fonction ecrire_entete 
+bool ecrire_appx(FILE *f);
+
+bool ecrire_DQT(FILE *f, const uint8_t tab_quantif[64], bool tab_est_CbCr);
+
+bool ecrire_SOFx(FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool couleur, Facteurs_echantillonnage facteurs);
+
+bool ecrire_DHT(FILE *f, bool ac, const uint8_t longueurs_huffman[16], const uint8_t *table_symboles_huffman, const uint8_t taille_table_huffman, uint8_t id_composante);
+
+bool ecrire_SOS(FILE *f, bool couleur);
+
 // écris l'entête du fichier de sortie en fonction des spécifications de l'image
 bool ecrire_entete(
     FILE *f, uint16_t hauteur_image, uint16_t largeur_image, bool couleur, Facteurs_echantillonnage facteurs,

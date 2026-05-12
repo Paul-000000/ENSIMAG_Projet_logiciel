@@ -237,26 +237,46 @@ bool ecrire_entete(
     const uint8_t taille_table_huffman[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS]
 ) {
 
-    if (!ecrire_appx(f)) return false;
-
-    if (!ecrire_DQT(f, table_q_y, false)) return false;
-    
-    if (couleur) {
-        if (!ecrire_DQT(f, table_q_cbcr, true)) return false;
+    if (!ecrire_appx(f)) {
+        return false;
     }
 
-    if (!ecrire_SOFx(f, hauteur_image, largeur_image, couleur, facteurs)) return false;
+    if (!ecrire_DQT(f, table_q_y, false)) {
+        return false;
+    }
 
-    if (!ecrire_DHT(f, false,   longueurs_huffman[ID_DC][ID_QUANTIFICATION_Y],     table_symboles_huffman[ID_DC][ID_QUANTIFICATION_Y],    taille_table_huffman[ID_DC][ID_QUANTIFICATION_Y],      ID_QUANTIFICATION_Y)) return false;
-    if (!ecrire_DHT(f, true,    longueurs_huffman[ID_AC][ID_QUANTIFICATION_Y],     table_symboles_huffman[ID_AC][ID_QUANTIFICATION_Y],    taille_table_huffman[ID_AC][ID_QUANTIFICATION_Y],      ID_QUANTIFICATION_Y)) return false;
-    
     if (couleur) {
+        if (!ecrire_DQT(f, table_q_cbcr, true)) {
+            return false;
+        }
+    }
 
-        if (!ecrire_DHT(f, false,   longueurs_huffman[ID_DC][ID_QUANTIFICATION_CBCR],  table_symboles_huffman[ID_DC][ID_QUANTIFICATION_CBCR], taille_table_huffman[ID_DC][ID_QUANTIFICATION_CBCR],   ID_QUANTIFICATION_CBCR)) return false;
-        if (!ecrire_DHT(f, true,    longueurs_huffman[ID_AC][ID_QUANTIFICATION_CBCR],  table_symboles_huffman[ID_AC][ID_QUANTIFICATION_CBCR], taille_table_huffman[ID_AC][ID_QUANTIFICATION_CBCR],   ID_QUANTIFICATION_CBCR)) return false;
+    if (!ecrire_SOFx(f, hauteur_image, largeur_image, couleur, facteurs)) {
+        return false;
     }
     
-    if (!ecrire_SOS(f, couleur)) return false;
+    if (!ecrire_DHT(f, false,   longueurs_huffman[ID_DC][ID_QUANTIFICATION_Y],     table_symboles_huffman[ID_DC][ID_QUANTIFICATION_Y],    taille_table_huffman[ID_DC][ID_QUANTIFICATION_Y],      ID_QUANTIFICATION_Y)) {
+        return false;
+    }
+
+    if (!ecrire_DHT(f, true,    longueurs_huffman[ID_AC][ID_QUANTIFICATION_Y],     table_symboles_huffman[ID_AC][ID_QUANTIFICATION_Y],    taille_table_huffman[ID_AC][ID_QUANTIFICATION_Y],      ID_QUANTIFICATION_Y)) {
+        return false;
+    }
+
+    if (couleur) {
+
+        if (!ecrire_DHT(f, false,   longueurs_huffman[ID_DC][ID_QUANTIFICATION_CBCR],  table_symboles_huffman[ID_DC][ID_QUANTIFICATION_CBCR], taille_table_huffman[ID_DC][ID_QUANTIFICATION_CBCR],   ID_QUANTIFICATION_CBCR)) {
+            return false;
+        }
+
+        if (!ecrire_DHT(f, true,    longueurs_huffman[ID_AC][ID_QUANTIFICATION_CBCR],  table_symboles_huffman[ID_AC][ID_QUANTIFICATION_CBCR], taille_table_huffman[ID_AC][ID_QUANTIFICATION_CBCR],   ID_QUANTIFICATION_CBCR)) {
+            return false;
+        }
+    }
+    
+    if (!ecrire_SOS(f, couleur)) {
+        return false;
+    }
 
     return true;
 }
