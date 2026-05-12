@@ -1,5 +1,8 @@
 #include "unity.h"
 #include "commande.h"
+#include <stdlib.h>
+
+
 
 void setUp(void) {
     // set stuff up here
@@ -290,6 +293,75 @@ void test_commande_samples_indivisibles(void) {
     liberer_parametres_commande(&parametres);
 }
 
+void test_dossier_null(void) {
+
+    bool res = chemin_est_dossier(NULL);
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_est_dossier("ppm2jpeg");
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_est_dossier("images");
+    TEST_ASSERT_EQUAL(true, res);
+}
+
+void test_fichier_null(void) {
+
+    bool res = chemin_est_fichier(NULL);
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_est_fichier("images");
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_est_fichier("ppm2jpeg");
+    TEST_ASSERT_EQUAL(true, res);
+}
+
+void test_dupliquer_chaine(void) {
+
+    char *chaine = dupliquer_chaine(NULL);
+    TEST_ASSERT_NULL(chaine);
+
+    chaine = dupliquer_chaine("truc");
+    TEST_ASSERT_EQUAL_STRING("truc", chaine);
+    free(chaine);
+}
+
+void test_dossier_chemin_existe(void) {
+
+    bool res = dossier_chemin_existe(NULL);
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = dossier_chemin_existe("ppm2jpeg");
+    TEST_ASSERT_EQUAL(true, res);
+}
+
+void test_chemin_accessible(void) {
+
+    bool res = chemin_accessible(NULL);
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_accessible("truc");
+    TEST_ASSERT_EQUAL(false, res);
+
+    res = chemin_accessible("ppm2jpeg");
+    TEST_ASSERT_EQUAL(true, res);
+}
+
+void test_chemin_par_defaut(void) {
+
+    char *chaine = chemin_par_defaut(NULL);
+    TEST_ASSERT_NULL(chaine);
+
+    chaine = chemin_par_defaut("truc");
+    TEST_ASSERT_EQUAL_STRING("out/truc.jpg", chaine);
+    free(chaine);
+
+    chaine = chemin_par_defaut("truc.ppm"); 
+    TEST_ASSERT_EQUAL_STRING("out/truc.jpg", chaine);
+    free(chaine);
+}
+
 int main(void) {
 
     UNITY_BEGIN();
@@ -312,6 +384,12 @@ int main(void) {
     RUN_TEST(test_commande_samples_limite_2);
     RUN_TEST(test_commande_samples_superieurs_a_10);
     RUN_TEST(test_commande_samples_indivisibles);
+    RUN_TEST(test_dossier_null);
+    RUN_TEST(test_fichier_null);
+    RUN_TEST(test_dupliquer_chaine);
+    RUN_TEST(test_dossier_chemin_existe);
+    RUN_TEST(test_chemin_accessible);
+    RUN_TEST(test_chemin_par_defaut);
 
     return UNITY_END();
 }

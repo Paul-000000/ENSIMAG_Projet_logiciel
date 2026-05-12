@@ -22,7 +22,9 @@ static struct option options[] = {
 
 bool chemin_est_dossier(const char *chemin) {
 
-	if (chemin == NULL) return false;
+	if (chemin == NULL) {
+		return false;
+	}
 
 	struct stat stat_;
     return (stat(chemin, &stat_) == 0 && S_ISDIR(stat_.st_mode));
@@ -30,7 +32,9 @@ bool chemin_est_dossier(const char *chemin) {
 
 bool chemin_est_fichier(const char *chemin) {
 
-	if (chemin == NULL) return false;
+	if (chemin == NULL) {
+		return false;
+	}
 
 	struct stat stat_;
 	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
@@ -38,11 +42,15 @@ bool chemin_est_fichier(const char *chemin) {
 
 char *dupliquer_chaine(const char *chaine) {
 
-	if (chaine == NULL) return NULL;
+	if (chaine == NULL) {
+		return NULL;
+	}
 
 	char *nouvelle_chaine = malloc(strlen(chaine) + 1);
 	
-	if (nouvelle_chaine == NULL) return NULL;
+	if (nouvelle_chaine == NULL) {
+		return NULL;
+	}
 
 	strcpy(nouvelle_chaine, chaine);
 
@@ -51,10 +59,14 @@ char *dupliquer_chaine(const char *chaine) {
 
 bool dossier_chemin_existe(const char *chemin) {
 
-	if (chemin == NULL) return false;
+	if (chemin == NULL) {
+		return false;
+	}
 
 	char *chemin_dup = dupliquer_chaine(chemin);
-	if (chemin_dup == NULL) return false;
+	if (chemin_dup == NULL) {
+		return false;
+	}
 
 	char *chemin_dossier = dirname(chemin_dup);
 
@@ -67,11 +79,15 @@ bool dossier_chemin_existe(const char *chemin) {
 
 bool chemin_accessible(const char *chemin) {
 
-	if (chemin == NULL) return false;
+	if (chemin == NULL) {
+		return false;
+	}
 
 	FILE *fichier = fopen(chemin, "rb");
 	
-	if (fichier == NULL) return false;
+	if (fichier == NULL) {
+		return false;
+	}
 
 	fclose(fichier);
 
@@ -87,16 +103,22 @@ bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
 		facteurs.v2 < 1 || facteurs.v2 > 4 || 
 		facteurs.h3 < 1 || facteurs.h3 > 4 ||
 		facteurs.v3 < 1 || facteurs.v3 > 4
-	) return false;
+	) {
+		return false;
+	}
 
-	if ((facteurs.h1 * facteurs.v1 + facteurs.h2 * facteurs.v2 + facteurs.h3 * facteurs.v3) > 10) return false;
+	if ((facteurs.h1 * facteurs.v1 + facteurs.h2 * facteurs.v2 + facteurs.h3 * facteurs.v3) > 10) {
+		return false;
+	}
 
 	if (
 		facteurs.h1 % facteurs.h2 != 0 || 
 		facteurs.h1 % facteurs.h3 != 0 ||
 		facteurs.v1 % facteurs.v2 != 0 || 
 		facteurs.v1 % facteurs.v3 != 0
-	) return false;
+	) {
+		return false;
+	}
 
 	return true;
 }
@@ -109,7 +131,9 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 	parametres->chemin_sortie = NULL;
 
 	if (argc < 2) {
-		if (messages_erreur) fprintf(stderr, "Erreur : moins de deux arguments\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : moins de deux arguments\n");
+		}
 		return false;
 	}
 
@@ -135,7 +159,9 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 
 			case 1: // sample
 				if (optarg == NULL) {
-					if (messages_erreur) fprintf(stderr, "Erreur : optarg NULL\n");
+					if (messages_erreur) {
+						fprintf(stderr, "Erreur : optarg NULL\n");
+					}
 					return false;
 				}
 				int args_corrects = sscanf(
@@ -150,7 +176,9 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				);
 
 				if (args_corrects != 6) {
-					if (messages_erreur) fprintf(stderr, "Erreur dans la récupération des facteurs d'échantillonnage\n");
+					if (messages_erreur) {
+						fprintf(stderr, "Erreur dans la récupération des facteurs d'échantillonnage\n");
+					}
 					return false;
 				}
 
@@ -162,13 +190,17 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				return true;
 			
 			default:
-				if (messages_erreur) fprintf(stderr, "Erreur : cas option par défaut\n");
+				if (messages_erreur) {
+					fprintf(stderr, "Erreur : cas option par défaut\n");
+				}
 				return false;
 			}
 	}
 
 	if (optind >= argc) {
-		if (messages_erreur) fprintf(stderr, "Erreur : option hors des arguments\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : option hors des arguments\n");
+		}
 		return false;
 	}
 
@@ -180,7 +212,9 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 char *chemin_par_defaut(const char *chemin) {
 
 	char *chemin_dup = dupliquer_chaine(chemin);
-	if (chemin_dup == NULL) return NULL;
+	if (chemin_dup == NULL) {
+		return NULL;
+	}
 
 	char *chemin_fichier = basename(chemin_dup);
 
@@ -227,9 +261,11 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	if (!res) {
 		return false;
 	}
+
 	if (parametres->help) {
 		return true;
 	}
+
 	if (parametres->chemin_entree == NULL) {
 		if (messages_erreur) fprintf(stderr, "Erreur : moins de deux arguments\n");
 		return false;
@@ -240,7 +276,9 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		char *chemin_sortie = chemin_par_defaut(parametres->chemin_entree);
 
 		if (chemin_sortie == NULL) {
-			if (messages_erreur) fprintf(stderr, "Erreur : chemin de sortie NULL\n");
+			if (messages_erreur) {
+				fprintf(stderr, "Erreur : chemin de sortie NULL\n");
+			}
 			return false;
 		}
 
@@ -249,25 +287,33 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 
 
 	if (!chemin_accessible(parametres->chemin_entree)) {
-		if (messages_erreur) fprintf(stderr, "Erreur : fichier en entree inaccessible\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : fichier en entree inaccessible\n");
+		}
 		return false;
 	}
 
 	if (!dossier_chemin_existe(parametres->chemin_entree)) {
-		if (messages_erreur) fprintf(stderr, "Erreur : dossier du du fichier d'entree inaccessible\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : dossier du du fichier d'entree inaccessible\n");
+		}
 		return false;
 	}
 
 	if (!chemin_est_fichier(parametres->chemin_entree)) {
-		if (messages_erreur) fprintf(stderr, "Erreur : le chemin donne en entree n'est pas un fichier\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : le chemin donne en entree n'est pas un fichier\n");
+		}
 		return false;
 	}
 
 	/*
 	if (chemin_accessible(chemin_sortie)) {
 		free(chemin_sortie);
-		if (messages_erreur) fprintf(stderr, "Erreur : le fichier de sortie existe deja\n");
-		return false;
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : le fichier de sortie existe deja\n");
+		}
+			return false;
 	}
 	*/
 	
@@ -275,14 +321,18 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 
 		if (!chemin_est_fichier(parametres->chemin_sortie)) {
 			liberer_parametres_commande(parametres);
-			if (messages_erreur) fprintf(stderr, "Erreur : le chemin de sortie n'est pas un fichier\n");
+			if (messages_erreur) {
+				fprintf(stderr, "Erreur : le chemin de sortie n'est pas un fichier\n");
+			}
 			return false;
 		}
 	}
 
 	if (!dossier_chemin_existe(parametres->chemin_sortie)) {
 		liberer_parametres_commande(parametres);
-		if (messages_erreur) fprintf(stderr, "Erreur : le dossier du fichier de sortie est inaccessible\n");
+		if (messages_erreur) {
+			fprintf(stderr, "Erreur : le dossier du fichier de sortie est inaccessible\n");
+		}
 		return false;
 	}
 
@@ -296,7 +346,9 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		
 		if (!verifier_facteurs_echantillonnage(parametres->facteurs)) {
 			liberer_parametres_commande(parametres);
-			if (messages_erreur) fprintf(stderr, "Erreur : facteurs d'echantillonnage incorrects\n");
+			if (messages_erreur) {
+				fprintf(stderr, "Erreur : facteurs d'echantillonnage incorrects\n");
+			}
 			return false;
 		} 
 	}
@@ -306,7 +358,9 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 
 bool help_demande(const Parametres_commande *parametres) {
 
-	if (!parametres->help) return false;
+	if (!parametres->help) {
+		return false;
+	}
 
 	printf("Usage : ./ppm2jpeg <chemin du fichier en entrée> <options>\n");
 	printf("--help : affiche cette page d'aide\n");
@@ -318,8 +372,10 @@ bool help_demande(const Parametres_commande *parametres) {
 
 void liberer_parametres_commande(Parametres_commande *parametres) {
 
-	if (parametres->chemin_sortie == NULL) return;
-
+	if (parametres->chemin_sortie == NULL) {
+		return;
+	}
+	
 	free(parametres->chemin_sortie);
 	parametres->chemin_sortie = NULL;
 }

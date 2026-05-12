@@ -25,29 +25,22 @@ void test_huffman_construction_table_encodage(void) {
 
     construction_arbre_huffman(table_test, longueurs, symboles);
 
-  
-
-    // symbole 0x00 (longueur 2, code binaire 00 -> décimal 0)
     TEST_ASSERT_EQUAL_UINT8(1, table_test[0x00].valide);
     TEST_ASSERT_EQUAL_UINT8(2, table_test[0x00].nb_bits);
     TEST_ASSERT_EQUAL_UINT16(0, table_test[0x00].code);
 
-    // symbole 0x01 (longueur 3, code binaire 010 -> décimal 2)
     TEST_ASSERT_EQUAL_UINT8(1, table_test[0x01].valide);
     TEST_ASSERT_EQUAL_UINT8(3, table_test[0x01].nb_bits);
     TEST_ASSERT_EQUAL_UINT16(2, table_test[0x01].code);
 
-    // symbole 0x05 (longueur 3, code binaire 110 -> décimal 6)
     TEST_ASSERT_EQUAL_UINT8(1, table_test[0x05].valide);
     TEST_ASSERT_EQUAL_UINT8(3, table_test[0x05].nb_bits);
     TEST_ASSERT_EQUAL_UINT16(6, table_test[0x05].code);
 
-    //symbole 0x06 (longueur 4, code binaire 1110 -> décimal 14)
     TEST_ASSERT_EQUAL_UINT8(1, table_test[0x06].valide);
     TEST_ASSERT_EQUAL_UINT8(4, table_test[0x06].nb_bits);
     TEST_ASSERT_EQUAL_UINT16(14, table_test[0x06].code);
 
-    // exemple de cas de non appartenance
     TEST_ASSERT_EQUAL_UINT8(0, table_test[0x42].valide);
 }
 
@@ -55,19 +48,18 @@ void test_huffman_rle_magnitude(void) {
     
     int16_t bloc[64] = {0}; 
     
-    bloc[0] = 15;  // DC
-    bloc[1] = 0;  
-    bloc[2] = -2;  // AC non nul
+    bloc[0] = 15;
+    bloc[1] = 0;
+    bloc[2] = -2;
     
-    int16_t dc_prec = 10; // Le DC précédent. DPCM = 15 - 10 = 5.
+    int16_t dc_prec = 10;
 
     Huffman tab_dc[256];
     Huffman tab_ac[256];
     memset(tab_dc, 0, sizeof(tab_dc)); 
     memset(tab_ac, 0, sizeof(tab_ac));
 
-  
-    // Différence = 5. La magnitude de 5 est 3. Indice = 5.
+
     tab_dc[3].valide = 1;
     tab_dc[3].code = 0b101;
     tab_dc[3].nb_bits = 3;

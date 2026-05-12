@@ -11,13 +11,6 @@ void tearDown(void) {
     // clean stuff up here
 }
 
-void test2(void){
-	
-    TEST_ASSERT(1 > 0);
-	TEST_ASSERT_FALSE(2+2==5);
-    // TEST_FAIL_MESSAGE("Parce que la vie est injuste!");
-}
-
 void test_quantification ( void ){
 
     int16_t image_test[64] = {

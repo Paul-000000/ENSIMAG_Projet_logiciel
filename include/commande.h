@@ -34,6 +34,18 @@ bool help_demande(const Parametres_commande *parametres);
 // libère les paramètres récupérés
 void liberer_parametres_commande(Parametres_commande *parametres);
 
+// fonctions auxiliaires déclarées pour les tests
+bool chemin_est_dossier(const char *chemin);
+
+bool chemin_est_fichier(const char *chemin);
+
+char *dupliquer_chaine(const char *chaine);
+
+bool dossier_chemin_existe(const char *chemin);
+
+bool chemin_accessible(const char *chemin);
+
+char *chemin_par_defaut(const char *chemin);
 
 
 #endif /* _COMMANDE_H_ */

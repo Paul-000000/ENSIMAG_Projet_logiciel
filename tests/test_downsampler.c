@@ -44,7 +44,7 @@ void test_simple_2x2(void) {
 
     TEST_ASSERT_EQUAL_UINT8(6,vecteurs_sortie.nb_vecteurs);
 
-    for (uint8_t i = 0; i < vecteurs_sortie.nb_vecteurs; i++) { // test valeurs
+    for (uint8_t i = 0; i < vecteurs_sortie.nb_vecteurs; i++) {
         
         if (i < 4) {
 

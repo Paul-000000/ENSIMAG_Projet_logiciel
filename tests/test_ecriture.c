@@ -14,7 +14,7 @@ void tearDown(void) {
 
 void test_ecriture_vide(void) {
 
-    char *chemin_sortie = "test.jpeg";
+    char *chemin_sortie = "test.jpg";
 
     Flux_Ecriture flux;
     ouvrir_fichier_sortie(chemin_sortie, &flux);
@@ -39,7 +39,7 @@ void test_ecriture_vide(void) {
 
 void test_ecriture_octets_bits(void) {
 
-    char *chemin_sortie = "test.jpeg";
+    char *chemin_sortie = "test.jpg";
 
     Flux_Ecriture flux;
     ouvrir_fichier_sortie(chemin_sortie, &flux);
@@ -80,7 +80,7 @@ void test_ecriture_octets_bits(void) {
 
 void test_ecriture_ac_dc(void) {
 
-    char *chemin_sortie = "test.jpeg";
+    char *chemin_sortie = "test.jpg";
 
     Flux_Ecriture flux;
     ouvrir_fichier_sortie(chemin_sortie, &flux);
