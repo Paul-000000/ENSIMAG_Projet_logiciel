@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <downsampler.h>
 
 
 typedef struct Fichier_tmp
@@ -16,7 +17,7 @@ typedef struct Fichier_tmp
 }Fichier_tmp;
 
 
-Fichier_tmp * creer_fichier_tmp();
+Fichier_tmp * creer_fichier_tmp(bool couleur);
 void ecrire_bloc(Fichier_tmp *tmp,uint16_t bloc[64],Composante type_bloc);
 void lire_bloc(Fichier_tmp *tmp,uint16_t bloc[64],Composante type_bloc);
 
