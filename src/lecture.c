@@ -119,11 +119,15 @@ Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_
     int multiplicateur = (image->type == P6) ? 3 : 1;
 
     image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
-    if (image->tab == NULL) return NULL;
+    if (image->tab == NULL) {
+        return NULL;
+    }
 
     for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
         image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
-        if (image->tab == NULL) return NULL;
+        if (image->tab == NULL) {
+            return NULL;
+        }
     }
 
     return image;
@@ -195,8 +199,9 @@ Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y, uint32_t largeur_blo
 
 void liberer_image(Image *image, uint32_t nb_lignes_superbloc) {
 
-    if (image == NULL)
+    if (image == NULL) {
         return;
+    }
 
     if (image->tab != NULL) {
         
@@ -227,12 +232,16 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, const char *nom_fichier,
     iterateur->nb_mcu_lus = 0;
 
     Image *image = lectureImage(nom_fichier);
-    if (image == NULL) return false;
+    if (image == NULL) {
+        return false;
+    }
 
     determiner_facteurs_mcu(facteurs, &(iterateur->largeur_mcu), &(iterateur->hauteur_mcu));
 
     image = allouer_image(image, iterateur->largeur_mcu, iterateur->hauteur_mcu, NB_BLOCS_SUPERBLOC);
-    if (image == NULL) return false;
+    if (image == NULL) {
+        return false;
+    }
 
     iterateur->largeur_image_mcu = ceil((double)image->largeur / (iterateur->largeur_mcu));
     iterateur->hauteur_image_mcu = ceil((double)image->hauteur / (iterateur->hauteur_mcu));
@@ -243,7 +252,9 @@ bool initialiser_iterateur_mcu(IterateurMCU *iterateur, const char *nom_fichier,
 
 bool mcu_suivant(IterateurMCU *iterateur, bool couleur, uint8_t mcu_gris[8][8], Couleur_rgb mcu_couleur[MCU_MAX][MCU_MAX]) {
 
-    if ((iterateur->y) >= (iterateur->hauteur_image_mcu)) return false;
+    if ((iterateur->y) >= (iterateur->hauteur_image_mcu)) {
+        return false;
+    }
 
     if (iterateur->i_mcu == iterateur->nb_mcu_lus) {
         iterateur->i_mcu = 0;
@@ -257,7 +268,6 @@ bool mcu_suivant(IterateurMCU *iterateur, bool couleur, uint8_t mcu_gris[8][8], 
 
         lireEblocs(iterateur->image, iterateur->x * largeur_mcu, iterateur->y * hauteur_mcu, largeur_mcu, hauteur_mcu, NB_BLOCS_SUPERBLOC);
         iterateur->nb_mcu_lus = ceil((double)iterateur->image->taille_ligne / largeur_mcu);
-        
 
         if ((iterateur->image->taille_ligne % largeur_mcu) != 0) { // répéter la dernière colonne
             uint32_t indice_derniere_colonne = iterateur->image->taille_ligne - 1;

@@ -16,7 +16,6 @@ void test_recupEntete_P5(void) {
     FILE *f_test = fopen(filename, "rb");
     TEST_ASSERT_NOT_NULL(f_test);
     Image* img = recupEntete(f_test);
-
     
     TEST_ASSERT_NOT_NULL(img);
     TEST_ASSERT_EQUAL_INT(P5, img->type);
@@ -26,7 +25,113 @@ void test_recupEntete_P5(void) {
     fclose(f_test);
 
     free(img); 
-   
+}
+
+void test_recupEntete_fichier_type_invalide_1(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    TEST_ASSERT_NULL(img);
+
+    fclose(fichier);
+
+    remove("test.jpg");
+}
+
+void test_recupEntete_fichier_type_invalide_2(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P4\n");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    TEST_ASSERT_NULL(img);
+
+    fclose(fichier);
+
+    remove("test.jpg");
+}
+
+void test_recupEntete_fichier_dimensions_invalide(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P5\n8 a\n");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    TEST_ASSERT_NULL(img);
+
+    fclose(fichier);
+
+    remove("test.jpg");
+}
+
+void test_recupEntete_fichier_profondeur_invalide(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P5\n8 8\ntruc\n");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    TEST_ASSERT_NULL(img);
+
+    fclose(fichier);
+
+    remove("test.jpg");
+}
+
+void test_recupEntete_fichier_taille_invalide(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P5\n8 8\n255\n");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    TEST_ASSERT_NULL(img);
+
+    fclose(fichier);
+
+    remove("test.jpg");
+}
+
+void test_recupEntete(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "P5\n0 0\n255\n");
+
+    fclose(fichier);
+
+    fichier = fopen("test.jpg", "rb");
+    Image* img = recupEntete(fichier);
+    
+    TEST_ASSERT_NOT_NULL(img);
+    TEST_ASSERT_EQUAL_INT(P5, img->type);
+    TEST_ASSERT_EQUAL_UINT32(0, img->largeur);
+    TEST_ASSERT_EQUAL_UINT32(0, img->hauteur);
+    TEST_ASSERT_EQUAL_INT(11, img->debut_pixels);
+
+    fclose(fichier);
+
+    remove("test.jpg");
 }
 
 void test_lire_image(void) {
@@ -47,6 +152,31 @@ void test_lire_image(void) {
     TEST_ASSERT_EQUAL_UINT32(320, img->hauteur);
 
     liberer_image(img, H_super);
+}
+
+void test_lectureImage_null(void) {
+
+    Image* img = lectureImage(NULL);
+    TEST_ASSERT_NULL(img);
+}
+
+void test_lectureImage_invalide(void) {
+
+    Image* img = lectureImage("truc");
+    TEST_ASSERT_NULL(img);
+}
+
+void test_taille_invalide(void) {
+
+    FILE *fichier = fopen("test.jpg", "wb");
+    TEST_ASSERT_NOT_NULL(fichier);
+    fprintf(fichier, "a");
+    fclose(fichier);
+
+    Image* img = lectureImage("test.jpg");
+    TEST_ASSERT_NULL(img);
+
+    remove("test.jpg");
 }
 
 void test_lectureEblocs() {
@@ -326,10 +456,18 @@ int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_lire_image);
     RUN_TEST(test_recupEntete_P5);
+    RUN_TEST(test_recupEntete_fichier_type_invalide_1);
+    RUN_TEST(test_recupEntete_fichier_type_invalide_2);
+    RUN_TEST(test_recupEntete_fichier_dimensions_invalide);
+    RUN_TEST(test_recupEntete_fichier_profondeur_invalide);
+    RUN_TEST(test_recupEntete_fichier_taille_invalide);
     RUN_TEST(test_lectureEblocs);
     RUN_TEST(test_lireEblocs_grande_image);
     RUN_TEST(test_lireEblocs_grande_image_P6);
     RUN_TEST(test_iterateur_mcu_complexe);
+    RUN_TEST(test_lectureImage_null);
+    RUN_TEST(test_lectureImage_invalide);
+    RUN_TEST(test_taille_invalide);
 
     return UNITY_END();
 }
