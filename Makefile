@@ -111,6 +111,6 @@ compile_3: clean
 	gcc -O3 -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm
 
 gprof: clean
-	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm -pg
+	gcc -O3 -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm -pg
 	./ppm2jpeg images/etu/biiiiiig.ppm
 	gprof ./ppm2jpeg gmon.out
