@@ -35,11 +35,17 @@ void test_wikipedia(void) {
         -1, 0, 0, -2, -1, -3, 4, -1, 
         0, 0, -1, -4, -1, 0, 0, 2
     };
-    int16_t bloc_sq[64];
+
+    int16_t vec_freq[64];
+    double vec_temp[64];
+
+    applique_dct(ref, vec_temp);
     
-    applique_dct(ref,bloc_sq);
+    for (uint8_t i = 0; i < 64; i++) {
+        vec_freq[i] = (int16_t)round(vec_temp[i]);
+    }
     
-    TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,bloc_sq,64); // On est bon à la louche
+    TEST_ASSERT_INT16_ARRAY_WITHIN(1,expected,vec_freq,64); // On est bon à la louche
 }
  
 int main(void) {

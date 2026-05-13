@@ -9,6 +9,8 @@
 #include "huffman.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
+#include "dct.h"
+#include "zigzag_quantification.h"
 
 
 
@@ -58,6 +60,9 @@ int main(int argc, char **argv) {
     AC_DC ac_dc;
     Magnitude bloc_enc[64];
     Symboles_RLE symboles_rle_ac;
+    Vecteur vecteur;
+    double vecteur_frequentiel_1[64];
+    int16_t vecteur_frequentiel_2[64];
 
     initialise_huffman();
 
@@ -81,13 +86,13 @@ int main(int argc, char **argv) {
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
-                Vecteur vecteur = vecteurs.vecteurs[i];
-                int16_t bloc_frequentiel[64];
+                vecteur = vecteurs.vecteurs[i];
                 
-                dct_zigzag_quantification(vecteur.valeur, vecteur.composante, bloc_frequentiel);
+                applique_dct(vecteur.valeur, vecteur_frequentiel_1);
+                applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
                 
-                codage_magnitude(bloc_frequentiel, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
-                rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
+                codage_magnitude(vecteur_frequentiel_2, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
+                rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
                 encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
 
                 ajouter_donnees_compressees(&ac_dc, &flux);
@@ -98,8 +103,6 @@ int main(int argc, char **argv) {
         
         int16_t dc_prec = 0;
         uint8_t mcu_gris[8][8];
-        Vecteur vecteur;
-        int16_t bloc_frequentiel[64];
 
         while (true) {
 
@@ -110,10 +113,11 @@ int main(int argc, char **argv) {
             
             decouper_matrice_gris(mcu_gris, &vecteur);    
             
-            dct_zigzag_quantification(vecteur.valeur, vecteur.composante, bloc_frequentiel);
+            applique_dct(vecteur.valeur, vecteur_frequentiel_1);
+            applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
             
-            codage_magnitude(bloc_frequentiel, &dc_prec, bloc_enc);
-            rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
+            codage_magnitude(vecteur_frequentiel_2, &dc_prec, bloc_enc);
+            rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
             huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
             ajouter_donnees_compressees(&ac_dc, &flux);
         }

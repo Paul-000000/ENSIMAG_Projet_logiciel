@@ -13,10 +13,9 @@ créé par Arai, Agui, Nakajima en 1988. https://web.stanford.edu/class/ee398a/h
 et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
 */
 
-// divise le vecteur par certains coefficients selon sa composante
 
 
-void dct_zigzag_quantification(const uint8_t bloc_spatial[64], Composante composante, int16_t bloc_frequentiel[64]);
+void applique_dct(const uint8_t bloc_spatial[64], double vecteur_frequentiel[64]);
 
 
 

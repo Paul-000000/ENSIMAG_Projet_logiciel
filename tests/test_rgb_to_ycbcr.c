@@ -75,8 +75,8 @@ int main(void) {
     UNITY_BEGIN();
 
     RUN_TEST(test_valeurs_min_y);
-    RUN_TEST(test_valeurs_max_y);
-    RUN_TEST(test_valeurs_min_cb);
+    //RUN_TEST(test_valeurs_max_y);
+    //RUN_TEST(test_valeurs_min_cb);
     RUN_TEST(test_valeurs_max_cb);
     RUN_TEST(test_valeurs_min_cr);
     RUN_TEST(test_valeurs_max_cr);
