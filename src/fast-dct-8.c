@@ -46,6 +46,52 @@ static const double A[] = {
 };
 
 
+void FastDct8_transform_modifiee(double *vector, int pad) {
+	const double v0 = vector[0] + vector[7 * pad];
+	const double v1 = vector[pad] + vector[6 * pad];
+	const double v2 = vector[2 * pad] + vector[5 * pad];
+	const double v3 = vector[3 * pad] + vector[4 * pad];
+	const double v4 = vector[3 * pad] - vector[4 * pad];
+	const double v5 = vector[2 * pad] - vector[5 * pad];
+	const double v6 = vector[pad] - vector[6 * pad];
+	const double v7 = vector[0] - vector[7 * pad];
+	
+	const double v8 = v0 + v3;
+	const double v9 = v1 + v2;
+	const double v10 = v1 - v2;
+	const double v11 = v0 - v3;
+	const double v12 = -v4 - v5;
+	const double v13 = (v5 + v6) * A[3];
+	const double v14 = v6 + v7;
+	
+	const double v15 = v8 + v9;
+	const double v16 = v8 - v9;
+	const double v17 = (v10 + v11) * A[1];
+	const double v18 = (v12 + v14) * A[5];
+	
+	const double v19 = -v12 * A[2] - v18;
+	const double v20 = v14 * A[4] - v18;
+	
+	const double v21 = v17 + v11;
+	const double v22 = v11 - v17;
+	const double v23 = v13 + v7;
+	const double v24 = v7 - v13;
+	
+	const double v25 = v19 + v24;
+	const double v26 = v23 + v20;
+	const double v27 = v23 - v20;
+	const double v28 = v24 - v19;
+	
+	vector[0] = S[0] * v15;
+	vector[pad] = S[1] * v26;
+	vector[2 * pad] = S[2] * v21;
+	vector[3 * pad] = S[3] * v28;
+	vector[4 * pad] = S[4] * v16;
+	vector[5 * pad] = S[5] * v25;
+	vector[6 * pad] = S[6] * v22;
+	vector[7 * pad] = S[7] * v27;
+}
+
 // DCT type II, scaled. Algorithm by Arai, Agui, Nakajima, 1988.
 // See: https://web.stanford.edu/class/ee398a/handouts/lectures/07-TransformCoding.pdf#page=30
 void FastDct8_transform(double vector[static 8]) {

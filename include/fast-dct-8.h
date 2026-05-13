@@ -28,6 +28,7 @@
 extern "C" {
 #endif
 
+void FastDct8_transform_modifiee(double *vector, int pad);
 
 void FastDct8_transform(double vector[static 8]);
 

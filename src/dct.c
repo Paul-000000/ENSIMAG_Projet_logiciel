@@ -111,6 +111,7 @@ créé par Arai, Agui, Nakajima en 1988. https://web.stanford.edu/class/ee398a/h
 et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
 */
 
+
 void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
     
     double vecteur_temp[64];
@@ -119,25 +120,14 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) 
         vecteur_temp[i] = (double)bloc_spatial[i] - 128.0;
     }
 
-   // applique ligne 
+    // applique ligne 
     for (int i = 0; i < 8; i++) {
-        FastDct8_transform(&(vecteur_temp[i * 8]));
+        FastDct8_transform_modifiee(&(vecteur_temp[i * 8]), 1);
     }
 
+    // applique colonne
     for (int j = 0; j < 8; j++) {
-        double colonne[8];
-        
-        for (int i = 0; i < 8; i++) {
-            colonne[i] = vecteur_temp[j + 8 * i];
-        }
-        
-        // applique colonne
-        FastDct8_transform(colonne);
-        
-        // stock val
-        for (int i = 0; i < 8; i++) {
-            vecteur_temp[j + 8 * i] = colonne[i];
-        }
+        FastDct8_transform_modifiee(&(vecteur_temp[j]), 8);
     }
 
     // reporte frequentiel 
