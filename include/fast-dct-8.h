@@ -30,9 +30,11 @@ extern "C" {
 
 void FastDct8_transform_modifiee(double *vector, int pad);
 
-void FastDct8_transform(double vector[static 8]);
+// non utilisée
+// void FastDct8_transform(double vector[static 8]);
 
-void FastDct8_inverseTransform(double vector[static 8]);
+// non utilisée
+// void FastDct8_inverseTransform(double vector[static 8]);
 
 
 #ifdef __cplusplus
