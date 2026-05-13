@@ -6,8 +6,6 @@
 #include "rgb_to_ycbcr.h"
 #include "downsampler.h"
 #include "dct.h"
-#include "zigzag.h"
-#include "quantification.h"
 #include "huffman.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
@@ -86,9 +84,7 @@ int main(int argc, char **argv) {
                 Vecteur vecteur = vecteurs.vecteurs[i];
                 int16_t bloc_frequentiel[64];
                 
-                applique_dct(vecteur.valeur ,bloc_frequentiel);
-                zigzag(bloc_frequentiel);
-                quantification(bloc_frequentiel, vecteur.composante);
+                dct_zigzag_quantification(vecteur.valeur, vecteur.composante, bloc_frequentiel);
                 
                 codage_magnitude(bloc_frequentiel, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
                 rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
@@ -113,9 +109,9 @@ int main(int argc, char **argv) {
             }
             
             decouper_matrice_gris(mcu_gris, &vecteur);    
-            applique_dct(vecteur.valeur ,bloc_frequentiel);
-            zigzag(bloc_frequentiel);
-            quantification(bloc_frequentiel, vecteur.composante);
+            
+            dct_zigzag_quantification(vecteur.valeur, vecteur.composante, bloc_frequentiel);
+            
             codage_magnitude(bloc_frequentiel, &dc_prec, bloc_enc);
             rle(bloc_frequentiel, &symboles_rle_ac, bloc_enc);
             huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
