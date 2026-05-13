@@ -32,7 +32,7 @@ Magnitude encoder_val(int16_t val){
     while ( tmp > 0)
     { 
       magnitude++;
-      puissance_2*=2;
+      puissance_2 = puissance_2 << 1;
       tmp=tmp >> 1;
     }
     val_enc.class_mag=magnitude;

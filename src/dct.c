@@ -113,25 +113,22 @@ et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-a
 
 void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) {
     
-    double bloc[8][8];
+    double vecteur_temp[64];
 
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            bloc[i][j] = (double)bloc_spatial[i * 8 + j] - 128.0;
-        }
+    for (int i = 0; i < 64; i++) {
+        vecteur_temp[i] = (double)bloc_spatial[i] - 128.0;
     }
 
    // applique ligne 
     for (int i = 0; i < 8; i++) {
-        FastDct8_transform(bloc[i]);
+        FastDct8_transform(&(vecteur_temp[i * 8]));
     }
 
-  
     for (int j = 0; j < 8; j++) {
         double colonne[8];
         
         for (int i = 0; i < 8; i++) {
-            colonne[i] = bloc[i][j];
+            colonne[i] = vecteur_temp[j + 8 * i];
         }
         
         // applique colonne
@@ -139,15 +136,12 @@ void applique_dct(const uint8_t bloc_spatial[64], int16_t bloc_frequentiel[64]) 
         
         // stock val
         for (int i = 0; i < 8; i++) {
-            bloc[i][j] = colonne[i];
+            vecteur_temp[j + 8 * i] = colonne[i];
         }
     }
 
     // reporte frequentiel 
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            
-            bloc_frequentiel[i * 8 + j] = (int16_t)round(bloc[i][j]);
-        }
+    for (int i = 0; i < 64; i++) {
+        bloc_frequentiel[i] = (int16_t)round(vecteur_temp[i]);
     }
 }
