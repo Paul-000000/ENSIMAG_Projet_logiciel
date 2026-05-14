@@ -16,6 +16,10 @@
 
 int main(int argc, char **argv) {
     
+    double t_dct = 0, t_lecture =0, t_ecriture = 0, t_decoupage = 0, t_zigzag_quantification = 0, t_magnitude = 0, t_rle = 0, t_huffman = 0; // a retirer
+    clock_t debut = clock(); // a retirer
+
+
     // commande
     Parametres_commande parametres;
 
@@ -70,32 +74,49 @@ int main(int argc, char **argv) {
 
         int16_t dc_prec_y_cb_cr[3] = {0, 0, 0};
         Couleur_rgb mcu_couleur[MCU_MAX][MCU_MAX];
-        Couleur_ycbcr mcu_ycbcr[MCU_MAX][MCU_MAX];
         Vecteurs_ycbcr vecteurs;
         Dimensions_cbcr dim_cbcr = determiner_dimensions_cb_cr(parametres.facteurs);
 
         while (true) {
 
+            clock_t d = clock(); // a retirer
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) {
                 break;
             }
+            t_lecture += (clock() - d); // a retirer
 
-            matrice_rgb_to_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, mcu_ycbcr);
-            decouper_matrices_couleur(mcu_ycbcr, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
+            d = clock(); // a retirer
+            decouper_matrices_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
+            t_decoupage += (clock() - d); // a retirer
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
                 vecteur = vecteurs.vecteurs[i];
                 
+                d = clock(); // a retirer
                 applique_dct(vecteur.valeur, vecteur_frequentiel_1);
-                applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
-                
-                codage_magnitude(vecteur_frequentiel_2, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
-                rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
-                encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
+                t_dct += (clock() - d); // a retirer
 
+                d = clock(); // a retirer
+                applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
+                t_zigzag_quantification += (clock() - d); // a retirer
+
+                d = clock(); // a retirer
+                codage_magnitude(vecteur_frequentiel_2, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
+                t_magnitude += (clock() - d); // a retirer
+
+                d = clock(); // a retirer
+                rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
+                t_rle += (clock() - d); // a retirer
+
+                d = clock(); // a retirer
+                encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
+                t_huffman += (clock() - d); // a retirer
+
+                d = clock(); // a retirer
                 ajouter_donnees_compressees(&ac_dc, &flux);
+                t_ecriture += (clock() - d); // a retirer
             }   
         }
 
@@ -115,7 +136,7 @@ int main(int argc, char **argv) {
             
             applique_dct(vecteur.valeur, vecteur_frequentiel_1);
             applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
-            
+
             codage_magnitude(vecteur_frequentiel_2, &dc_prec, bloc_enc);
             rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
             huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
@@ -131,6 +152,18 @@ int main(int argc, char **argv) {
 
     // commande
     liberer_parametres_commande(&parametres);
+
+
+    printf("effectué en : %.3fs\n", (double)(clock() - debut) / CLOCKS_PER_SEC); // a retirer
+    printf("lecture : %.3fs\n", t_lecture / CLOCKS_PER_SEC); // a retirer
+    printf("decoupage : %.3fs\n", t_decoupage / CLOCKS_PER_SEC); // a retirer
+    printf("dct : %.3fs\n", t_dct / CLOCKS_PER_SEC); // a retirer
+    printf("zigzag et quantification: %.3fs\n", t_zigzag_quantification / CLOCKS_PER_SEC); // a retirer
+    printf("magnitude : %.3fs\n", t_magnitude / CLOCKS_PER_SEC); // a retirer
+    printf("rle : %.3fs\n", t_rle / CLOCKS_PER_SEC); // a retirer
+    printf("huffman : %.3fs\n", t_huffman / CLOCKS_PER_SEC); // a retirer
+    printf("ecriture : %.3fs\n", t_ecriture / CLOCKS_PER_SEC); // a retirer
+
 
     return EXIT_SUCCESS;
 }

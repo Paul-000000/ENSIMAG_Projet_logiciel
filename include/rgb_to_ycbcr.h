@@ -21,11 +21,16 @@ typedef struct couleur_ycbcr { // les 3 composantes Y, Cb et Cr des pixels
 
 
 
-// convertion d'un pixel au format RGB en format YCbCr
-Couleur_ycbcr rgb_to_ycbcr(Couleur_rgb couleur);
+// récupération de la composante Y à partir d'un pixel RGB
+uint8_t calculer_y(Couleur_rgb couleur);
 
-// convertit une matrice du format RGB au format YCbCr
-void matrice_rgb_to_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur, uint8_t hauteur, Couleur_ycbcr matrice_sortie[MCU_MAX][MCU_MAX]);
+// récupération de la composante CB à partir d'un pixel RGB
+uint8_t calculer_cb(Couleur_rgb couleur);
+
+// récupération de la composante CR à partir d'un pixel RGB
+uint8_t calculer_cr(Couleur_rgb couleur);
+
+
 
 static const int16_t tab_Y_R[256] = {
         0,    0,    1,    1,    1,    1,    2,    2,    2,    3,    3,    3,    4,    4,    4,    4,
@@ -159,5 +164,7 @@ static const int16_t tab_Cr_B[256] = {
       -18,  -18,  -18,  -18,  -19,  -19,  -19,  -19,  -19,  -19,  -19,  -19,  -19,  -19,  -19,  -19,
       -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -20,  -21,  -21,  -21
 };
+
+
 
 #endif /* _RGB_TO_YCBCR_H_ */
