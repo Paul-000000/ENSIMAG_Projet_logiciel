@@ -16,7 +16,7 @@ typedef enum composante { // les 3 composantes d'une couleur yCbCr
 
 typedef struct vecteur { // c'est un bloc de 8x8 applati avec sa composante correspondante
     
-    uint8_t valeur[64];
+    double valeur[64];
     Composante composante;
 } Vecteur;
 

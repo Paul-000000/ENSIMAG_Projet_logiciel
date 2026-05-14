@@ -39,7 +39,11 @@ void test_wikipedia(void) {
     int16_t vec_freq[64];
     double vec_temp[64];
 
-    applique_dct(ref, vec_temp);
+    for (uint8_t i = 0; i < 64; i++) {
+        vec_temp[i] = (double)ref[i] -  128.0;
+    }
+
+    applique_dct(vec_temp);
     
     for (uint8_t i = 0; i < 64; i++) {
         vec_freq[i] = (int16_t)round(vec_temp[i]);

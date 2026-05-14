@@ -47,16 +47,16 @@ void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const 
 void initialise_huffman();
 
 // encode les AC et le DC avec Huffman
-void huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, const Huffman tab_dc[256], const Huffman tab_ac[256], AC_DC *resultat);
+bool huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, const Huffman tab_dc[256], const Huffman tab_ac[256], AC_DC *resultat);
 
 // encode les AC et le DC ayant la composante Y avec Huffman
-void huffman_y(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
+bool huffman_y(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
 
 // encode les AC et le DC ayant la composante CbCr avec Huffman
-void huffman_cbcr(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
+bool huffman_cbcr(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat);
 
 // encode les AC et le DC avec Huffman en fonction de sa composante
-void encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat);
+bool encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat);
 
 
 

@@ -112,27 +112,22 @@ void initialise_huffman() {
     construction_arbre_huffman(CbCr_AC, htables_nb_symb_per_lengths[1][1], htables_symbols[1][1]);
 }
 
-void huffman_y(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
+bool huffman_y(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
 
-    huffman(bloc_enc, symboles_rle_ac, Y_DC, Y_AC, resultat);
+    return huffman(bloc_enc, symboles_rle_ac, Y_DC, Y_AC, resultat);
 }
 
-void huffman_cbcr(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
+bool huffman_cbcr(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, AC_DC *resultat) {
 
-    huffman(bloc_enc, symboles_rle_ac, CbCr_DC, CbCr_AC, resultat);
+    return huffman(bloc_enc, symboles_rle_ac, CbCr_DC, CbCr_AC, resultat);
 }
 
-void encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat) {
+bool encoder_coefficients_huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, Composante composante, AC_DC *resultat) {
 
-    if (composante == Y) {
-        huffman_y(bloc_enc, symboles_rle_ac, resultat);
-
-    } else {
-        huffman_cbcr(bloc_enc, symboles_rle_ac, resultat);
-    }
+    return (composante == Y) ? huffman_y(bloc_enc, symboles_rle_ac, resultat) : huffman_cbcr(bloc_enc, symboles_rle_ac, resultat);
 }
 
-void huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, const Huffman tab_dc[256], const Huffman tab_ac[256], AC_DC *resultat) {
+bool huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, const Huffman tab_dc[256], const Huffman tab_ac[256], AC_DC *resultat) {
     
     uint8_t symbole_dc = bloc_enc[0].class_mag;    
     
@@ -144,10 +139,8 @@ void huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, 
         resultat->DC.nb_bits = tab_dc[symbole_dc].nb_bits;
 
     } else {
-        resultat->DC.code = 0;
-        resultat->DC.nb_bits = 0;
+        return false;
     }
-
     
     resultat->taille = symboles_rle_ac->taille; 
 
@@ -158,12 +151,13 @@ void huffman(const Magnitude bloc_enc[64], const Symboles_RLE *symboles_rle_ac, 
         resultat->AC[i].indice = symboles_rle_ac->symboles[i].indice;
         resultat->AC[i].classe_mag = symboles_rle_ac->symboles[i].classe_mag;
         
-        if (tab_ac[symbole_ac].valide) {
-            resultat->AC[i].code = tab_ac[symbole_ac].code;
-            resultat->AC[i].nb_bits = tab_ac[symbole_ac].nb_bits;
-        } else {
-            resultat->AC[i].code = 0;
-            resultat->AC[i].nb_bits = 0;
+        if (!tab_ac[symbole_ac].valide) {
+            return false;
         }
+
+        resultat->AC[i].code = tab_ac[symbole_ac].code;
+        resultat->AC[i].nb_bits = tab_ac[symbole_ac].nb_bits;
     }
+
+    return true;
 }

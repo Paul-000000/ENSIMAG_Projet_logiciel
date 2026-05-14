@@ -23,7 +23,7 @@ Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 	return dimensions;
 }
 
-uint8_t moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
+double moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
 
 	uint32_t somme = 0;
 	uint16_t i_hauteur = i * hauteur;
@@ -34,7 +34,7 @@ uint8_t moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8
 		for (uint8_t y = 0; y < hauteur; y++) {
 			for (uint8_t x = 0; x < largeur; x++) {
 
-				somme += calculer_cb(matrice[i_hauteur + y][j_largeur + x]);
+				somme += calculer_cb(matrice[i_hauteur + y][j_largeur + x]) ;
 			}
 		}
 
@@ -47,7 +47,7 @@ uint8_t moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8
 		}
 	}
 
-	return (uint8_t)round((double)somme / (largeur * hauteur));
+	return (double)somme / (largeur * hauteur);
 
 }
 
@@ -68,7 +68,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
 					
-					vec->valeur[x * 8 + y] = calculer_y(matrice[8 * i + x][8 * j + y]);
+					vec->valeur[x * 8 + y] = calculer_y(matrice[8 * i + x][8 * j + y]) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
@@ -91,7 +91,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
 
-					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i*8+x, j*8+y, true);
+					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i*8+x, j*8+y, true) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
@@ -114,7 +114,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
 
-					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i*8+x, j*8+y, false);
+					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i*8+x, j*8+y, false) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
@@ -128,5 +128,11 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 void decouper_matrice_gris(const uint8_t matrice[8][8], Vecteur *vecteur) {
 
 	vecteur->composante = Y;
-	memcpy(vecteur->valeur, matrice, 64);
+
+	for (uint8_t x = 0; x < 8; x++) {
+		for (uint8_t y = 0; y < 8; y++) {
+
+			vecteur->valeur[x * 8 + y] = matrice[x][y] - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
+		}
+	}
 }

@@ -22,7 +22,7 @@ void rle(const int16_t bloc[64], Symboles_RLE *symboles_rle, const Magnitude blo
 
             nb_zero = 0;
             symboles_rle->taille += 1;
-        
+
         } else {
             nb_zero++;
 

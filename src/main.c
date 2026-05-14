@@ -65,8 +65,7 @@ int main(int argc, char **argv) {
     Magnitude bloc_enc[64];
     Symboles_RLE symboles_rle_ac;
     Vecteur vecteur;
-    double vecteur_frequentiel_1[64];
-    int16_t vecteur_frequentiel_2[64];
+    int16_t vecteur_entiers[64];
 
     initialise_huffman();
 
@@ -95,19 +94,19 @@ int main(int argc, char **argv) {
                 vecteur = vecteurs.vecteurs[i];
                 
                 d = clock(); // a retirer
-                applique_dct(vecteur.valeur, vecteur_frequentiel_1);
+                applique_dct(vecteur.valeur);
                 t_dct += (clock() - d); // a retirer
 
                 d = clock(); // a retirer
-                applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
+                applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
                 t_zigzag_quantification += (clock() - d); // a retirer
 
                 d = clock(); // a retirer
-                codage_magnitude(vecteur_frequentiel_2, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
+                codage_magnitude(vecteur_entiers, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
                 t_magnitude += (clock() - d); // a retirer
 
                 d = clock(); // a retirer
-                rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
+                rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
                 t_rle += (clock() - d); // a retirer
 
                 d = clock(); // a retirer
@@ -134,11 +133,11 @@ int main(int argc, char **argv) {
             
             decouper_matrice_gris(mcu_gris, &vecteur);    
             
-            applique_dct(vecteur.valeur, vecteur_frequentiel_1);
-            applique_zigzag_quantification(vecteur_frequentiel_1, vecteur.composante, vecteur_frequentiel_2);
+            applique_dct(vecteur.valeur);
+            applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
 
-            codage_magnitude(vecteur_frequentiel_2, &dc_prec, bloc_enc);
-            rle(vecteur_frequentiel_2, &symboles_rle_ac, bloc_enc);
+            codage_magnitude(vecteur_entiers, &dc_prec, bloc_enc);
+            rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
             huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
             ajouter_donnees_compressees(&ac_dc, &flux);
         }
