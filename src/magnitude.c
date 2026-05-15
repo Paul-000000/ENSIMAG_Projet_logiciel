@@ -16,38 +16,28 @@ void codage_magnitude(const int16_t bloc[64], int16_t *dc_prec, Magnitude bloc_e
 
 }
 
-Magnitude encoder_val(int16_t val){
+inline Magnitude encoder_val(int16_t val){
 
-    int16_t tmp=abs(val);
-    uint8_t magnitude=0;
-    uint16_t puissance_2=1;
-    Magnitude val_enc;
-    
     if (val==0)
     {
         return (Magnitude){0,0};
     }
-    
+    int16_t tmp=abs(val);
+    uint8_t magnitude=0;
+   
+    Magnitude val_enc;
 
     while ( tmp > 0)
     { 
       magnitude++;
-      puissance_2 = puissance_2 << 1;
       tmp=tmp >> 1;
     }
+    uint16_t puissance_2 = 1 << magnitude;
     val_enc.class_mag=magnitude;
-    uint16_t indice;
     int16_t sup_int=puissance_2-1;
+    int16_t masque_signe = val >> 15;
+    val_enc.indice = val + (masque_signe & sup_int);
     
-    if (val<0)
-    {
-       indice=sup_int+val;
-    }
-    else
-    {
-     indice=val;
-    }
-    val_enc.indice= indice;
 
     return val_enc;
 
