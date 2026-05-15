@@ -32,6 +32,7 @@ inline Magnitude encoder_val(int16_t val){
       magnitude++;
       tmp=tmp >> 1;
     }
+   
     uint16_t puissance_2 = 1 << magnitude;
     val_enc.class_mag=magnitude;
     int16_t sup_int=puissance_2-1;

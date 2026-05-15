@@ -44,3 +44,4 @@ void rle(const int16_t bloc[64], Symboles_RLE *symboles_rle, const Magnitude blo
         symboles_rle->taille += 1;
     }
 }
+
