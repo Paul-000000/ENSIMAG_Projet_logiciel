@@ -44,7 +44,7 @@ typedef struct NoeudHuffman // noeud de l'abre d'Huffman
 // initialise les 4 tableaux contenant la convertion octet à code huffman
 void initialise_huffman();
 
-// encode les AC et le DC avec la magnitude, l'encodage RLE puis celui d'Huffman
+// encode les AC et le DC avec la magnitude, l'encodage RLE puis celui d'Huffman, renvoie false si on utilise une entrée invalide dans la table d'Huffman
 bool magnitude_rle_huffman(int16_t *dc_prec, const int16_t vecteur[64], Composante composante, AC_DC *resultat);
 
 // fonction similaire à magnitude_rle_huffman, déclarée pour les tests
