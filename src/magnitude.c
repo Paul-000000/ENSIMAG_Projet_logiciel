@@ -26,7 +26,6 @@ inline Magnitude encoder_magnitude(int16_t val){
     int16_t sup_int=puissance_2-1;
     int16_t masque_signe = val >> 15;
     val_enc.indice = val + (masque_signe & sup_int);
-    
 
     return val_enc;
 }

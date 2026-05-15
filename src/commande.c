@@ -9,6 +9,7 @@
 
 
 
+// définitions des options utilisables
 static struct option options[] = {
 	{"outfile", required_argument, NULL, 0},
 	{"sample", 	required_argument, NULL, 1},
@@ -18,6 +19,7 @@ static struct option options[] = {
 
 
 
+// teste si un chemin est un dossier
 bool chemin_est_dossier(const char *chemin) {
 
 	if (chemin == NULL) {
@@ -28,6 +30,7 @@ bool chemin_est_dossier(const char *chemin) {
     return (stat(chemin, &stat_) == 0 && S_ISDIR(stat_.st_mode));
 }
 
+// teste si un chemin est un fichier
 bool chemin_est_fichier(const char *chemin) {
 
 	if (chemin == NULL) {
@@ -38,6 +41,7 @@ bool chemin_est_fichier(const char *chemin) {
 	return (stat(chemin, &stat_) == 0 && S_ISREG(stat_.st_mode));
 }
 
+// fonction similaire à strdup qui alloue la chaine en paramètre dans le tas
 char *dupliquer_chaine(const char *chaine) {
 
 	if (chaine == NULL) {
@@ -55,6 +59,7 @@ char *dupliquer_chaine(const char *chaine) {
 	return nouvelle_chaine;
 }
 
+// vérifie si le dossier parent du chemin existe
 bool dossier_chemin_existe(const char *chemin) {
 
 	if (chemin == NULL) {
@@ -75,6 +80,7 @@ bool dossier_chemin_existe(const char *chemin) {
 	return res;
 }
 
+// teste si l'on peut ouvrir le fichier depuis le chemin
 bool chemin_accessible(const char *chemin) {
 
 	if (chemin == NULL) {
@@ -92,6 +98,7 @@ bool chemin_accessible(const char *chemin) {
 	return true;
 }
 
+// vérifie si les fecteurs d'échantillonnages sont valides
 bool verifier_facteurs_echantillonnage(Facteurs_echantillonnage facteurs) {
 
 	if (
@@ -146,7 +153,7 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 		
 		switch (opt) {
 			
-			case 0: // outfile
+			case 0: // code de l'option outfile
 
 				if (parametres->chemin_sortie != NULL) {
 					free(parametres->chemin_sortie);
@@ -155,7 +162,7 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				parametres->chemin_sortie = dupliquer_chaine(optarg);
 				break;
 
-			case 1: // sample
+			case 1: // code de l'option sample
 				if (optarg == NULL) {
 					if (messages_erreur) {
 						fprintf(stderr, "Erreur : optarg NULL\n");
@@ -183,7 +190,7 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 				*facteurs_initialises = true;
 				break;
 
-			case 2: // help
+			case 2: // code de l'option help
 				parametres->help = true;
 				return true;
 			
@@ -207,6 +214,7 @@ bool recuperer_parametres_commande(int argc, char **argv, Parametres_commande *p
 	return true;
 }
 
+// construit le chemin de sortie par défaut a partir du chemin d'entrée
 char *chemin_par_defaut(const char *chemin) {
 
 	char *chemin_dup = dupliquer_chaine(chemin);
@@ -226,7 +234,7 @@ char *chemin_par_defaut(const char *chemin) {
 	char *dernier_point = strrchr(chemin_fichier,'.');
 	int len = strlen(chemin_fichier);
 
-	if (dernier_point == NULL) {
+	if (dernier_point == NULL) { // si le nom de fichier n'a pas d'extension
 
 		char *chaine = (char *)malloc(len + 9);
 		if (chaine == NULL) {
@@ -304,16 +312,6 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 		}
 		return false;
 	}
-
-	/*
-	if (chemin_accessible(chemin_sortie)) {
-		free(chemin_sortie);
-		if (messages_erreur) {
-			fprintf(stderr, "Erreur : le fichier de sortie existe deja\n");
-		}
-			return false;
-	}
-	*/
 	
 	if (chemin_accessible(parametres->chemin_sortie)) {
 
@@ -337,7 +335,7 @@ bool initialiser_parametres_commande(int argc, char **argv, Parametres_commande 
 	
 	if (!facteurs_initialises) {
 
-		Facteurs_echantillonnage facteurs = {1, 1, 1, 1, 1, 1};
+		Facteurs_echantillonnage facteurs = {1, 1, 1, 1, 1, 1}; // facteurs d'échantillonnage par défaut
 		parametres->facteurs = facteurs;
 	
 	} else {

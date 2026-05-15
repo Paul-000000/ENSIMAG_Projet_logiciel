@@ -15,10 +15,6 @@
 
 int main(int argc, char **argv) {
     
-    // double t_dct = 0, t_lecture =0, t_ecriture = 0, t_decoupage = 0, t_zigzag_quantification = 0, t_magnitude_rle_huffman = 0; // a retirer
-    // clock_t debut = clock(); // a retirer
-
-
     // commande
     Parametres_commande parametres;
 
@@ -75,30 +71,20 @@ int main(int argc, char **argv) {
 
         while (true) {
 
-            // clock_t d = clock(); // a retirer
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) {
                 break;
             }
-            // t_lecture += (clock() - d); // a retirer
-
-            // d = clock(); // a retirer
+            
             decouper_matrices_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
-            // t_decoupage += (clock() - d); // a retirer
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
                 vecteur = vecteurs.vecteurs[i];
                 
-                // d = clock(); // a retirer
                 applique_dct(vecteur.valeur);
-                // t_dct += (clock() - d); // a retirer
-
-                // d = clock(); // a retirer
                 applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
-                // t_zigzag_quantification += (clock() - d); // a retirer
 
-                // d = clock(); // a retirer
                 bool res = magnitude_rle_huffman(&(dc_prec_y_cb_cr[vecteur.composante]), vecteur_entiers, vecteur.composante, &ac_dc);
                 if (!res) {
                     fprintf(stderr, "Un symbole dans la table d'Huffman est invalide\n");
@@ -109,11 +95,8 @@ int main(int argc, char **argv) {
                     return EXIT_FAILURE;
 
                 }
-                // t_magnitude_rle_huffman += (clock() - d); // a retirer
 
-                // d = clock(); // a retirer
                 ajouter_donnees_compressees(&ac_dc, &flux);
-                // t_ecriture += (clock() - d); // a retirer
             }   
         }
 
@@ -148,16 +131,6 @@ int main(int argc, char **argv) {
 
     // commande
     liberer_parametres_commande(&parametres);
-
-
-    // printf("effectué en : %.3fs\n", (double)(clock() - debut) / CLOCKS_PER_SEC); // a retirer
-    // printf("lecture : %.3fs\n", t_lecture / CLOCKS_PER_SEC); // a retirer
-    // printf("decoupage : %.3fs\n", t_decoupage / CLOCKS_PER_SEC); // a retirer
-    // printf("dct : %.3fs\n", t_dct / CLOCKS_PER_SEC); // a retirer
-    // printf("zigzag et quantification: %.3fs\n", t_zigzag_quantification / CLOCKS_PER_SEC); // a retirer
-    // printf("magnitude, RLE et Huffman : %.3fs\n", t_magnitude_rle_huffman / CLOCKS_PER_SEC); // a retirer
-    // printf("ecriture : %.3fs\n", t_ecriture / CLOCKS_PER_SEC); // a retirer
-
 
     return EXIT_SUCCESS;
 }

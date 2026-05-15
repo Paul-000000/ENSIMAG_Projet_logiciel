@@ -53,7 +53,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 
 	uint8_t nb_vecteurs = 0;
 
-	// y
+	// calcul des vecteurs de la composante Y
 	uint8_t nb_blocs_hauteur_y = hauteur_mcu / 8;
 	uint8_t nb_blocs_largeur_y = largeur_mcu / 8;
 
@@ -74,7 +74,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
  		}
 	}
 
-	// cb
+	// calcul des vecteurs de la composante CB
 	uint8_t largeur_micro_matrices_cb = largeur_mcu / dimensions_sortie.largeur_mcu_cb;
 	uint8_t hauteur_micro_matrices_cb = hauteur_mcu / dimensions_sortie.hauteur_mcu_cb;
 	uint8_t nb_blocs_largeur_cb = dimensions_sortie.largeur_mcu_cb / 8;
@@ -97,7 +97,7 @@ void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 		}
 	}
 
-	// cr
+	// calcul des vecteurs de la composante CR
 	uint8_t largeur_micro_matrices_cr = largeur_mcu / dimensions_sortie.largeur_mcu_cr;
 	uint8_t hauteur_micro_matrices_cr = hauteur_mcu / dimensions_sortie.hauteur_mcu_cr;
 	uint8_t nb_blocs_largeur_cr = dimensions_sortie.largeur_mcu_cr / 8;

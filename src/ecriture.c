@@ -18,6 +18,7 @@ bool ouvrir_fichier_sortie(const char *chemin_sortie, Flux_Ecriture *flux) {
     return true;
 }
 
+// écrit le contenu du buffer d'octets dans le fichier de sortie puis le vide
 void ecrire_donnees(Flux_Ecriture *flux) {
 
     fwrite(flux->buffer_octets.buffer, sizeof(uint8_t), flux->buffer_octets.taille, flux->fichier_sortie);
@@ -25,6 +26,7 @@ void ecrire_donnees(Flux_Ecriture *flux) {
     flux->buffer_octets.taille = 0;
 }
 
+// ajoute l'octet eu buffer d'octets et effectue le byte stuffing si nécéssaire
 void ecrire_octet_buffer(uint8_t octet_a_ecrire, Flux_Ecriture *flux) {
 
     flux->buffer_octets.buffer[flux->buffer_octets.taille] = octet_a_ecrire;
@@ -40,6 +42,7 @@ void ecrire_octet_buffer(uint8_t octet_a_ecrire, Flux_Ecriture *flux) {
     }
 }
 
+// ajoute au buffer d'octets les paquets de 8 bits disponibles dans le buffer de bits
 void vider_buffer_bits(Flux_Ecriture *flux) {
 
     while (flux->buffer_bits.taille >= 8) {
