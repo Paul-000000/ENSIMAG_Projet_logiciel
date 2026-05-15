@@ -6,7 +6,6 @@
 #include "rgb_to_ycbcr.h"
 #include "downsampler.h"
 #include "dct.h"
-#include "huffman.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
 #include "dct.h"
@@ -16,7 +15,7 @@
 
 int main(int argc, char **argv) {
     
-    // double t_dct = 0, t_lecture =0, t_ecriture = 0, t_decoupage = 0, t_zigzag_quantification = 0, t_magnitude = 0, t_rle = 0, t_huffman = 0; // a retirer
+    // double t_dct = 0, t_lecture =0, t_ecriture = 0, t_decoupage = 0, t_zigzag_quantification = 0, t_magnitude_rle_huffman = 0; // a retirer
     // clock_t debut = clock(); // a retirer
 
 
@@ -62,8 +61,6 @@ int main(int argc, char **argv) {
 
     bool reste_mcu;
     AC_DC ac_dc;
-    Magnitude bloc_enc[64];
-    Symboles_RLE symboles_rle_ac;
     Vecteur vecteur;
     int16_t vecteur_entiers[64];
 
@@ -102,16 +99,8 @@ int main(int argc, char **argv) {
                 // t_zigzag_quantification += (clock() - d); // a retirer
 
                 // d = clock(); // a retirer
-                codage_magnitude(vecteur_entiers, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
-                // t_magnitude += (clock() - d); // a retirer
-
-                // d = clock(); // a retirer
-                rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
-                // t_rle += (clock() - d); // a retirer
-
-                // d = clock(); // a retirer
-                encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
-                // t_huffman += (clock() - d); // a retirer
+                magnitude_rle_huffman(&(dc_prec_y_cb_cr[vecteur.composante]), vecteur_entiers, vecteur.composante, &ac_dc);
+                // t_magnitude_rle_huffman += (clock() - d); // a retirer
 
                 // d = clock(); // a retirer
                 ajouter_donnees_compressees(&ac_dc, &flux);
@@ -136,9 +125,8 @@ int main(int argc, char **argv) {
             applique_dct(vecteur.valeur);
             applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
 
-            codage_magnitude(vecteur_entiers, &dc_prec, bloc_enc);
-            rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
-            huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
+            magnitude_rle_huffman(&dc_prec, vecteur_entiers, Y, &ac_dc);
+
             ajouter_donnees_compressees(&ac_dc, &flux);
         }
 
@@ -158,9 +146,7 @@ int main(int argc, char **argv) {
     // printf("decoupage : %.3fs\n", t_decoupage / CLOCKS_PER_SEC); // a retirer
     // printf("dct : %.3fs\n", t_dct / CLOCKS_PER_SEC); // a retirer
     // printf("zigzag et quantification: %.3fs\n", t_zigzag_quantification / CLOCKS_PER_SEC); // a retirer
-    // printf("magnitude : %.3fs\n", t_magnitude / CLOCKS_PER_SEC); // a retirer
-    // printf("rle : %.3fs\n", t_rle / CLOCKS_PER_SEC); // a retirer
-    // printf("huffman : %.3fs\n", t_huffman / CLOCKS_PER_SEC); // a retirer
+    // printf("magnitude, RLE et Huffman : %.3fs\n", t_magnitude_rle_huffman / CLOCKS_PER_SEC); // a retirer
     // printf("ecriture : %.3fs\n", t_ecriture / CLOCKS_PER_SEC); // a retirer
 
 

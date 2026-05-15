@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "huffman.h"
+#include "magnitude_rle_huffman.h"
 
 #define TAILLE_BUFFER_ECRITURE 10000
 #define LIMITE_ECRITURE 8192

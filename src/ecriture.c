@@ -90,11 +90,11 @@ void fermer_fichier_sortie(Flux_Ecriture *flux) {
 void ajouter_donnees_compressees(const AC_DC *coefficients_ac_dc, Flux_Ecriture *flux) {
 
     ajouter_bits(coefficients_ac_dc->DC.code, coefficients_ac_dc->DC.nb_bits, flux);
-    ajouter_bits(coefficients_ac_dc->DC.indice, coefficients_ac_dc->DC.classe_mag, flux);
+    ajouter_bits(coefficients_ac_dc->DC.magnitude.indice, coefficients_ac_dc->DC.magnitude.classe, flux);
 
     for (uint8_t i = 0; i < coefficients_ac_dc->taille; i++) {
 
         ajouter_bits(coefficients_ac_dc->AC[i].code, coefficients_ac_dc->AC[i].nb_bits, flux);
-        ajouter_bits(coefficients_ac_dc->AC[i].indice, coefficients_ac_dc->AC[i].classe_mag, flux);
+        ajouter_bits(coefficients_ac_dc->AC[i].magnitude.indice, coefficients_ac_dc->AC[i].magnitude.classe, flux);
     }
 }
