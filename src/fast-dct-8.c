@@ -1,3 +1,6 @@
+#include <math.h>
+#include "fast-dct-8.h"
+
 /* 
  * Fast discrete cosine transform algorithms (C)
  * 
@@ -21,8 +24,6 @@
  *   Software.
  */
 
-#include <math.h>
-#include "fast-dct-8.h"
 
 
 static const double S[] = {

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include "magnitude_rle_huffman.h"
 #include "magnitude.h"

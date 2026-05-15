@@ -1,10 +1,12 @@
+#include <stdlib.h>
+#include <stdbool.h>
 #include "unity.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
 #include "qtables.h"
 #include "htables.h"
-#include <stdlib.h>
-#include <stdbool.h>
+
+
 
 void setUp(void) {
     // set stuff up here

@@ -1,10 +1,8 @@
-
-
+#include <math.h>
+#include <string.h>
 #include "downsampler.h"
 #include "rgb_to_ycbcr.h"
 #include "commande.h"
-#include <math.h>
-#include <string.h>
 
 
 

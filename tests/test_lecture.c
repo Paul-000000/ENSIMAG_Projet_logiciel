@@ -1,7 +1,10 @@
-#include "unity.h"
-#include "lecture.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include "unity.h"
+#include "lecture.h"
+
+
+
 void setUp(void) {
     // set stuff up here
 }

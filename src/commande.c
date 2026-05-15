@@ -1,6 +1,3 @@
-
-
-#include "commande.h"
 #include <unistd.h>
 #include <getopt.h>
 #include <stdio.h>
@@ -8,6 +5,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <libgen.h>
+#include "commande.h"
 
 
 

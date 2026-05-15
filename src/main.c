@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     IterateurMCU iterateur;
     bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, parametres.facteurs);
     if (!init) {
-        perror("erreur d'initialisation de l'itérateur de lecture");
+        fprintf(stderr, "erreur d'initialisation de l'itérateur de lecture\n");
         liberer_parametres_commande(&parametres);
         return EXIT_FAILURE;
     }
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     );
 
     if (!entete) {
-        perror("erreur d'initialisation de l'entete dans le fichier de sortie");
+        fprintf(stderr, "erreur d'initialisation de l'entete dans le fichier de sortie\n");
         fermer_fichier_sortie(&flux);
         remove(parametres.chemin_sortie);
         liberer_parametres_commande(&parametres);
@@ -99,7 +99,16 @@ int main(int argc, char **argv) {
                 // t_zigzag_quantification += (clock() - d); // a retirer
 
                 // d = clock(); // a retirer
-                magnitude_rle_huffman(&(dc_prec_y_cb_cr[vecteur.composante]), vecteur_entiers, vecteur.composante, &ac_dc);
+                bool res = magnitude_rle_huffman(&(dc_prec_y_cb_cr[vecteur.composante]), vecteur_entiers, vecteur.composante, &ac_dc);
+                if (!res) {
+                    fprintf(stderr, "Un symbole dans la table d'Huffman est invalide\n");
+                    fermer_fichier_sortie(&flux);
+                    remove(parametres.chemin_sortie);
+                    liberer_iterateur_mcu(&iterateur);
+                    liberer_parametres_commande(&parametres);
+                    return EXIT_FAILURE;
+
+                }
                 // t_magnitude_rle_huffman += (clock() - d); // a retirer
 
                 // d = clock(); // a retirer

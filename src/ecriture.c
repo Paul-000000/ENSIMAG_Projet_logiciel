@@ -1,6 +1,6 @@
+#include <math.h>
 #include "ecriture.h"
 #include "ecriture_entete.h"
-#include <math.h>
 
 
 

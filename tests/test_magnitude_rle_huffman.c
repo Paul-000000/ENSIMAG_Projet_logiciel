@@ -1,9 +1,9 @@
 
-#include "unity.h"
+#include <string.h>
 #include <stdint.h>
+#include "unity.h"
 #include "magnitude_rle_huffman.h"
 #include "qtables.h"
-#include "string.h"
 #include "magnitude.h"
 
 

@@ -32,6 +32,7 @@ uint8_t calculer_cr(Couleur_rgb couleur);
 
 
 
+// tableaux précalculés des multiplications des composantes RGB par des constantes
 static const int16_t tab_Y_R[256] = {
         0,    0,    1,    1,    1,    1,    2,    2,    2,    3,    3,    3,    4,    4,    4,    4,
         5,    5,    5,    6,    6,    6,    7,    7,    7,    7,    8,    8,    8,    9,    9,    9,

@@ -1,5 +1,6 @@
 #ifndef _MAGNITUDE_H_
 #define _MAGNITUDE_H_
+
 #include <stdint.h>
 
 

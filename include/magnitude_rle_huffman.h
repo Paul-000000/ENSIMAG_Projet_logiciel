@@ -41,16 +41,18 @@ typedef struct NoeudHuffman // noeud de l'abre d'Huffman
 
 
 
-// construit un tableau à 256 entrées qui pour chaque entrée valide donne l'encodage Huffman correspondant
-void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const uint8_t *symbols);
-
 // initialise les 4 tableaux contenant la convertion octet à code huffman
 void initialise_huffman();
 
 // encode les AC et le DC avec la magnitude, l'encodage RLE puis celui d'Huffman
 bool magnitude_rle_huffman(int16_t *dc_prec, const int16_t vecteur[64], Composante composante, AC_DC *resultat);
 
-// fonction similaire à magnitude_rle_huffman
+// fonction similaire à magnitude_rle_huffman, déclarée pour les tests
 bool magnitude_rle_huffman_composante(int16_t *dc_prec, const int16_t vecteur[64], const Huffman tab_dc[256], const Huffman tab_ac[256], AC_DC *resultat);
+
+// construit un tableau à 256 entrées qui pour chaque entrée valide donne l'encodage Huffman correspondant, déclarée pour les tests
+void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const uint8_t *symbols);
+
+
 
 #endif /* _MAGNITUDE_RLE_HUFFMAN_H_ */
