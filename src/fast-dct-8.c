@@ -1,3 +1,6 @@
+#include <math.h>
+#include "fast-dct-8.h"
+
 /* 
  * Fast discrete cosine transform algorithms (C)
  * 
@@ -21,8 +24,6 @@
  *   Software.
  */
 
-#include <math.h>
-#include "fast-dct-8.h"
 
 
 static const double S[] = {
@@ -45,7 +46,7 @@ static const double A[] = {
 	0.382683432365089771728460,
 };
 
-
+// version légèrement modifiée de FastDct8_transform qui permet d'appliquer rapidement la DCT sur les colonnes
 void FastDct8_transform_modifiee(double *vector, int pad) {
 	
 	const double v0 = vector[0] + vector[7 * pad];

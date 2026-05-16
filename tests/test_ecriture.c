@@ -1,8 +1,10 @@
+#include <stdlib.h>
+#include <stdbool.h>
 #include "unity.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
-#include <stdlib.h>
-#include <stdbool.h>
+
+
 
 void setUp(void) {
     // set stuff up here
@@ -87,9 +89,9 @@ void test_ecriture_ac_dc(void) {
     TEST_ASSERT_NOT_NULL(flux.fichier_sortie);
 
     AC_DC ac_dc;
-    CodageHuffman dc =    {.indice = 0b10,   .classe_mag = 2,    .code = 0b0110000,   .nb_bits = 7};
-    CodageHuffman ac_1 =  {.indice = 0,       .classe_mag = 0,   .code = 0b001,       .nb_bits = 3};
-    CodageHuffman ac_2 =  {.indice = 0b1011, .classe_mag = 5,    .code = 0b10,        .nb_bits = 9};
+    CodageHuffman dc =    {.magnitude.indice = 0b10,   .magnitude.classe = 2,    .code = 0b0110000,   .nb_bits = 7};
+    CodageHuffman ac_1 =  {.magnitude.indice = 0,      .magnitude.classe = 0,    .code = 0b001,       .nb_bits = 3};
+    CodageHuffman ac_2 =  {.magnitude.indice = 0b1011, .magnitude.classe = 5,    .code = 0b10,        .nb_bits = 9};
     ac_dc.DC = dc;
     ac_dc.AC[0] = ac_1;
     ac_dc.AC[1] = ac_2;

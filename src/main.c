@@ -6,7 +6,6 @@
 #include "rgb_to_ycbcr.h"
 #include "downsampler.h"
 #include "dct.h"
-#include "huffman.h"
 #include "ecriture.h"
 #include "ecriture_entete.h"
 #include "dct.h"
@@ -16,10 +15,6 @@
 
 int main(int argc, char **argv) {
     
-    // double t_dct = 0, t_lecture =0, t_ecriture = 0, t_decoupage = 0, t_zigzag_quantification = 0, t_magnitude = 0, t_rle = 0, t_huffman = 0; // a retirer
-    // clock_t debut = clock(); // a retirer
-
-
     // commande
     Parametres_commande parametres;
 
@@ -38,7 +33,7 @@ int main(int argc, char **argv) {
     IterateurMCU iterateur;
     bool init = initialiser_iterateur_mcu(&iterateur, parametres.chemin_entree, parametres.facteurs);
     if (!init) {
-        perror("erreur d'initialisation de l'itérateur de lecture");
+        fprintf(stderr, "erreur d'initialisation de l'itérateur de lecture\n");
         liberer_parametres_commande(&parametres);
         return EXIT_FAILURE;
     }
@@ -53,7 +48,7 @@ int main(int argc, char **argv) {
     );
 
     if (!entete) {
-        perror("erreur d'initialisation de l'entete dans le fichier de sortie");
+        fprintf(stderr, "erreur d'initialisation de l'entete dans le fichier de sortie\n");
         fermer_fichier_sortie(&flux);
         remove(parametres.chemin_sortie);
         liberer_parametres_commande(&parametres);
@@ -62,8 +57,6 @@ int main(int argc, char **argv) {
 
     bool reste_mcu;
     AC_DC ac_dc;
-    Magnitude bloc_enc[64];
-    Symboles_RLE symboles_rle_ac;
     Vecteur vecteur;
     int16_t vecteur_entiers[64];
 
@@ -78,44 +71,32 @@ int main(int argc, char **argv) {
 
         while (true) {
 
-            // clock_t d = clock(); // a retirer
             reste_mcu = mcu_couleur_suivant(&iterateur, mcu_couleur);
             if (!reste_mcu) {
                 break;
             }
-            // t_lecture += (clock() - d); // a retirer
-
-            // d = clock(); // a retirer
+            
             decouper_matrices_ycbcr(mcu_couleur, iterateur.largeur_mcu, iterateur.hauteur_mcu, dim_cbcr, &vecteurs);
-            // t_decoupage += (clock() - d); // a retirer
 
             for (uint8_t i = 0; i < vecteurs.nb_vecteurs; i++) {
 
                 vecteur = vecteurs.vecteurs[i];
                 
-                // d = clock(); // a retirer
                 applique_dct(vecteur.valeur);
-                // t_dct += (clock() - d); // a retirer
-
-                // d = clock(); // a retirer
                 applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
-                // t_zigzag_quantification += (clock() - d); // a retirer
 
-                // d = clock(); // a retirer
-                codage_magnitude(vecteur_entiers, &(dc_prec_y_cb_cr[vecteur.composante]), bloc_enc);
-                // t_magnitude += (clock() - d); // a retirer
+                bool res = magnitude_rle_huffman(&(dc_prec_y_cb_cr[vecteur.composante]), vecteur_entiers, vecteur.composante, &ac_dc);
+                if (!res) {
+                    fprintf(stderr, "Un symbole dans la table d'Huffman est invalide\n");
+                    fermer_fichier_sortie(&flux);
+                    remove(parametres.chemin_sortie);
+                    liberer_iterateur_mcu(&iterateur);
+                    liberer_parametres_commande(&parametres);
+                    return EXIT_FAILURE;
 
-                // d = clock(); // a retirer
-                rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
-                // t_rle += (clock() - d); // a retirer
+                }
 
-                // d = clock(); // a retirer
-                encoder_coefficients_huffman(bloc_enc, &symboles_rle_ac, vecteur.composante, &ac_dc);
-                // t_huffman += (clock() - d); // a retirer
-
-                // d = clock(); // a retirer
                 ajouter_donnees_compressees(&ac_dc, &flux);
-                // t_ecriture += (clock() - d); // a retirer
             }   
         }
 
@@ -136,9 +117,8 @@ int main(int argc, char **argv) {
             applique_dct(vecteur.valeur);
             applique_zigzag_quantification(vecteur.valeur, vecteur.composante, vecteur_entiers);
 
-            codage_magnitude(vecteur_entiers, &dc_prec, bloc_enc);
-            rle(vecteur_entiers, &symboles_rle_ac, bloc_enc);
-            huffman_y(bloc_enc, &symboles_rle_ac, &ac_dc);
+            magnitude_rle_huffman(&dc_prec, vecteur_entiers, Y, &ac_dc);
+
             ajouter_donnees_compressees(&ac_dc, &flux);
         }
 
@@ -151,18 +131,6 @@ int main(int argc, char **argv) {
 
     // commande
     liberer_parametres_commande(&parametres);
-
-
-    // printf("effectué en : %.3fs\n", (double)(clock() - debut) / CLOCKS_PER_SEC); // a retirer
-    // printf("lecture : %.3fs\n", t_lecture / CLOCKS_PER_SEC); // a retirer
-    // printf("decoupage : %.3fs\n", t_decoupage / CLOCKS_PER_SEC); // a retirer
-    // printf("dct : %.3fs\n", t_dct / CLOCKS_PER_SEC); // a retirer
-    // printf("zigzag et quantification: %.3fs\n", t_zigzag_quantification / CLOCKS_PER_SEC); // a retirer
-    // printf("magnitude : %.3fs\n", t_magnitude / CLOCKS_PER_SEC); // a retirer
-    // printf("rle : %.3fs\n", t_rle / CLOCKS_PER_SEC); // a retirer
-    // printf("huffman : %.3fs\n", t_huffman / CLOCKS_PER_SEC); // a retirer
-    // printf("ecriture : %.3fs\n", t_ecriture / CLOCKS_PER_SEC); // a retirer
-
 
     return EXIT_SUCCESS;
 }

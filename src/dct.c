@@ -36,12 +36,12 @@ et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-a
  
 void applique_dct(double vecteur_bloc[64]) {
 
-    // applique ligne
+    // on applique la dct sur chaque ligne
     for (int i = 0; i < 8; i++) {
         FastDct8_transform_modifiee(&(vecteur_bloc[i * 8]), 1);
     }
 
-    // applique colonne
+    // on applique la dct sur chaque colonne
     for (int j = 0; j < 8; j++) {
         FastDct8_transform_modifiee(&(vecteur_bloc[j]), 8);
     }
