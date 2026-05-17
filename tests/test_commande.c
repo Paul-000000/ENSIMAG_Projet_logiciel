@@ -39,9 +39,13 @@ void test_commande_simple_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_simple(void) {
+void test_commande_simple_me_v(void) {
 
     test_commande_simple_me(true);
+}
+
+void test_commande_simple_me_f(void) {
+
     test_commande_simple_me(false);
 }
 
@@ -65,9 +69,13 @@ void test_commande_outfile_arguments_inverses_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_outfile_arguments_inverses(void) {
+void test_commande_outfile_arguments_inverses_me_v(void) {
 
     test_commande_outfile_arguments_inverses_me(true);
+}
+
+void test_commande_outfile_arguments_inverses_me_f(void) {
+
     test_commande_outfile_arguments_inverses_me(false);
 }
 
@@ -89,9 +97,13 @@ void test_commande_help_entree_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 } 
 
-void test_commande_help_entree(void) {
+void test_commande_help_entree_me_v(void) {
 
     test_commande_help_entree_me(true);
+}
+
+void test_commande_help_entree_me_f(void) {
+
     test_commande_help_entree_me(false);
 }
 
@@ -113,9 +125,13 @@ void test_commande_help_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_help(void) {
+void test_commande_help_me_v(void) {
 
     test_commande_help_me(true);
+}
+
+void test_commande_help_me_f(void) {
+
     test_commande_help_me(false);
 }
 
@@ -133,9 +149,13 @@ void test_commande_vide_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_vide(void) {
+void test_commande_vide_me_v(void) {
 
     test_commande_vide_me(true);
+}
+
+void test_commande_vide_me_f(void) {
+
     test_commande_vide_me(false);
 }
 
@@ -153,9 +173,13 @@ void test_commande_invalide_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_invalide(void) {
+void test_commande_invalide_me_v(void) {
 
     test_commande_invalide_me(true);
+}
+
+void test_commande_invalide_me_f(void) {
+
     test_commande_invalide_me(false);
 }
 
@@ -186,9 +210,13 @@ void test_commande_sample_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sample(void) {
+void test_commande_sample_me_v(void) {
 
     test_commande_sample_me(true);
+}
+
+void test_commande_sample_me_f(void) {
+
     test_commande_sample_me(false);
 }
 
@@ -205,9 +233,13 @@ void test_commande_samples_incorrect_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_incorrect(void) {
+void test_commande_samples_incorrect_me_v(void) {
 
     test_commande_samples_incorrect_me(true);
+}
+
+void test_commande_samples_incorrect_me_f(void) {
+
     test_commande_samples_incorrect_me(false);
 }
 
@@ -224,9 +256,13 @@ void test_commande_samples_null_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_null(void) {
+void test_commande_samples_null_me_v(void) {
 
     test_commande_samples_null_me(true);
+}
+
+void test_commande_samples_null_me_f(void) {
+
     test_commande_samples_null_me(false);
 }
 
@@ -243,9 +279,13 @@ void test_commande_option_invalide_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_option_invalide(void) {
+void test_commande_option_invalide_me_v(void) {
 
     test_commande_option_invalide_me(true);
+}
+
+void test_commande_option_invalide_me_f(void) {
+
     test_commande_option_invalide_me(false);
 }
 
@@ -262,9 +302,13 @@ void test_commande_sortie_dossier_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_dossier(void) {
+void test_commande_sortie_dossier_me_v(void) {
 
     test_commande_sortie_dossier_me(true);
+}
+
+void test_commande_sortie_dossier_me_f(void) {
+
     test_commande_sortie_dossier_me(false);
 }
 
@@ -281,9 +325,13 @@ void test_commande_2_chemins_sortie_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_2_chemins_sortie(void) {
+void test_commande_2_chemins_sortie_me_v(void) {
 
     test_commande_2_chemins_sortie_me(true);
+}
+
+void test_commande_2_chemins_sortie_me_f(void) {
+
     test_commande_2_chemins_sortie_me(false);
 }
 
@@ -300,9 +348,13 @@ void test_commande_sortie_dossier_2_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_dossier_2(void) {
+void test_commande_sortie_dossier_2_me_v(void) {
 
     test_commande_sortie_dossier_2_me(true);
+}
+
+void test_commande_sortie_dossier_2_me_f(void) {
+
     test_commande_sortie_dossier_2_me(false);
 }
 
@@ -319,9 +371,13 @@ void test_commande_sortie_inexistant_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_inexistant(void) {
+void test_commande_sortie_inexistant_me_v(void) {
 
     test_commande_sortie_inexistant_me(true);
+}
+
+void test_commande_sortie_inexistant_me_f(void) {
+
     test_commande_sortie_inexistant_me(false);
 }
 
@@ -338,9 +394,13 @@ void test_commande_samples_limite_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_limite(void) {
+void test_commande_samples_limite_me_v(void) {
 
     test_commande_samples_limite_me(true);
+}
+
+void test_commande_samples_limite_me_f(void) {
+
     test_commande_samples_limite_me(false);
 }
 
@@ -357,9 +417,13 @@ void test_commande_samples_limite_2_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_limite_2(void) {
+void test_commande_samples_limite_2_me_v(void) {
 
     test_commande_samples_limite_2_me(true);
+}
+
+void test_commande_samples_limite_2_me_f(void) {
+
     test_commande_samples_limite_2_me(false);
 }
 
@@ -376,9 +440,13 @@ void test_commande_samples_superieurs_a_10_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_superieurs_a_10(void) {
+void test_commande_samples_superieurs_a_10_me_v(void) {
 
     test_commande_samples_superieurs_a_10_me(true);
+}
+
+void test_commande_samples_superieurs_a_10_me_f(void) {
+
     test_commande_samples_superieurs_a_10_me(false);
 }
 
@@ -395,9 +463,13 @@ void test_commande_samples_indivisibles_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_indivisibles(void) {
+void test_commande_samples_indivisibles_me_v(void) {
 
     test_commande_samples_indivisibles_me(true);
+}
+
+void test_commande_samples_indivisibles_me_f(void) {
+
     test_commande_samples_indivisibles_me(false);
 }
 
@@ -414,9 +486,13 @@ void test_commande_pas_chemin_entree_me(bool messages_erreur) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_pas_chemin_entree(void) {
+void test_commande_pas_chemin_entree_me_v(void) {
 
     test_commande_pas_chemin_entree_me(true);
+}
+
+void test_commande_pas_chemin_entree_me_f(void) {
+
     test_commande_pas_chemin_entree_me(false);
 }
 
@@ -493,31 +569,50 @@ int main(void) {
 
     UNITY_BEGIN();
 
-    RUN_TEST(test_commande_simple);
-    RUN_TEST(test_commande_outfile_arguments_inverses);
-    RUN_TEST(test_commande_help_entree);
-    RUN_TEST(test_commande_help);
-    RUN_TEST(test_commande_vide);
-    RUN_TEST(test_commande_invalide);
-    RUN_TEST(test_commande_sample);
-    RUN_TEST(test_commande_samples_incorrect);
-    RUN_TEST(test_commande_samples_null);
-    RUN_TEST(test_commande_option_invalide);
-    RUN_TEST(test_commande_sortie_dossier);
-    RUN_TEST(test_commande_sortie_dossier_2);
-    RUN_TEST(test_commande_2_chemins_sortie);
-    RUN_TEST(test_commande_sortie_inexistant);
-    RUN_TEST(test_commande_samples_limite);
-    RUN_TEST(test_commande_samples_limite_2);
-    RUN_TEST(test_commande_samples_superieurs_a_10);
-    RUN_TEST(test_commande_samples_indivisibles);
+    RUN_TEST(test_commande_simple_me_v);
+    RUN_TEST(test_commande_simple_me_f);
+    RUN_TEST(test_commande_outfile_arguments_inverses_me_v);
+    RUN_TEST(test_commande_outfile_arguments_inverses_me_f);
+    RUN_TEST(test_commande_help_entree_me_v);
+    RUN_TEST(test_commande_help_entree_me_f);
+    RUN_TEST(test_commande_help_me_v);
+    RUN_TEST(test_commande_help_me_f);
+    RUN_TEST(test_commande_vide_me_v);
+    RUN_TEST(test_commande_vide_me_f);
+    RUN_TEST(test_commande_invalide_me_v);
+    RUN_TEST(test_commande_invalide_me_f);
+    RUN_TEST(test_commande_sample_me_v);
+    RUN_TEST(test_commande_sample_me_f);
+    RUN_TEST(test_commande_samples_incorrect_me_v);
+    RUN_TEST(test_commande_samples_incorrect_me_f);
+    RUN_TEST(test_commande_samples_null_me_v);
+    RUN_TEST(test_commande_samples_null_me_f);
+    RUN_TEST(test_commande_option_invalide_me_v);
+    RUN_TEST(test_commande_option_invalide_me_f);
+    RUN_TEST(test_commande_sortie_dossier_me_v);
+    RUN_TEST(test_commande_sortie_dossier_me_f);
+    RUN_TEST(test_commande_sortie_dossier_2_me_v);
+    RUN_TEST(test_commande_sortie_dossier_2_me_f);
+    RUN_TEST(test_commande_2_chemins_sortie_me_v);
+    RUN_TEST(test_commande_2_chemins_sortie_me_f);
+    RUN_TEST(test_commande_sortie_inexistant_me_v);
+    RUN_TEST(test_commande_sortie_inexistant_me_f);
+    RUN_TEST(test_commande_samples_limite_me_v);
+    RUN_TEST(test_commande_samples_limite_me_f);
+    RUN_TEST(test_commande_samples_limite_2_me_v);
+    RUN_TEST(test_commande_samples_limite_2_me_f);
+    RUN_TEST(test_commande_samples_superieurs_a_10_me_v);
+    RUN_TEST(test_commande_samples_superieurs_a_10_me_f);
+    RUN_TEST(test_commande_samples_indivisibles_me_v);
+    RUN_TEST(test_commande_samples_indivisibles_me_f);
+    RUN_TEST(test_commande_pas_chemin_entree_me_v);
+    RUN_TEST(test_commande_pas_chemin_entree_me_f);
     RUN_TEST(test_dossier_null);
     RUN_TEST(test_fichier_null);
     RUN_TEST(test_dupliquer_chaine);
     RUN_TEST(test_dossier_chemin_existe);
     RUN_TEST(test_chemin_accessible);
     RUN_TEST(test_chemin_par_defaut);
-    RUN_TEST(test_commande_pas_chemin_entree);
 
     return UNITY_END();
 }
