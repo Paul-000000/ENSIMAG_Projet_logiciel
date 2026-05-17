@@ -40,8 +40,20 @@ Dans cette partie, nous présentons un résumé de notre découpage modulaire et
 
 **Schéma récapitulatif :**
 
-![ ](diagrammes/mermaid-diagram-2026-05-16-210320.png)
-![Schéma](diagrammes/mermaid-diagram-2026-05-16-205909.png)
+![ ](diagrammes/pipeline_1.png)
+![Schéma](diagrammes/pipeline_2.png)
+
+# Répartition des tâches et organisation
+
+Concernant notre méthodologie de travail, nous avons commencé par définir un diagramme de Gantt couvrant toute la durée de la campagne. Ce diagramme a été ajusté lors de la deuxième semaine pour coller à la réalité de notre avancement. Nous avons ensuite adopté une approche itérative en répartissant les tâches chaque matin entre les trois membres de l'équipe. 
+
+Le détail des responsabilités s'organise ainsi :
+
+*   **Paul Bottner :** Parsing des arguments de commande, découpage en MCU et sous-échantillonnage, écriture du flux de bits (bitstream), et orchestration générale dans le `main`.
+*   **Abdoul Goudouss Bah :** Calcul de la DCT, quantification, ordonnancement en zigzag, et algorithme d'encodage de Huffman.
+*   **Mohamed Khalil Becharai :** Lecture du fichier `.ppm` en superblocs de MCU, encodage des magnitudes, et écriture de l'en-tête du fichier `.jpg`.
+
+> **Validation :** Chaque membre de l'équipe est responsable de la rédaction et de l'exécution des tests unitaires associés à ses modules pour en garantir la robustesse.
 
 # Notre encodeur JPEG à nous
 
