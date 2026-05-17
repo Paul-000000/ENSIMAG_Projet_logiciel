@@ -1,8 +1,0 @@
-src/ecriture.c:7:6:ouvrir_fichier_sortie	48	static
-src/ecriture.c:22:6:ecrire_donnees	32	static
-src/ecriture.c:30:6:ecrire_octet_buffer	32	static
-src/ecriture.c:46:6:vider_buffer_bits	48	static
-src/ecriture.c:57:6:ajouter_bits	32	static
-src/ecriture.c:67:6:completer_derniers_bits	48	static
-src/ecriture.c:84:6:fermer_fichier_sortie	32	static
-src/ecriture.c:93:6:ajouter_donnees_compressees	48	static

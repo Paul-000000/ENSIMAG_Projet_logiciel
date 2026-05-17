@@ -1,8 +1,0 @@
-src/ecriture_entete.c:9:6:ecrire_SOI	48	static
-src/ecriture_entete.c:28:6:ecrire_EOI	48	static
-src/ecriture_entete.c:47:6:ecrire_appx	80	static
-src/ecriture_entete.c:79:6:ecrire_DQT	64	static
-src/ecriture_entete.c:113:6:ecrire_SOFx	96	static
-src/ecriture_entete.c:158:6:ecrire_DHT	80	static
-src/ecriture_entete.c:192:6:ecrire_SOS	64	static
-src/ecriture_entete.c:232:6:ecrire_entete	64	static
