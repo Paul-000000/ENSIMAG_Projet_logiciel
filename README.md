@@ -8,10 +8,6 @@
 
 ![diagramme](diagrammes/Diagramme_semaine_2.png)
 
-# Structures de données utilisées
-
-![structures](structures%20de%20donnees/structures%20de%20donnees.svg)
-
 # Enchaînement du pipeline (Flux de données)
 
 Dans cette partie, nous présentons un résumé de notre découpage modulaire et l'enchaînement de l'encodage de l'image source jusqu'au résultat final (l'image compressée au format JPEG).
@@ -43,6 +39,11 @@ Dans cette partie, nous présentons un résumé de notre découpage modulaire et
 ![ ](diagrammes/pipeline_1.png)
 ![Schéma](diagrammes/pipeline_2.png)
 
+# Structures de données utilisées
+
+![structures](structures%20de%20donnees/structures%20de%20donnees.svg)
+
+
 # Répartition des tâches et organisation
 
 Concernant notre méthodologie de travail, nous avons commencé par définir un diagramme de Gantt couvrant toute la durée de la campagne. Ce diagramme a été ajusté lors de la deuxième semaine pour coller à la réalité de notre avancement. Nous avons ensuite adopté une approche itérative en répartissant les tâches chaque matin entre les trois membres de l'équipe. 
@@ -54,6 +55,39 @@ Le détail des responsabilités s'organise ainsi :
 *   **Mohamed Khalil Becharai :** Lecture du fichier `.ppm` en superblocs de MCU, encodage des magnitudes, et écriture de l'en-tête du fichier `.jpg`.
 
 > **Validation :** Chaque membre de l'équipe est responsable de la rédaction et de l'exécution des tests unitaires associés à ses modules pour en garantir la robustesse.
+
+# Optimisations et évaluation des performances
+
+Afin d'évaluer objectivement les performances de notre encodeur, nous avons utilisé deux approches, en effectuant nos tests principalement sur l'image `biiiig.ppm` pour mettre en évidence les gains de temps.
+
+*   **Mesures internes :** Calcul du temps d'exécution de chaque grande étape dans le `main` à l'aide des fonctions de la bibliothèque `<time.h>`.
+*   **Outils externes :** Utilisation de la commande `time` pour le temps global, et de `gprof` pour générer un rapport détaillé du temps passé dans chaque fonction.
+
+Voici le détail des optimisations techniques appliquées à chaque étape de l'encodage :
+
+**Calcul de la DCT :**
+Nous sommes passés d'une implémentation initiale naïve en $O(N^3)$ à une version optimisée en $O(N^2)$.
+*   **Séparabilité & Algorithme rapide :** Nous utilisons l'algorithme de DCT rapide 1D de *Arai, Agui et Nakajima (1988)*. Au lieu d'un calcul 2D lourd, on applique cet algorithme ultra-rapide sur les lignes, puis sur les colonnes.
+*   **Notre optimisation (le `pad`) :** Nous avons modifié l'algorithme pour intégrer un pas de lecture en mémoire (`pad`). Cela permet d'appliquer la DCT sur les colonnes en sautant de 8 cases en 8 cases, ce qui nous évite totalement de devoir transposer la matrice en mémoire.
+
+**Lecture du fichier :**
+Afin d'éviter de charger l'image complète en mémoire (ce qui est critique pour les fichiers volumineux), nous avons mis en place une lecture par lots. L'image est lue par morceaux fixes de 64 MCU, optimisant ainsi l'empreinte mémoire (RAM).
+
+**Conversion RGB vers YCbCr :**
+*   **Tableaux statiques :** Pour éviter de recalculer les formules à chaque pixel, nous avons créé des tableaux statiques précalculés.
+*   **Opérations bit-à-bit :** Nous avons remplacé les multiplications/divisions par 2 par des opérations de décalage de bits (`>>` et `<<`), beaucoup plus rapides pour le processeur.
+
+**Encodage (Magnitude, RLE, Huffman) :**
+*   **Réduction des branches :** Pour le calcul des magnitudes et des indices, nous avons éliminé quelques conditions (`if`) en utilisant des masques de bits sur les signes, évitant ainsi les pénalités de prédiction de branchement. Les multiplications par une puissance de 2 ont là aussi été remplacées par des décalages.
+*   **Accès en $O(1)$ pour Huffman :** Les arbres de Huffman originaux ont été transformés en tableaux. Cela permet de remplacer le parcours de l'arbre en $O(\log n)$ par un simple accès mémoire direct en $O(1)$.
+*   **Fusion du pipeline :** Nous avons fusionné les trois étapes (Magnitude, RLE, Huffman) en une seule grande fonction. Cela évite l'allocation de tableaux intermédiaires et supprime le coût d'appel des fonctions à chaque bloc.
+
+**Échantillonnage et découpage en blocs :**
+*   **Extraction des invariants :** Factorisation des boucles en sortant les calculs répétitifs à l'extérieur. 
+*   **Nettoyage des boucles internes :** Les conditions (`if`) ont été sorties des boucles les plus profondes.
+
+**Écriture du fichier de sortie :**
+*   *(À rajouter après)*
 
 # Notre encodeur JPEG à nous
 
