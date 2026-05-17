@@ -53,6 +53,11 @@ bool magnitude_rle_huffman_composante(int16_t *dc_prec, const int16_t vecteur[64
 // construit un tableau à 256 entrées qui pour chaque entrée valide donne l'encodage Huffman correspondant, déclarée pour les tests
 void construction_arbre_huffman(Huffman tab[256], const uint8_t *lengths, const uint8_t *symbols);
 
+// fonctions déclarées pour les tests
+bool magnitude_rle_huffman_y(int16_t *dc_prec, const int16_t vecteur[64], AC_DC *resultat);
+
+bool magnitude_rle_huffman_cbcr(int16_t *dc_prec, const int16_t vecteur[64], AC_DC *resultat);
+
 
 
 #endif /* _MAGNITUDE_RLE_HUFFMAN_H_ */
