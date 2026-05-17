@@ -34,7 +34,7 @@ et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-a
 
 
  
-void applique_dct(double vecteur_bloc[64]) {
+void applique_dct(float vecteur_bloc[64]) {
 
     // on applique la dct sur chaque ligne
     for (int i = 0; i < 8; i++) {

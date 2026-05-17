@@ -102,7 +102,7 @@ realclean: clean ##! Nettoie à fond : idéal avant un commit
 
 
 compile: clean
-	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm
+	gcc -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm -fstack-usage
 
 compile_2: clean
 	gcc -O2 -Wall -Wextra -std=c99 -Iinclude -Itests/unity -MMD -MP $(SRC_FILES) -o $(TARGET) -lm

@@ -22,7 +22,7 @@ static const uint8_t indices_zigzag[64] = {
 
 
 // réordonne le vecteur sous forme de zigzag et divise ce vecteur par certains coefficients selon sa composante
-void applique_zigzag_quantification(const double vecteur_frequentiel[64], Composante composante, int16_t vecteur_sortie[64]);
+void applique_zigzag_quantification(const float vecteur_frequentiel[64], Composante composante, int16_t vecteur_sortie[64]);
 
 
 

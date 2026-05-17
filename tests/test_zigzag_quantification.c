@@ -36,14 +36,14 @@ void test_quantification ( void ){
 
     };
 
-    double vecteur_double_test[64];
+    float vecteur_float_test[64];
 
     for (uint8_t i = 0; i < 64; i++) {
-        vecteur_double_test[i] = (double)vecteur_test[i];
+        vecteur_float_test[i] = (float)vecteur_test[i];
     }
 
     int16_t vecteur_resultat[64];
-    applique_zigzag_quantification(vecteur_double_test, Y, vecteur_resultat);
+    applique_zigzag_quantification(vecteur_float_test, Y, vecteur_resultat);
 
     TEST_ASSERT_INT16_ARRAY_WITHIN(1, vecteur_attendu, vecteur_resultat, 64);
 }

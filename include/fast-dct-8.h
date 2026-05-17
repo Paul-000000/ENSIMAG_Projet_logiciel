@@ -36,7 +36,7 @@ extern "C" {
 
 
 // algorithme de DCT rapide type II en 1D de 8 éléments
-void FastDct8_transform_modifiee(double *vector, int pad);
+void FastDct8_transform_modifiee(float *vector, int pad);
 
 // non utilisée
 // void FastDct8_transform(double vector[static 8]);

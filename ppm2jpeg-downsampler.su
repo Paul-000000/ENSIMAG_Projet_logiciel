@@ -1,0 +1,4 @@
+src/downsampler.c:9:17:determiner_dimensions_cb_cr	16	static
+src/downsampler.c:24:8:moyenne_micro_matrice	64	static
+src/downsampler.c:52:6:decouper_matrices_ycbcr	96	static
+src/downsampler.c:126:6:decouper_matrice_gris	16	static

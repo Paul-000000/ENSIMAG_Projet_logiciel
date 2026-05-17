@@ -4,7 +4,7 @@
 
 
 
-void applique_zigzag_quantification(const double vecteur_frequentiel[64], Composante composante, int16_t vecteur_sortie[64])
+void applique_zigzag_quantification(const float vecteur_frequentiel[64], Composante composante, int16_t vecteur_sortie[64])
 {
     const uint8_t *table_quantification = (composante == Y) ? quantification_table_Y : quantification_table_CbCr;
 

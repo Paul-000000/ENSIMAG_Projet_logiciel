@@ -47,42 +47,42 @@ static const double A[] = {
 };
 
 // version légèrement modifiée de FastDct8_transform qui permet d'appliquer rapidement la DCT sur les colonnes
-void FastDct8_transform_modifiee(double *vector, int pad) {
+void FastDct8_transform_modifiee(float *vector, int pad) {
 	
-	const double v0 = vector[0] + vector[7 * pad];
-	const double v1 = vector[pad] + vector[6 * pad];
-	const double v2 = vector[2 * pad] + vector[5 * pad];
-	const double v3 = vector[3 * pad] + vector[4 * pad];
-	const double v4 = vector[3 * pad] - vector[4 * pad];
-	const double v5 = vector[2 * pad] - vector[5 * pad];
-	const double v6 = vector[pad] - vector[6 * pad];
-	const double v7 = vector[0] - vector[7 * pad];
+	const float v0 = vector[0] + vector[7 * pad];
+	const float v1 = vector[pad] + vector[6 * pad];
+	const float v2 = vector[2 * pad] + vector[5 * pad];
+	const float v3 = vector[3 * pad] + vector[4 * pad];
+	const float v4 = vector[3 * pad] - vector[4 * pad];
+	const float v5 = vector[2 * pad] - vector[5 * pad];
+	const float v6 = vector[pad] - vector[6 * pad];
+	const float v7 = vector[0] - vector[7 * pad];
 	
-	const double v8 = v0 + v3;
-	const double v9 = v1 + v2;
-	const double v10 = v1 - v2;
-	const double v11 = v0 - v3;
-	const double v12 = -v4 - v5;
-	const double v13 = (v5 + v6) * A[3];
-	const double v14 = v6 + v7;
+	const float v8 = v0 + v3;
+	const float v9 = v1 + v2;
+	const float v10 = v1 - v2;
+	const float v11 = v0 - v3;
+	const float v12 = -v4 - v5;
+	const float v13 = (v5 + v6) * A[3];
+	const float v14 = v6 + v7;
 	
-	const double v15 = v8 + v9;
-	const double v16 = v8 - v9;
-	const double v17 = (v10 + v11) * A[1];
-	const double v18 = (v12 + v14) * A[5];
+	const float v15 = v8 + v9;
+	const float v16 = v8 - v9;
+	const float v17 = (v10 + v11) * A[1];
+	const float v18 = (v12 + v14) * A[5];
 	
-	const double v19 = -v12 * A[2] - v18;
-	const double v20 = v14 * A[4] - v18;
+	const float v19 = -v12 * A[2] - v18;
+	const float v20 = v14 * A[4] - v18;
 	
-	const double v21 = v17 + v11;
-	const double v22 = v11 - v17;
-	const double v23 = v13 + v7;
-	const double v24 = v7 - v13;
+	const float v21 = v17 + v11;
+	const float v22 = v11 - v17;
+	const float v23 = v13 + v7;
+	const float v24 = v7 - v13;
 	
-	const double v25 = v19 + v24;
-	const double v26 = v23 + v20;
-	const double v27 = v23 - v20;
-	const double v28 = v24 - v19;
+	const float v25 = v19 + v24;
+	const float v26 = v23 + v20;
+	const float v27 = v23 - v20;
+	const float v28 = v24 - v19;
 	
 	vector[0] = S[0] * v15;
 	vector[pad] = S[1] * v26;

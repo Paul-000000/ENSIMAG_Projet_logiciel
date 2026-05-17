@@ -1,0 +1,3 @@
+src/rgb_to_ycbcr.c:5:9:calculer_y	16	static
+src/rgb_to_ycbcr.c:10:9:calculer_cb	16	static
+src/rgb_to_ycbcr.c:15:9:calculer_cr	16	static

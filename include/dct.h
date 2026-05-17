@@ -12,7 +12,7 @@ DCT optimisée qui transforme la matrice bloc_spatial en matrice sous forme fré
 créé par Arai, Agui, Nakajima en 1988. https://web.stanford.edu/class/ee398a/handouts/lectures/07-TransformCoding.pdf#page=30
 et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
 */
-void applique_dct(double vecteur_bloc[64]);
+void applique_dct(float vecteur_bloc[64]);
 
 
 

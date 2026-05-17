@@ -21,7 +21,7 @@ Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 	return dimensions;
 }
 
-double moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
+float moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
 
 	uint32_t somme = 0;
 	uint16_t i_hauteur = i * hauteur;
@@ -45,7 +45,7 @@ double moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_
 		}
 	}
 
-	return (double)somme / (largeur * hauteur);
+	return (float)somme / (largeur * hauteur);
 
 }
 
