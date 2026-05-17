@@ -27,7 +27,7 @@ Dans cette partie, nous présentons un résumé de notre découpage modulaire et
 -   **5) Quantification et ordonnancement Zigzag (module `zigzag_quantification`) :**
     -   *Entrée :* Un bloc fréquentiel 8x8 d'une composante donnée.
     -   *Sortie :* Un vecteur de taille 64 quantifié et réordonné sous forme de zigzag.
--   **6) Encodage des valeurs (modules `magnitude`, `rle` et `huffman`) :**
+-   **6) Encodage des valeurs (modules `magnitude`, `magnitude_rle_huffman`) :**
     -   *Entrée :* Un vecteur de taille 64 quantifié et ordonné en zigzag.
     -   *Sortie :* Le bloc entièrement encodé (bitstream).
 -   **7) Écriture dans le fichier de sortie (modules `ecriture_entete` et `ecriture`) :**
@@ -41,7 +41,7 @@ Dans cette partie, nous présentons un résumé de notre découpage modulaire et
 
 # Structures de données utilisées
 
-![structures](structures%20de%20donnees/structures%20de%20donnees.svg)
+![structures](structures%20de%20donnees/structures.svg)
 
 
 # Répartition des tâches et organisation
@@ -66,7 +66,7 @@ Afin d'évaluer objectivement les performances de notre encodeur, nous avons uti
 Voici le détail des optimisations techniques appliquées à chaque étape de l'encodage :
 
 **Calcul de la DCT :**
-Nous sommes passés d'une implémentation initiale naïve en $O(N^3)$ à une version optimisée en $O(N^2)$.
+Nous sommes passés d'une implémentation initiale naïve en $O(N^4)$ à une version optimisée en $O(N^2)$.
 *   **Séparabilité & Algorithme rapide :** Nous utilisons l'algorithme de DCT rapide 1D de *Arai, Agui et Nakajima (1988)*. Au lieu d'un calcul 2D lourd, on applique cet algorithme ultra-rapide sur les lignes, puis sur les colonnes.
 *   **Notre optimisation (le `pad`) :** Nous avons modifié l'algorithme pour intégrer un pas de lecture en mémoire (`pad`). Cela permet d'appliquer la DCT sur les colonnes en sautant de 8 cases en 8 cases, ce qui nous évite totalement de devoir transposer la matrice en mémoire.
 
