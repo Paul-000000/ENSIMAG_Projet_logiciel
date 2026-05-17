@@ -12,14 +12,14 @@ void tearDown(void) {
     // clean stuff up here
 }
 
-void test_commande_simple(void) {
+void test_commande_simple_me(bool messages_erreur) {
 
     int argc = 2;
     char *argv[] = {"./ppm2jpeg","images/etu/invader.pgm"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("images/etu/invader.pgm", parametres.chemin_entree);
@@ -39,14 +39,20 @@ void test_commande_simple(void) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_outfile_arguments_inverses(void) {
+void test_commande_simple(void) {
+
+    test_commande_simple_me(true);
+    test_commande_simple_me(false);
+}
+
+void test_commande_outfile_arguments_inverses_me(bool messages_erreur) {
 
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--outfile=images/etu/truc.jpg","./images/etu/gris.pgm"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("./images/etu/gris.pgm", parametres.chemin_entree);
@@ -59,14 +65,20 @@ void test_commande_outfile_arguments_inverses(void) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_help_infile(void) {
+void test_commande_outfile_arguments_inverses(void) {
+
+    test_commande_outfile_arguments_inverses_me(true);
+    test_commande_outfile_arguments_inverses_me(false);
+}
+
+void test_commande_help_entree_me(bool messages_erreur) {
 
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--help","test_lignes.pgm"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -77,14 +89,20 @@ void test_commande_help_infile(void) {
     liberer_parametres_commande(&parametres);
 } 
 
-void test_commande_help(void) {
+void test_commande_help_entree(void) {
+
+    test_commande_help_entree_me(true);
+    test_commande_help_entree_me(false);
+}
+
+void test_commande_help_me(bool messages_erreur) {
 
     int argc = 2;
     char *argv[] = {"./ppm2jpeg","--help"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL(true,parametres.help);
@@ -95,14 +113,40 @@ void test_commande_help(void) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_vide(void) {
+void test_commande_help(void) {
+
+    test_commande_help_me(true);
+    test_commande_help_me(false);
+}
+
+void test_commande_vide_me(bool messages_erreur) {
 
     int argc = 1;
     char *argv[] = {"./ppm2jpeg"};
 
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
+
+    TEST_ASSERT_EQUAL(false,res);
+
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_vide(void) {
+
+    test_commande_vide_me(true);
+    test_commande_vide_me(false);
+}
+
+void test_commande_invalide_me(bool messages_erreur) {
+
+    int argc = 2;
+    char *argv[] = {"./ppm2jpeg", "--truc"};
+
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
 
@@ -111,26 +155,18 @@ void test_commande_vide(void) {
 
 void test_commande_invalide(void) {
 
-    int argc = 2;
-    char *argv[] = {"./ppm2jpeg", "--truc"};
-
-    Parametres_commande parametres;
-
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
-
-    TEST_ASSERT_EQUAL(false,res);
-
-    liberer_parametres_commande(&parametres);
+    test_commande_invalide_me(true);
+    test_commande_invalide_me(false);
 }
 
-void test_commande_sample(void) {
+void test_commande_sample_me(bool messages_erreur) {
 
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1x2","images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(true,res);
     TEST_ASSERT_EQUAL_STRING("images/etu/invader.pgm", parametres.chemin_entree);
@@ -150,147 +186,238 @@ void test_commande_sample(void) {
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_incorrect(void) {
+void test_commande_sample(void) {
+
+    test_commande_sample_me(true);
+    test_commande_sample_me(false);
+}
+
+void test_commande_samples_incorrect_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,1xb","images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_null(void) {
+void test_commande_samples_incorrect(void) {
+
+    test_commande_samples_incorrect_me(true);
+    test_commande_samples_incorrect_me(false);
+}
+
+void test_commande_samples_null_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=0", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_option_invalide(void) {
+void test_commande_samples_null(void) {
+
+    test_commande_samples_null_me(true);
+    test_commande_samples_null_me(false);
+}
+
+void test_commande_option_invalide_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--truc=abc", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_dossier(void) {
+void test_commande_option_invalide(void) {
+
+    test_commande_option_invalide_me(true);
+    test_commande_option_invalide_me(false);
+}
+
+void test_commande_sortie_dossier_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--outfile=images", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_2_chemins_sortie(void) {
+void test_commande_sortie_dossier(void) {
+
+    test_commande_sortie_dossier_me(true);
+    test_commande_sortie_dossier_me(false);
+}
+
+void test_commande_2_chemins_sortie_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--outfile=images", "--outfile=images", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_dossier_2(void) {
+void test_commande_2_chemins_sortie(void) {
+
+    test_commande_2_chemins_sortie_me(true);
+    test_commande_2_chemins_sortie_me(false);
+}
+
+void test_commande_sortie_dossier_2_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--outfile=images/etu", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_sortie_inexistant(void) {
+void test_commande_sortie_dossier_2(void) {
+
+    test_commande_sortie_dossier_2_me(true);
+    test_commande_sortie_dossier_2_me(false);
+}
+
+void test_commande_sortie_inexistant_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--outfile=truc/truc.ppm", "images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_limite(void) {
+void test_commande_sortie_inexistant(void) {
+
+    test_commande_sortie_inexistant_me(true);
+    test_commande_sortie_inexistant_me(false);
+}
+
+void test_commande_samples_limite_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=2x5,2x1,1x1","images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_limite_2(void) {
+void test_commande_samples_limite(void) {
+
+    test_commande_samples_limite_me(true);
+    test_commande_samples_limite_me(false);
+}
+
+void test_commande_samples_limite_2_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=2x2,2x1,0x1","images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
-void test_commande_samples_superieurs_a_10(void) {
+void test_commande_samples_limite_2(void) {
+
+    test_commande_samples_limite_2_me(true);
+    test_commande_samples_limite_2_me(false);
+}
+
+void test_commande_samples_superieurs_a_10_me(bool messages_erreur) {
     
     int argc = 3;
     char *argv[] = {"./ppm2jpeg","--sample=2x4,2x2,2x2","images/etu/invader.pgm"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
+
+    TEST_ASSERT_EQUAL(false,res);
+    liberer_parametres_commande(&parametres);
+}
+
+void test_commande_samples_superieurs_a_10(void) {
+
+    test_commande_samples_superieurs_a_10_me(true);
+    test_commande_samples_superieurs_a_10_me(false);
+}
+
+void test_commande_samples_indivisibles_me(bool messages_erreur) {
+    
+    int argc = 3;
+    char *argv[] = {"./ppm2jpeg","--sample=1x3,1x2,1x1","images/etu/invader.pgm"};
+    
+    Parametres_commande parametres;
+
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
 }
 
 void test_commande_samples_indivisibles(void) {
+
+    test_commande_samples_indivisibles_me(true);
+    test_commande_samples_indivisibles_me(false);
+}
+
+void test_commande_pas_chemin_entree_me(bool messages_erreur) {
     
-    int argc = 3;
-    char *argv[] = {"./ppm2jpeg","--sample=2x3,2x2,2x1","images/etu/invader.pgm"};
+    int argc = 2;
+    char *argv[] = {"./ppm2jpeg","--sample=1x1,1x1,1x1"};
     
     Parametres_commande parametres;
 
-    bool res = initialiser_parametres_commande(argc, argv, &parametres, true);
+    bool res = initialiser_parametres_commande(argc, argv, &parametres, messages_erreur);
 
     TEST_ASSERT_EQUAL(false,res);
     liberer_parametres_commande(&parametres);
+}
+
+void test_commande_pas_chemin_entree(void) {
+
+    test_commande_pas_chemin_entree_me(true);
+    test_commande_pas_chemin_entree_me(false);
 }
 
 void test_dossier_null(void) {
@@ -368,7 +495,7 @@ int main(void) {
 
     RUN_TEST(test_commande_simple);
     RUN_TEST(test_commande_outfile_arguments_inverses);
-    RUN_TEST(test_commande_help_infile);
+    RUN_TEST(test_commande_help_entree);
     RUN_TEST(test_commande_help);
     RUN_TEST(test_commande_vide);
     RUN_TEST(test_commande_invalide);
@@ -390,6 +517,7 @@ int main(void) {
     RUN_TEST(test_dossier_chemin_existe);
     RUN_TEST(test_chemin_accessible);
     RUN_TEST(test_chemin_par_defaut);
+    RUN_TEST(test_commande_pas_chemin_entree);
 
     return UNITY_END();
 }
