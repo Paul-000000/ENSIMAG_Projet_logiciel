@@ -61,7 +61,7 @@ Dans cette partie, nous présentons un résumé de notre découpage modulaire et
 
 # Répartition des tâches et organisation
 
-Concernant notre méthodologie de travail, nous avons commencé par définir un diagramme de Gantt couvrant toute la durée de la campagne. Ce diagramme a été ajusté lors de la deuxième semaine pour coller à la réalité de notre avancement. Nous avons ensuite adopté une approche itérative en répartissant les tâches chaque matin entre les trois membres de l'équipe. 
+Concernant notre méthodologie de travail, nous avons commencé par définir un diagramme de Gantt couvrant toute la durée du projet. Ce diagramme a été ajusté lors de la deuxième semaine pour coller à la réalité de notre avancement. Nous avons ensuite adopté une approche itérative en répartissant les tâches chaque matin entre les trois membres de l'équipe. 
 
 Le détail des responsabilités s'organise ainsi :
 
@@ -86,7 +86,7 @@ Nous sommes passés d'une implémentation initiale naïve en $O(N^4)$ à une ver
 *   **Notre optimisation (le `pad`) :** Nous avons modifié l'algorithme pour intégrer un pas de lecture en mémoire (`pad`). Cela permet d'appliquer la DCT sur les colonnes en sautant de 8 cases en 8 cases, ce qui nous évite totalement de devoir transposer la matrice en mémoire.
 
 **Lecture du fichier :**
-Afin d'éviter de charger l'image complète en mémoire (ce qui est critique pour les fichiers volumineux), nous avons mis en place une lecture par lots. L'image est lue par morceaux fixes de 64 MCU, optimisant ainsi l'empreinte mémoire (RAM).
+Afin d'éviter de charger l'image complète en mémoire (ce qui est critique pour les fichiers volumineux), nous avons mis en place une lecture par lots. L'image est lue par morceaux fixes de 64 MCU, optimisant ainsi le nombre de lectures mémoire.
 
 **Conversion RGB vers YCbCr :**
 *   **Tableaux statiques :** Pour éviter de recalculer les formules à chaque pixel, nous avons créé des tableaux statiques précalculés.
@@ -97,9 +97,13 @@ Afin d'éviter de charger l'image complète en mémoire (ce qui est critique pou
 *   **Accès en $O(1)$ pour Huffman :** Les arbres de Huffman originaux ont été transformés en tableaux. Cela permet de remplacer le parcours de l'arbre en $O(\log n)$ par un simple accès mémoire direct en $O(1)$.
 *   **Fusion du pipeline :** Nous avons fusionné les trois étapes (Magnitude, RLE, Huffman) en une seule grande fonction. Cela évite l'allocation de tableaux intermédiaires et supprime le coût d'appel des fonctions à chaque bloc.
 
+**Ordonancement en Zigzag et Quantification :**
+Nous avons également effectué ces deux étapes en simultané pour éviter de parcourir le bloc plusieurs fois.
+
 **Échantillonnage et découpage en blocs :**
 *   **Extraction des invariants :** Factorisation des boucles en sortant les calculs répétitifs à l'extérieur. 
 *   **Nettoyage des boucles internes :** Les conditions (`if`) ont été sorties des boucles les plus profondes.
+*   **Initialisation :** Utilisation de vecteurs de flottants dès le découpage et application du décalage de niveau (-128) directement lors de l'extraction pour préparer les données pour la DCT sans ajouter de boucle de parcours supplémentaire.
 
 **Écriture du fichier de sortie :**
 *   *(À rajouter après)*
