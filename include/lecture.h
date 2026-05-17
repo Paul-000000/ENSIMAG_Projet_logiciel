@@ -40,22 +40,6 @@ typedef struct IterateurMCU { // itérateur sur la MCU en cours
 
 
 
-// crée une structure image en lisant les informations de l'entête du fichier
-Image* recupEntete(FILE *fichier);
-
-// ouvre le fichier et récupère l'entête a partir de son nom
-Image *lectureImage(const char *nom_fichier);
-
-// alloue un superbloc pour commencer à lire les données
-Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
-
-// lis un superbloc en fonction des coordonnées de l'image fournies
-Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
-    
-// libère l'image et le superbloc alloué
-void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
-
-
 // permet d'obtenir les dimensions du MCU en pixels à partir des facteurs
 void determiner_facteurs_mcu(Facteurs_echantillonnage facteurs, uint8_t *largeur_mcu, uint8_t *hauteur_mcu); 
 
@@ -73,6 +57,21 @@ void liberer_iterateur_mcu(IterateurMCU *iterateur);
 
 // détermine si l'image actuelle est en couleur ou en niveaux de gris
 bool image_couleur(const IterateurMCU *iterateur);
+
+// crée une structure image en lisant les informations de l'entête du fichier
+Image* recupEntete(FILE *fichier);
+
+// ouvre le fichier et récupère l'entête a partir de son nom
+Image *lectureImage(const char *nom_fichier);
+
+// alloue un superbloc pour commencer à lire les données
+Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
+
+// lis un superbloc en fonction des coordonnées de l'image fournies
+Image *lireEblocs(Image *image_ppm, uint32_t x, uint32_t y,uint32_t largeur_bloc_en_pixels, uint32_t nb_lignes_superbloc,uint32_t nb_blocs);
+    
+// libère l'image et le superbloc alloué
+void liberer_image(Image *image,uint32_t nb_lignes_superbloc);
 
 
 

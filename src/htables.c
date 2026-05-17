@@ -1,6 +1,7 @@
 #include <stdint.h>
-
 #include "htables.h"
+
+
 
 /* Table des symboles DC, Y */
 static const uint8_t htables_symbols_DC_Y[] = {

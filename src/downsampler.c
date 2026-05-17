@@ -1,9 +1,8 @@
-
-
+#include <math.h>
+#include <string.h>
 #include "downsampler.h"
 #include "rgb_to_ycbcr.h"
 #include "commande.h"
-#include <math.h>
 
 
 
@@ -22,7 +21,7 @@ Dimensions_cbcr determiner_dimensions_cb_cr(Facteurs_echantillonnage facteurs) {
 	return dimensions;
 }
 
-uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
+float moyenne_micro_matrice(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t hauteur, uint8_t largeur, uint8_t i, uint8_t j, bool cb) {
 
 	uint32_t somme = 0;
 	uint16_t i_hauteur = i * hauteur;
@@ -33,7 +32,7 @@ uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uin
 		for (uint8_t y = 0; y < hauteur; y++) {
 			for (uint8_t x = 0; x < largeur; x++) {
 
-				somme += matrice[i_hauteur + y][j_largeur + x].cb;
+				somme += calculer_cb(matrice[i_hauteur + y][j_largeur + x]) ;
 			}
 		}
 
@@ -41,41 +40,41 @@ uint8_t moyenne_micro_matrice(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uin
 
 		for (uint8_t y = 0; y < hauteur; y++) {
 			for (uint8_t x = 0; x < largeur; x++) {
-
-				somme += matrice[i_hauteur + y][j_largeur + x].cr;
+				somme += calculer_cr(matrice[i_hauteur + y][j_largeur + x]);
 			}
 		}
 	}
 
-	return (uint8_t)round((double)somme / (largeur * hauteur));
+	return (float)somme / (largeur * hauteur);
 
 }
 
-void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
+void decouper_matrices_ycbcr(const Couleur_rgb matrice[MCU_MAX][MCU_MAX], uint8_t largeur_mcu, uint8_t hauteur_mcu, Dimensions_cbcr dimensions_sortie, Vecteurs_ycbcr *vecteurs_sortie) {
 
 	uint8_t nb_vecteurs = 0;
 
-	// y
+	// calcul des vecteurs de la composante Y
 	uint8_t nb_blocs_hauteur_y = hauteur_mcu / 8;
 	uint8_t nb_blocs_largeur_y = largeur_mcu / 8;
 
 	for (uint8_t i = 0; i < nb_blocs_hauteur_y; i++) {
 		for (uint8_t j = 0; j < nb_blocs_largeur_y; j++) {
 
-			Vecteur vec = {.composante = Y};
-			
+			Vecteur *vec = &(vecteurs_sortie->vecteurs[nb_vecteurs]);
+			vec->composante = Y;
+
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
-					vec.valeur[x * 8 + y] = matrice[8 * i + x][8 * j + y].y;
+					
+					vec->valeur[x * 8 + y] = calculer_y(matrice[8 * i + x][8 * j + y]) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
-			vecteurs_sortie->vecteurs[nb_vecteurs] = vec;
 			nb_vecteurs++;
  		}
 	}
 
-	// cb
+	// calcul des vecteurs de la composante CB
 	uint8_t largeur_micro_matrices_cb = largeur_mcu / dimensions_sortie.largeur_mcu_cb;
 	uint8_t hauteur_micro_matrices_cb = hauteur_mcu / dimensions_sortie.hauteur_mcu_cb;
 	uint8_t nb_blocs_largeur_cb = dimensions_sortie.largeur_mcu_cb / 8;
@@ -84,21 +83,21 @@ void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], ui
 	for (uint8_t i = 0; i < nb_blocs_hauteur_cb; i++) {
 		for (uint8_t j = 0; j < nb_blocs_largeur_cb; j++) {
 
-			Vecteur vec = {.composante = CB};
+			Vecteur *vec = &(vecteurs_sortie->vecteurs[nb_vecteurs]);
+			vec->composante = CB;
 
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
 
-					vec.valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i*8+x, j*8+y, true);
+					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cb, largeur_micro_matrices_cb, i*8+x, j*8+y, true) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
-			vecteurs_sortie->vecteurs[nb_vecteurs] = vec;
 			nb_vecteurs++;
 		}
 	}
 
-	// cr
+	// calcul des vecteurs de la composante CR
 	uint8_t largeur_micro_matrices_cr = largeur_mcu / dimensions_sortie.largeur_mcu_cr;
 	uint8_t hauteur_micro_matrices_cr = hauteur_mcu / dimensions_sortie.hauteur_mcu_cr;
 	uint8_t nb_blocs_largeur_cr = dimensions_sortie.largeur_mcu_cr / 8;
@@ -107,16 +106,16 @@ void decouper_matrices_couleur(const Couleur_ycbcr matrice[MCU_MAX][MCU_MAX], ui
 	for (uint8_t i = 0; i < nb_blocs_hauteur_cr; i++) {
 		for (uint8_t j = 0; j < nb_blocs_largeur_cr; j++) {
 
-			Vecteur vec = {.composante = CR};
+			Vecteur *vec = &(vecteurs_sortie->vecteurs[nb_vecteurs]);
+			vec->composante = CR;
 
 			for (uint8_t x = 0; x < 8; x++) {
 				for (uint8_t y = 0; y < 8; y++) {
 
-					vec.valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i*8+x, j*8+y, false);
+					vec->valeur[x * 8 + y] = moyenne_micro_matrice(matrice, hauteur_micro_matrices_cr, largeur_micro_matrices_cr, i*8+x, j*8+y, false) - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
 				}
 			}
 
-			vecteurs_sortie->vecteurs[nb_vecteurs] = vec;
 			nb_vecteurs++;
 		}
 	}
@@ -128,9 +127,10 @@ void decouper_matrice_gris(const uint8_t matrice[8][8], Vecteur *vecteur) {
 
 	vecteur->composante = Y;
 
-	for (uint8_t i = 0; i < 8; i++) {
-		for (uint8_t j = 0; j < 8; j++) {
-			vecteur->valeur[i * 8 + j] = matrice[i][j];		
- 		}
+	for (uint8_t x = 0; x < 8; x++) {
+		for (uint8_t y = 0; y < 8; y++) {
+
+			vecteur->valeur[x * 8 + y] = matrice[x][y] - 128.0; // -128 pour ne pas avoir à l'étape suivante de DCT
+		}
 	}
 }

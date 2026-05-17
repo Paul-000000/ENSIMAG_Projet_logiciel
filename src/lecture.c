@@ -12,6 +12,7 @@
 
 
 
+// lit les potentiels commentaires dans les lignes du fichier ppm ou pgm
 void ignore_commentaires(FILE *fichier)
 {
     int c;
@@ -47,8 +48,8 @@ Image *recupEntete(FILE *fichier) {
 
     ignore_commentaires(fichier);
 
-    if (fscanf(fichier, "%c%c\n", &c1, &c2) != 2)
-    { // P5 ou P6
+    if (fscanf(fichier, "%c%c\n", &c1, &c2) != 2) // type d'image P5 ou P6
+    {
         free(image);
         return NULL;
     }
@@ -83,7 +84,7 @@ Image *recupEntete(FILE *fichier) {
 
     ignore_commentaires(fichier);
 
-    if (fscanf(fichier, "%u\n", &profondeur) != 1)
+    if (fscanf(fichier, "%u\n", &profondeur) != 1) // profondeur, ignorée ici
     {
         free(image);
         return NULL;
@@ -97,7 +98,7 @@ Image *recupEntete(FILE *fichier) {
     size_t taille_fichier = ftell(fichier);
     fseek(fichier, image->debut_pixels, SEEK_SET);
 
-    if (taille_fichier < (image->largeur * image->hauteur * ((image->type == P6) ? 3 : 1) + image->debut_pixels)) {
+    if (taille_fichier < (image->largeur * image->hauteur * ((image->type == P6) ? 3 : 1) + image->debut_pixels)) { // vérifie qu'il y a bien assez de données dans le fichier
 
         free(image);
         return NULL;
@@ -107,6 +108,7 @@ Image *recupEntete(FILE *fichier) {
     return image;
 }
 
+// positionne le curseur du fichier aux coordonnées (x,y) en pixels
 void positionner_curseur(const Image *img, uint32_t x, uint32_t y)
 {
     int multiplicateur = (img->type == P6) ? 3 : 1;
@@ -118,13 +120,13 @@ Image *allouer_image(Image *image, uint32_t largeur_bloc_en_pixels, uint32_t nb_
 
     int multiplicateur = (image->type == P6) ? 3 : 1;
 
-    image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *));
+    image->tab = (uint8_t **)malloc(nb_lignes_superbloc * sizeof(uint8_t *)); // tableau de pointeurs
     if (image->tab == NULL) {
         return NULL;
     }
 
     for (uint32_t i = 0; i < nb_lignes_superbloc; i++) {
-        image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t));
+        image->tab[i] = (uint8_t *)malloc(largeur_bloc_en_pixels * nb_blocs * multiplicateur * sizeof(uint8_t)); // alloue une ligne du superbloc
         if (image->tab == NULL) {
             return NULL;
         }
@@ -264,7 +266,7 @@ bool mcu_suivant(IterateurMCU *iterateur, bool couleur, uint8_t mcu_gris[8][8], 
     uint8_t largeur_mcu = couleur ? iterateur->largeur_mcu : 8;
     uint8_t hauteur_mcu = couleur ? iterateur->hauteur_mcu : 8;
 
-    if (iterateur->i_mcu == 0) {
+    if (iterateur->i_mcu == 0) { // quand on doit lire un nouveau superbloc
 
         lireEblocs(iterateur->image, iterateur->x * largeur_mcu, iterateur->y * hauteur_mcu, largeur_mcu, hauteur_mcu, NB_BLOCS_SUPERBLOC);
         iterateur->nb_mcu_lus = ceil((double)iterateur->image->taille_ligne / largeur_mcu);
@@ -294,7 +296,7 @@ bool mcu_suivant(IterateurMCU *iterateur, bool couleur, uint8_t mcu_gris[8][8], 
         }
     }
     
-    // remplissage du tableau
+    // remplissage de la MCU
     uint32_t debut_mcu_dans_ligne = (iterateur->i_mcu * largeur_mcu) * octets_par_pixel;
 
     if (couleur) {

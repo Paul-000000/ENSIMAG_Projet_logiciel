@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+
+
 /* Tables de quantification fournies en variables globales.
 Attention en static, on va dupliquer les tables à chaque inclusion.*/
 

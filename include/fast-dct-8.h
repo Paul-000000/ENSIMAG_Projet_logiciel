@@ -1,3 +1,8 @@
+#ifndef _FAST_DCT_8_H_
+#define _FAST_DCT_8_H_
+
+
+
 /* 
  * Fast discrete cosine transform algorithms (C)
  * 
@@ -28,7 +33,10 @@
 extern "C" {
 #endif
 
-void FastDct8_transform_modifiee(double *vector, int pad);
+
+
+// algorithme de DCT rapide type II en 1D de 8 éléments
+void FastDct8_transform_modifiee(float *vector, int pad);
 
 // non utilisée
 // void FastDct8_transform(double vector[static 8]);
@@ -37,6 +45,11 @@ void FastDct8_transform_modifiee(double *vector, int pad);
 // void FastDct8_inverseTransform(double vector[static 8]);
 
 
+
 #ifdef __cplusplus
 }
+#endif
+
+
+
 #endif
