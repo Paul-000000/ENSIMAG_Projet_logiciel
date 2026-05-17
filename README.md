@@ -4,6 +4,21 @@
 
 [Tableau de bord](https://formationc.pages.ensimag.fr/projet/jpeg/2026/2_bahag_becharam_bottnerp)
 
+# Projet JPEG - Encodeur Baseline (Équipe 2)
+
+Ce dépôt contient notre encodeur JPEG *baseline* 100 % fonctionnel et optimisé. Il a été réalisé par **Paul Bottner**, **Abdoul Goudouss Bah** et **Mohamed Khalil Becharai** dans le cadre du module Projet Logiciel.
+
+Ce README rassemble toutes les informations essentielles de notre projet, réparties dans les sections suivantes :
+
+*   [1. Diagramme de Gantt](#diagramme-de-gantt)
+*   [2. Enchaînement du pipeline (Flux de données)](#enchaînement-du-pipeline-flux-de-données)
+*   [3. Structures de données utilisées](#structures-de-données-utilisées)
+*   [4. Répartition des tâches et organisation](#répartition-des-tâches-et-organisation)
+*   [5. Optimisations et évaluation des performances](#optimisations-et-évaluation-des-performances)
+*   [6. Compilation et Exécution](#compilation-et-exécution)
+
+---
+
 # Diagramme de Gantt
 
 ![diagramme](diagrammes/Diagramme_semaine_2.png)
@@ -88,6 +103,27 @@ Afin d'éviter de charger l'image complète en mémoire (ce qui est critique pou
 
 **Écriture du fichier de sortie :**
 *   *(À rajouter après)*
+
+# Compilation et Exécution
+
+Pour la compilation de notre projet, nous nous sommes appuyés sur le `Makefile`  fourni par l'équipe pédagogique, auquel nous avons ajouté quelques règles spécifiques pour nos tests de performances.
+
+**Commandes de base (Standard) :**
+*   `make` (ou `make all`) : Compile l'encodeur avec les flags de base et de couverture de code.
+*   `make clean` / `make realclean` : Nettoie les fichiers objets, les exécutables et les fichiers de cache.
+*   `make tests` : Compile et lance la suite de tests unitaires (Unity) et d'intégration (pytest).
+
+**Commandes d'analyse (Nos ajouts) :**
+Afin de réaliser les mesures de performances et le profilage évoqués dans la section précédente, nous avons ajouté les règles suivantes :
+*   `make compile`, `make compile_2`, `make compile_3` : Force une compilation directe (sans fichiers objets intermédiaires) avec les différents niveaux d'optimisation de GCC (`-O0`, `-O2`, `-O3`). Idéal pour comparer rapidement les temps d'exécution.
+*   `make gprof` : Compile le projet avec l'option d'instrumentation `-pg`, exécute automatiquement l'encodage sur l'image de test `biiiiiig.ppm`, et génère le fichier `gmon.out` nécessaire à la lecture du rapport de profiling.
+
+**Exécution de l'encodeur :**
+Une fois compilé, l'exécutable s'utilise de la manière suivante :
+
+```bash
+./ppm2jpeg [options] fichier_entree.ppm [fichier_sortie.jpg]
+```
 
 # Notre encodeur JPEG à nous
 
