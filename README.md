@@ -105,9 +105,6 @@ Nous avons également effectué ces deux étapes en simultané pour éviter de p
 *   **Nettoyage des boucles internes :** Les conditions (`if`) ont été sorties des boucles les plus profondes.
 *   **Initialisation :** Utilisation de vecteurs de flottants dès le découpage et application du décalage de niveau (-128) directement lors de l'extraction pour préparer les données pour la DCT sans ajouter de boucle de parcours supplémentaire.
 
-**Écriture du fichier de sortie :**
-*   *(À rajouter après)*
-
 # Compilation et Exécution
 
 Pour la compilation de notre projet, nous nous sommes appuyés sur le `Makefile`  fourni par l'équipe pédagogique, auquel nous avons ajouté quelques règles spécifiques pour nos tests de performances.
