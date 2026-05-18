@@ -8,7 +8,7 @@
 
 
 /*
-DCT optimisée qui transforme la matrice bloc_spatial en matrice sous forme fréquentielle en O(n²) utilisant l'algorithme de DCT rapide type II en 1D
+DCT optimisée qui transforme la matrice bloc_spatial en matrice sous forme fréquentielle en O(n²log n) utilisant l'algorithme de DCT rapide type II en 1D
 créé par Arai, Agui, Nakajima en 1988. https://web.stanford.edu/class/ee398a/handouts/lectures/07-TransformCoding.pdf#page=30
 et du Projet Nayuki. https://www.nayuki.io/page/fast-discrete-cosine-transform-algorithms
 */

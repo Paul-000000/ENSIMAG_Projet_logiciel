@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="MatYlBDpQlykOgqGlAwJ">
-    <mxGraphModel dx="2920" dy="1977" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="6217" dy="3652" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -85,7 +85,7 @@
         <mxCell id="-_NubxIIV17trgyvlr9o-51" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=#B3B3B3;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;strokeColor=#666666;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=#000000;fontStyle=1;" value="&lt;div&gt;Module dct&lt;/div&gt;" vertex="1">
           <mxGeometry height="100" width="610" x="-420" y="210" as="geometry" />
         </mxCell>
-        <mxCell id="-_NubxIIV17trgyvlr9o-52" parent="-_NubxIIV17trgyvlr9o-51" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=#000000;fontStyle=1;labelBackgroundColor=none;" value="&lt;div&gt;void applique_dct(float vecteur_bloc[64])&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;DCT optimisée qui transforme la matrice bloc_spatial en matrice sous forme fréquentielle en O(n²) utilisant l&#39;algorithme de DCT rapide type II en 1D.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="-_NubxIIV17trgyvlr9o-52" parent="-_NubxIIV17trgyvlr9o-51" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=#000000;fontStyle=1;labelBackgroundColor=none;" value="&lt;div&gt;void applique_dct(float vecteur_bloc[64])&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;DCT optimisée qui transforme la matrice bloc_spatial en matrice sous forme fréquentielle en O(n² log n) utilisant l&#39;algorithme de DCT rapide type II en 1D.&lt;/span&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="580" x="20" y="30" as="geometry" />
         </mxCell>
         <mxCell id="-_NubxIIV17trgyvlr9o-61" parent="1" style="swimlane;whiteSpace=wrap;html=1;labelBackgroundColor=none;align=center;swimlaneFillColor=default;strokeWidth=2;fillColor=#B3B3B3;swimlaneLine=1;glass=0;flipV=0;legacyAnchorPoints=0;flipH=0;rounded=0;strokeColor=#666666;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=#000000;fontStyle=1;startSize=23;" value="&lt;div&gt;Module zigzag&amp;nbsp;quantification&lt;/div&gt;" vertex="1">
