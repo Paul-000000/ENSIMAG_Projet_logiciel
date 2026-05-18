@@ -81,7 +81,7 @@ Afin d'évaluer objectivement les performances de notre encodeur, nous avons uti
 Voici le détail des optimisations techniques appliquées à chaque étape de l'encodage :
 
 **Calcul de la DCT :**
-Nous sommes passés d'une implémentation initiale naïve en $O(N^4)$ à une version optimisée en $O(N^2)$.
+Nous sommes passés d'une implémentation initiale naïve en $O(N^4)$ à une version optimisée en $O(N^2 \log{N})$.
 *   **Séparabilité & Algorithme rapide :** Nous utilisons l'algorithme de DCT rapide 1D de *Arai, Agui et Nakajima (1988)*. Au lieu d'un calcul 2D lourd, on applique cet algorithme ultra-rapide sur les lignes, puis sur les colonnes.
 *   **Notre optimisation (le `pad`) :** Nous avons modifié l'algorithme pour intégrer un pas de lecture en mémoire (`pad`). Cela permet d'appliquer la DCT sur les colonnes en sautant de 8 cases en 8 cases, ce qui nous évite totalement de devoir transposer la matrice en mémoire.
 
@@ -112,12 +112,7 @@ Nous avons également effectué ces deux étapes en simultané pour éviter de p
 
 Pour la compilation de notre projet, nous nous sommes appuyés sur le `Makefile`  fourni par l'équipe pédagogique, auquel nous avons ajouté quelques règles spécifiques pour nos tests de performances.
 
-**Commandes de base (Standard) :**
-*   `make` (ou `make all`) : Compile l'encodeur avec les flags de base et de couverture de code.
-*   `make clean` / `make realclean` : Nettoie les fichiers objets, les exécutables et les fichiers de cache.
-*   `make tests` : Compile et lance la suite de tests unitaires (Unity) et d'intégration (pytest).
-
-**Commandes d'analyse (Nos ajouts) :**
+**Commandes d'analyse :**
 Afin de réaliser les mesures de performances et le profilage évoqués dans la section précédente, nous avons ajouté les règles suivantes :
 *   `make compile`, `make compile_2`, `make compile_3` : Force une compilation directe (sans fichiers objets intermédiaires) avec les différents niveaux d'optimisation de GCC (`-O0`, `-O2`, `-O3`). Idéal pour comparer rapidement les temps d'exécution.
 *   `make gprof` : Compile le projet avec l'option d'instrumentation `-pg`, exécute automatiquement l'encodage sur l'image de test `biiiiiig.ppm`, et génère le fichier `gmon.out` nécessaire à la lecture du rapport de profiling.
